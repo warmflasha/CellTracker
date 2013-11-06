@@ -1,0 +1,47 @@
+function plotFrameMatch(peaks,frame,str1,zeropad)
+% 
+% Graph of map of nuc centers from frame-1 to frame (>=2)
+
+if zeropad==0
+    img1=im2double(imread([str1 int2str(frame-1) '.TIF']));
+    img2=im2double(imread([str1 int2str(frame) '.TIF']));
+else
+    numtouse=int2str(frame);
+    ll=length(numtouse);
+    nzeros=3-ll;
+    for ii=1:nzeros
+        numtouse=['0' numtouse];
+    end
+    img1=im2double(imread([str1 int2str(frame-1) '.TIF']));
+    img2=im2double(imread([str1 int2str(frame) '.TIF']));
+end
+%img1=histeq(img1); img2=histeq(img2);
+overlay=cat(3,img1,img2,zeros(size(img1)));
+
+rmax=max(max(img1)); rmin=min(min(img1));
+gmax=max(max(img2)); gmin=min(min(img2));
+overlay2=imadjust(overlay,[rmin gmin 0; rmax gmax 1]);
+
+imshow(overlay2,[]); hold on;
+
+
+xy0 = peaks{frame-1}(:, 1:2);
+target = peaks{frame-1}(:, 4);
+xy1 = peaks{frame}(:, 1:2);
+
+%figure
+%hold on
+plot(xy0(:,1), xy0(:,2), '.r');
+plot(xy1(:,1), xy1(:,2), '.g');
+for i = 1:length(target)
+    tt = target(i);
+    if(tt < 0 )
+        continue
+    end
+    plot([xy0(i,1), xy1(tt,1)], [xy0(i,2), xy1(tt,2)], '-k' );
+end
+
+nomatch0 = length(find(target<0));
+nomatch1 = length(xy1) - (length(xy0) - nomatch0);
+title(['r,g=frame',num2str([frame-1, frame]), ', r no match=',num2str(nomatch0), ', g no match=',num2str(nomatch1)]);
+hold off

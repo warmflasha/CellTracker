@@ -1,0 +1,16 @@
+function newfilename=findnextfile(fstring)
+
+endp=findstr(fstring,'.');
+ii=1;
+currnum=str2num(fstring(endp-ii));
+while ~isempty(currnum)
+    ii=ii+1;
+    lastgoodnum=currnum;
+    currsting=fstring((endp-ii):(endp-1))
+    currnum=str2num(fstring((endp-ii):(endp-1)));
+end
+
+nextnum=lastgoodnum+1;
+
+newfilename=[fstring(1:(endp-ii)) int2str(nextnum) fstring(endp:end)];
+

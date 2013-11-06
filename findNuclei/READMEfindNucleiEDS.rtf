@@ -1,0 +1,154 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red160\green32\blue240;}
+\margl1440\margr1440\vieww14860\viewh10100\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 All routine are commented at the beginning so 
+\b help
+\b0  or 
+\b doc
+\b0  will work to get arguments and return values\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 The main routine is 
+\b segmentCells
+\b0 , and will process a nuclear image only or together with a cytoplasmic image. Communication between routines by means of the 
+\b stats 
+\b0 structure array, as defined in MATLAB routine regionprops(), and various masks.  I add fields to the stats struct, eg for statistics of integrals of over nuclei and cytoplasm. All parameters are contained in 
+\b setUserParamCCC20x
+\b0  and 
+\b setUserParamCCC10x 
+\b0 and this is the primary place where they are defined. (other setUserParam* are derived and not up to date!, check dates on files). To understand what various routine are doing, use the 
+\b verbose
+\b0  options (set in 
+\b setUserParam*
+\b0  ), which dumps useful plots. \
+\
+The top level routine calls two others which segment nuclei based on threshold, 
+\b findNucThresh.m,
+\b0  and one that looks for local max, 
+\b countNucCtr.m
+\b0 .  Both can be used in isolation if you copy the few preprocessing lines at the top of 
+\b segmentCells. 
+\b0 A handy script to segment the cytoplasm cell by cell is 
+\b edgeThreshCyto. 
+\b0 Its currently used by 
+\b segmentCells
+\b0 .
+\b \
+
+\b0 \
+When running more than one file from series, it pays to automate calling files using 
+\b processFolder*
+\b0  scripts. This routine has option to save the 
+\b stats
+\b0  struct array for the times analysed for later plotting, as well as routine 
+\b outputData4AWTracker
+\b0 , to interface with AW Tracker, see code. It prints the feeding history relative to time of image file, using a hacked version of  AW's 
+\b getFeedings
+\b0   and parses  path names to extract the relevant files in 
+\b DATA.
+\b0  The 
+\b setUserParam*
+\b0  file is called from 
+\b processFolder* 
+\b0 and
+\b  segmentCells
+\b0 ; former overrides latter, but for security in command window do 
+\b >clear global userParam
+\b0 , when switching between 
+\b setUserParam*
+\b0  files. \
+\
+Computation of cell statistics done progressively and stored in 
+\b statsN
+\b0  struct array. Fields used by segmentCells are computed in that routine. Computation of cytoplasm mask and background computation are done in 
+\b edgeThreshCyto
+\b0 . Finally given the masks defining the nucleus and cytoplasm (or using a donut area around the nucleus in place of the cytoplasm), average/variance of the raw image green (smad) channel images are calculated in 
+\b addCellAvr2Stats
+\b0 \
+\
+Still experimenting with routines to mask out the PDMS using the green channel, 
+\b maskPDMS, maskPDMSNoCells 
+\b0 I have written routines to shift masks around to optimally register with given image, 
+\b registerPDMSMask2Img
+\b0 .\
+
+\b \
+
+\b0 Other functions that can be used directly are:\
+
+\b \
+processFolderRedGr
+\b0 : 	to process files with a given key word(s) in a named directory. See related files with specific dates, which organize red/green and various numbering schemes. (red,gr are nuc and smad markers resp.)  This routine uses\
+
+\b folderFilesFromKeyword :	
+\b0 can be used directly to parse a list of file names containing a key word into [prefix, suffix, and list of numbers]\
+
+\b getLogfile:  
+\b0 			take a full path to particular chamber number and infer feeding logfile name, and other bits\
+and for data analysis,\
+\
+
+\b addCellAvr2Stats
+\b0 : 	take output of segmentCells and integrate any img over nuclei, cytoplasm\
+
+\b addNucAvr2Stats:
+\b0  	take output of segmentCells and integrate any img over nuclei\
+
+\b xy2Stats
+\b0 :			given a nuclei near x,y on an image, return its statistics. \
+
+\b plotHistStats:
+\b0 		print histograms and scatter plots from data from 
+\b addCellAvr2Stats\
+feedingHistory:	
+\b0 print all feedings prior to given time in nice format, needs prior call to 
+\b getFeedings.m\
+readStatsPlotTime 
+\b0  read the stats vs time file saved to disk and do various time plots\
+\
+graphics\
+\
+
+\b dispCCC
+\b0 :	 		various nice plots of color channels and phase.\
+
+\b showImgEdgePts:
+\b0 	plot an img overlaid with edges and points\
+\
+
+\b Known Bugs:
+\b0 \
+	The verbose option display of image/edges/pts in segmentCell() does not nicely scale the edge lines when magnify. Solution is to change the marker size to 5 in showImgEdgePts(), the line...\
+\pard\pardeftab720\ql\qnatural
+\cf0 plot(rescale*col, rescale*row, [colors(i) \cf2 '.'\cf0 ], \cf2 'MarkerSize'\cf0 , 4 );\
+	If segmenting nuclei using only 
+\b countNucCtr
+\b0 , two nuclei with a ridge in intensity connecting them will appear as one. Using 
+\b findNucThresh
+\b0  first will get most of these at considerable computational cost, alternatives being implemented.\
+	For versions of MATLAB which do not have the function bwconncomp() eg prior to 2010a, I do a test for Matlab_2008a and implement a work around. Need elaborate test for other releases.  grep 2008a *.m will find the tests\
+\
+
+\b Quirks:
+\b0  (ie features that may seem like bugs)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 	In green channel the PDMS supports and culture medium, no cells have different backgrounds by 25%. Some 'nuclei' may appear at edge of PDMS, but they typically to not have any cytoplasm and are eliminated from plots in 
+\b plotHistStats 
+\b0 but they are retained in 
+\b addCellAvr2Stats
+\b0  . Others persist but can be filtered out by having low background intensities (which is a field in 
+\b stats
+\b0 )\
+	The fields in the 
+\b stats
+\b0  array can refer to either nuclei or cytoplasm, and fields are added in various routines as they process the image. The ones used for outputs documented in 
+\b addCellAvr2Stats,
+\b0  otherwise have to trace through 
+\b segmentCells
+\b0 .
+\f1 \
+}

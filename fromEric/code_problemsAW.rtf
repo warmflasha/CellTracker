@@ -1,0 +1,127 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;}
+\margl1440\margr1440\vieww12780\viewh8480\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 code issues\
+colony.m  constructor #arguments check... the version I find in /Cytoo was not fixed \
+\
+\
+put comments all of cytoo/*m files\
+\
+clean up matfiles for IF\
+\
+anyway to preserve the nuclear outlines after segment cells in IF mat files., maybe rerun on assembled images.  ONE NEEDS TO CHECK segmentCells output directly on images and get outlines.\
+\
+background corrections on images if one wants to divide IF by nuclear. Use holes in colonies to get background, \
+\
+the DAPI images amazing, can see dividing cells in anaphase. exclude these?? no staining outside of disk while IF has higher level of junk outside of disk vs in disk outside of cells.\
+\
+image registration for DAPI is messed up and shifted vertically by ~1/2 nuclei on some images\
+\
+edsa:Cytoo_IF/Expt4_PluriMarkers/121126_RUES_Cytoo_0BMP_Nanog_Sox2_Oct4_DAPI] siggia% \
+ colonies(223) check on names and order of color channels, \
+	The Sox2 w2 channel seems misaligned in middle but not apparent in the DAPI.  Is Nanog really strongly nuclear?? The DAPI image upper left is misaligned horizontally.\
+\
+What to do with cells beyond radius of colony are they in colony.data?  but computed in peaks\
+\
+3/15/13\
+/121126_RUES2_Cytoo_50BMP12h_Nanog_Sox2_Oct4_DAPI\
+\
+colonies 500mu 31 62 63 all show uneven backgrounds in different color channels over the disk\
+\
+The 1000mu colonies are all more compressed near boundaries, is that the origin of the boundary signal?? Sort of visible in average nuclear area.\
+\
+why do cells pull in from edge of colony.\
+\
+Expt4_PluriMarkers/121127_RUES2_Cytoo_50BMP24h_Nanog_Sox2_Oct4_DAPI  colony 90 missing lots on nucs, and miscentered, focus problems, get sample of plate data with strings between colonies.  Same wiht colony 191\
+	colony 97 staining on matrigel??  188 focus problem and interior nuclei not found\
+\
+   prefix= rC24B_w1_s, suffix= _t1.TIF, and 2201 numbers from 1 to 2201\
+??? Error using ==> mldivide\
+Matrix dimensions must agree.\
+\
+Error in ==> colony>colony.assembleColony at 141\
+                    over2=fix((ii-1)/dim1);\
+\
+Error in ==> statsIF>show_colonyIF at 59\
+    tmp = assembleColony(cobj, dirname, wavel(i) );\
+ \
+K>> colonies(428)  its a 250mu one and some colonies of this size work, eg one which was 2x2 images.\
+ans = \
+  colony\
+\
+  Properties:\
+            data: [90x13 double]\
+          ncells: 90\
+          center: [461 836]\
+          radius: 302.0011\
+     aspectRatio: 0.9340\
+         density: []\
+    imagenumbers: [2x1 double]\
+     imagecoords: [2x1 struct]\
+  Methods\
+\
+OTHER BUGS in colony.m  if the imKeyWord is not found should return [] and exit, now crash since try to read non file\
+Use\
+\pard\pardeftab720\ql\qnatural
+
+\f1 \cf0             \
+            [junk, imFiles]=folderFilesFromKeyword(direc,imKeyWord\{1\});    \
+            \cf2 if\cf0  isempty(imFiles)\
+                fullImage = [];\
+                \cf2 return\cf0 \
+            \cf2 end\
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0 \cf0 Problem is creating new colony.m in path matlab seems to find old one.\
+\
+/Volumes/DATA/Aryeh/hESC/Cytoo_IF/Expt2_Oct4_pSmad1_Smad2/121004 has no data in plate1, colonies is []\
+\
+Background subtraction in red channel, check the file?? is it smooth.\
+\
+############## notes hESC/Cytoo_IF/Expt4_PluriMarkers\
+121126_RUES2_Cytoo_50BMP12h_Nanog_Sox2_Oct4_DAPI\
+	colony=134, 1260, 1631 mu1000, higher density cells at edge but not evident in area stats, blotchiness in green REAL?? Bit of color segregation with more sox2 in center vs edges.  Good nuc detection, 1631 shows pronounced center to edge density difference.  Green blotches~1-2 cells, but much larger than nuclei area.\
+	500mu colonies, 63 some intensity gradients, backgrounds??, 90 uniform cell density, some separation, green inside.\
+\
+121127_RUES2_Cytoo_50BMP24h_Nanog_Sox2_Oct4_DAPI\
+	1000mu colonies nanog tracks oct4, generallly higher in edge, sox2 higher center, lower edge relative to nanog-oct4.\
+Cells denser at edge than in center.\
+	500mu  doing terribly on detecting nucs in some colonies, but cell density more uniform, size of outer hi nanog-oct4 rim is same physical size as in 1000mu colonies.\
+\
+/Volumes/DATA/Aryeh/hESC/Cytoo_IF/Expt4_PluriMarkers/121127_RUES2_Cytoo_50BMP36h_Nanog_Sox2_Oct4_DAPI\
+	1000mu 738, 999 getting holes in colonies, low density hi density areas~50 cells. Greater separation of sox2 vs others, but now some additional separation of Oct4 outside and nanog more uniform in radius, but still blotchy.\
+colony 463, 655 terrible on finding nucs, but edges good, not blotchy. 3 rings in color.  substantial hole forms in colony. \
+colony 785 severe blotchiness, lots of holes.\
+	500mu colonies, 420 , 576 494, 1339 same segregation of sox2 inside, but some low density in edges and separation of nanog and oct4.  721 is odd overall low density.\
+\
+Compare Thompson - Ramanathan images, sometimes very bright DAPI, also Sox2 and Oct 4 really distinct and sharp boundary. He claims Sox2 Oct4 mutually antagonistic and Sox2 disappears smoothly from Pleuri to NE, and Oct4 from Pleuri to mesendo,  Sox1 and Bra are real fate markers. But I see no figs where in wt cells Sox2, Oct4 appear more gradual than Sox1, Bra. Want embryo expression of sox2 and oct4.\
+	How are they doing IF's much less background out of colonies.\
+\
+Liz Robertson 2011 on mouse endoderm similar ideas.\
+\
+Go over all markers and refs for what they do, TBR2, CDX2\
+\
+NO DATA FILES RUN IN\
+/Volumes/DATA/Aryeh/hESC/Cytoo_IF/Expt10_pSmad1TimeCourse/130315_RUES2_0BMP_Nanog_Smad2_pSmad1\
+\
+%%%%%%%\
+/Volumes/DATA/Aryeh/hESC/Cytoo_IF/Expt8_BMPLDN/130216_Cytoo_BMP4LDN18h_Sox17_Cdx2_TBR2  colony 223 right edge has differennt scaling??\
+	density gradient, smaller nucs and less area/cell at edge.  \
+Tbr2 highest edges but its neural??? Sox17 endoderm\
+\
+\
+#### /Volumes/DATA/Aryeh/hESC/Cytoo_IF/Expt7_Channels/130216_Channel_Sox17_Cdx2_TBR2\
+	colony 44 a mess , 143 image processing bad, blotches of expression 149  see Cdx2 outside, a ring at .7*radius of TBR2, and  bit of Sox17 on edge., 153 blotches of TBR2 at 0.7*radius CDX2 on extreme outer edge,  212,232 gargage image\
+\
+Expt7_Channels/130301_Cytoo_Channel_BMP24h_Nanog_Smad2_pSmad1 \
+	spacial patterns unclear or nonexistent colonies<100  colony 102, pSmad1 edge, along iwth Smad2 broader band.  153 nonexistent 160 pulled in from edge of patch why.  \
+	Do we take seriously absence of pSmad1 on edge in early parts of flow and attribute the spacial structure to inhibitor.\
+\
+######### /Expt9_BMPDoses/130301_10ngBMP4_Sox17_Cdx2_TBR2\
+colony 620 incorrect, 790 very messed up, and images do not align in x or y\
+	colonyAlmost all green strong blue last 10% of radius.  Scattered red on edges, uniform green. Time of images???  What is CDX2 doing in center, otherways of mapping disk to sphere.\
+	colony 795 shrunk very narrow rim of tbr2, broader boundary of Cdx2 and sort of uniform sox17 }

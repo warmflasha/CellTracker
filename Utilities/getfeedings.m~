@@ -1,0 +1,29 @@
+function feedings=getfeedings(logfile,chnum,t0)
+
+if ~exist(logfile,'file')
+    error('log file does not exist');
+end
+
+ff=fopen(logfile);
+strtofind=['Feeding chamber ' int2str(chnum) ':'];
+tline=fgetl(ff);
+q=1;
+while ischar(tline)
+    k=strfind(tline,strtofind);
+    if k
+        disp(tline);
+        feedings(q).time=(datenum(tline(1:k-1))-t0)*24;
+        jj=strfind(tline,'input =');
+        jj2=strfind(tline,' (');
+        feedings(q).medianum=str2num(tline(jj+8:jj2-1));
+        jj3=strfind(tline,')');
+        feedings(q).medianame=tline(jj2+2:jj3-1);
+        q=q+1;
+        jj4=strfind(tline,'cycles =');
+        jj5=strfind(tline,',pmp');
+        
+    end
+    
+    tline=fgetl(ff);
+end
+fclose(ff);
