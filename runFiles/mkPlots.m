@@ -31,7 +31,7 @@ end
 xlabel('time','FontSize',22);
 xlim([2 21]);
 ylabel('Nuc:Cyt GFP-Smad4','FontSize',22);
-legend({'Control','Man1'},'FontSize',22);
+%legend({'Control','Man1'},'FontSize',22);
 %legend({'dense -- +T','dense -- +T,+5Z','sparse -- +T','sparse -- +T,+5Z'});
 
 %legend({'TGFb+MekI','TGFb only','No Treatment','TGFb+FGFRI','TGFb+PI3KI'},'FontSize',16);
@@ -45,7 +45,7 @@ legend({'Control','Man1'},'FontSize',22);
 %     plot(meannonan(tt{ii}(:,1:60)),meannonan(mm2{ii}(:,6:65)),'.-','LineWidth',2);
 % end
 %
-%legend({'Control','tt-coco,0.6 ug/ml dox','tt-coco,2 ug/ml dox'},'FontSize',16,'Location','NorthEast');
+legend({'Control','tt-coco,0.6 ug/ml dox','tt-coco,2 ug/ml dox'},'FontSize',16,'Location','NorthEast');
 %title('1 ng/ml','Fontsize',18);
 %legend({'si-Control','si-Htt'},'FontSize',14,'Location','NorthEast'); 
 %xlim([0 21]);

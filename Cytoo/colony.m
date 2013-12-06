@@ -95,7 +95,7 @@ classdef colony
             end
             %find center, radius, and density by fitting exterior
             %points to a circle
-            try 
+            try
                 edgeInds=convhull(newdata(:,1),newdata(:,2));
             catch
                 edgeInds=1:size(newdata,1);
@@ -196,7 +196,7 @@ classdef colony
                     currimg=imread([direc filesep imname]);
                     
                     %background subtraction
-                    if exist('backIm','var') 
+                    if exist('backIm','var')
                         currimg=imsubtract(currimg,backIm{jj});
                     end
                     if exist('normIm','var')
@@ -216,7 +216,7 @@ classdef colony
         end
         
         
-        function [rA cellsinbin]=radialAverage(obj,column,ncolumn,binsize,compfrom)
+        function [rA, cellsinbin]=radialAverage(obj,column,ncolumn,binsize,compfrom)
             %computes the radial average of one column of data.
             %
             %[rA cellsinbin]=radialAverage(obj,column,ncolumn,binsize)
@@ -276,8 +276,12 @@ classdef colony
         end
         
         
-        function plotColonyColorPoints(obj)
+        function plotColonyColorPoints(obj,plotcircle)
             %plots the positions of cells in the colony colored by image
+            
+            if ~exist('plotcircle','var')
+                plotcircle=1;
+            end
             
             od=obj.data;
             
@@ -290,15 +294,18 @@ classdef colony
                 plot(od(inds,1),od(inds,2),'.','Color',cc(colorind+1,:),'MarkerSize',18);
                 hold on;
             end
-            plot(obj.center(1),obj.center(2),'cs','MarkerSize',20);
-            drawcircle(obj.center,obj.radius,'c');
+            
+            if plotcircle
+                plot(obj.center(1),obj.center(2),'cs','MarkerSize',20);
+                drawcircle(obj.center,obj.radius,'c');
+            end
             hold off;
             
         end
     end
 end
 
-function [newdata compressednuc]=realignPoints(obj,si,imgfiles)
+function [newdata, compressednuc]=realignPoints(obj,si,imgfiles)
 
 imnums=obj.imagenumbers;
 dim1=find(diff(obj.imagenumbers)>1,1,'first');
@@ -347,19 +354,19 @@ for ii=1:length(imnums)
     origdata=bsxfun(@plus,origdata,[currinds(2)-1 currinds(1)-1]);
     
     if ~isempty(imgfiles(imnums(ii)).compressNucMask)
-    nucmask=uncompressBinaryImg(imgfiles(imnums(ii)).compressNucMask);
-    [nucpix_x, nucpix_y]=ind2sub(size(nucmask),find(nucmask));
-    
-    badinds1=nucpix_x < ac(ii).wabove(1);
-    badinds2=nucpix_y < ac(ii).wside(1);
-    
-    badinds=badinds1 | badinds2;
-    
-    nucpix_x(badinds)=[]; nucpix_y(badinds)=[];
-    
-    nucpix=bsxfun(@plus,[nucpix_x nucpix_y],[currinds(1)-1 currinds(2)-1]);
-    
-    nucpixall=[nucpixall; nucpix];
+        nucmask=uncompressBinaryImg(imgfiles(imnums(ii)).compressNucMask);
+        [nucpix_x, nucpix_y]=ind2sub(size(nucmask),find(nucmask));
+        
+        badinds1=nucpix_x < ac(ii).wabove(1);
+        badinds2=nucpix_y < ac(ii).wside(1);
+        
+        badinds=badinds1 | badinds2;
+        
+        nucpix_x(badinds)=[]; nucpix_y(badinds)=[];
+        
+        nucpix=bsxfun(@plus,[nucpix_x nucpix_y],[currinds(1)-1 currinds(2)-1]);
+        
+        nucpixall=[nucpixall; nucpix];
     end
     
     newdata(currimgcells,:)=origdata;
