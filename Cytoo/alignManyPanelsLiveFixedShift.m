@@ -1,8 +1,10 @@
-function [acoords fullIm]=alignManyPanelsFixedShift(direc,imBase,posNums,timepoint,dims,bgIm)
+function [acoords, fullIm]=alignManyPanelsLiveFixedShift(direc,imBase,posNums,timepoint,dims,bgIm)
 
 if ~exist('bgIm','var') || isempty(bgIm)
-    bgIm=zeros(1024,1344);
+    bgIm=uint16(zeros(512,672));
 end
+topov=65;
+sideov=53;
 
 %get the image file names
 for ii=1:length(posNums)
@@ -23,7 +25,7 @@ for jj=1:dims(2)
         currimg=imread([direc filesep imFiles(currimgind).name]);
         if ii > 1 %if not in top row, align with above
             %[~ , ind ind2]=alignTwoImages(previmg,currimg,dir1,parrange,perpsearch);
-            acoords(currimgind).wabove=[65 0];
+            acoords(currimgind).wabove=[topov 0];
         else
             acoords(currimgind).wabove=[0 0];
         end
@@ -32,7 +34,7 @@ for jj=1:dims(2)
 %             leftimgind=currimgind-dims(1);
 %             leftimg=imread([direc filesep imFiles(leftimgind).name]);
 %             [~, ind ind2]=alignTwoImages(leftimg,currimg,dir2,parrange,perpsearch);
-            acoords(currimgind).wside=[53 0];
+            acoords(currimgind).wside=[sideov 0];
         else
             acoords(currimgind).wside=[0 0];
         end
