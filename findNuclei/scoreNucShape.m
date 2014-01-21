@@ -1,16 +1,20 @@
-function score = scoreNucShape(stats, verbose, stringency)
+function [score, msg] = scoreNucShape(stats, verbose, stringency)
 %
-%   score = scoreNucShape(stats, verbose, stringency)
+%   [score, msg] = scoreNucShape(stats, verbose, stringency)
 %
 % score = 0 object too small eliminate
 % score = 1 plausible nuclei, keep with no further processing
 % score = 2 possible composite nuclei, process further and retest.
+% msg   = string with error message when score=2, also saved in userParam
 % 
 % verbose    = 0|1 print results of tests for score=2 nucs
 % stringency = 0|1 when two parameters given for test, take the least|most stringent
+%
+% See regionprops() for defn of shape parameters
 
 global userParam
 
+msg = [];
 area = stats.Area;
 % if extra field not present, give it permissive value.
 if ~isfield(stats, 'LocalMax')
@@ -44,8 +48,9 @@ elseif(all(test) )
 else
     score = 2;
     if(isfield(stats, 'Centroid') && verbose )
-        userParam.errorStr = [userParam.errorStr, sprintf( 'nuc at %d %d, test= %s, area= %d, solid= %d, aspctR= %d, locMx= %d\n',...
+        msg = sprintf( 'nuc at %d %d, test= %s, area= %d, solidity= %3.2f, aspctR= %3.2f, locMx= %d\n',...
             round(stats.Centroid), num2str(test), area, stats.Solidity,...
-            stats.MajorAxisLength/stats.MinorAxisLength, stats.LocalMax) ];
+            stats.MajorAxisLength/stats.MinorAxisLength, stats.LocalMax);
+        userParam.errorStr = [userParam.errorStr, msg];
     end
 end
