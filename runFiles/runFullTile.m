@@ -1,4 +1,4 @@
-function runFullTile(direc,outfile,step)
+function runFullTile(direc,outfile,paramfile,step)
 %runFullTile(direc,outfile,maxims,step)
 %---------------------
 %For a set of tiled images, runs segmentCells (uses parfor for this), runs
@@ -10,6 +10,10 @@ function runFullTile(direc,outfile,step)
 
 if ~exist('step','var')
     step=1;
+end
+
+if ~exist('paramfile','var')
+    paramfile='setUserParamSC20XEDS';
 end
 
 [dims, wavenames]=getDimsFromScanFile(direc);
@@ -38,7 +42,7 @@ end
 %outfile
 if step < 3
     load([direc filesep outfile],'bIms','nIms');
-    runTileLoop(direc,chans,imgsperprocessor,nloop,maxims,bIms,nIms);
+    runTileLoop(direc,chans,imgsperprocessor,nloop,maxims,bIms,nIms,paramfile);
 end
 
 %performs a series of pairwise alignments,
