@@ -13,7 +13,7 @@ if ~exist('step','var')
 end
 
 if ~exist('paramfile','var')
-    paramfile='setUserParamSC20XEDS';
+    paramfile='setUserParamSC20xIFEDS';
 end
 
 [dims, wavenames]=getDimsFromScanFile(direc);

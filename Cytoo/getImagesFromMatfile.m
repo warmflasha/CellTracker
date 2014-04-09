@@ -1,5 +1,8 @@
-function fi=getImagesFromMatfile(matfile,colsize,maximgs,rs_sc)
+function fi=getImagesFromMatfile(matfile,colsize,maximgs,rs_sc,first_img)
 
+if ~exist('first_img','var')
+    first_img=1;
+end
 
 pp=load(matfile,'plate1');
 
@@ -17,10 +20,10 @@ switch colsize
         disp('WARNING: invalid colsize, must be 1-4, defaulting to 1');
 end
 
-nimgs=min(length(inds),maximgs);
+nimgs=min(length(inds)-first_img+1,maximgs);
 
 for ii=1:nimgs
-    fi{ii}=pp.plate1.getColonyImages(inds(ii));
+    fi{ii}=pp.plate1.getColonyImages(inds(ii+first_img-1));
 end
 
 if exist('rs_sc','var')
