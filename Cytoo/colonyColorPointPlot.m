@@ -1,4 +1,4 @@
-function colonyColorPointPlot(col,dcols,ps,climits,newfig,rescale_fac,centerpos)
+function colonyColorPointPlot(col,dcols,ps,climits,newfig,rescale_fac,centerpos,dofilter)
 %function colonyColorPointPlot(col,dcols)
 %---------------------------------------
 %Colony scatter plot with points colored by data
@@ -6,6 +6,7 @@ function colonyColorPointPlot(col,dcols,ps,climits,newfig,rescale_fac,centerpos)
 %dcols -- columns for data, if length==1, use this col
 %           if length==2, use 2nd one for norm
 %ps = pointsize (default 12);
+
 
 xdat=col.data(:,1);
 ydat=col.data(:,2);
@@ -37,8 +38,12 @@ if ~exist('centerpos','var')
     centerpos=1;
 end
 
+if ~exist('dofilter','var')
+    dofilter=1;
+end
+
 if newfig
-figure; 
+    figure;
 end
 
 if centerpos
@@ -46,12 +51,16 @@ if centerpos
     ydat=bsxfun(@minus,ydat,mean(ydat));
 end
 
-includeinds=sqrt(xdat.*xdat+ydat.*ydat) < 30*50+5;
+if dofilter
+    includeinds=sqrt(xdat.*xdat+ydat.*ydat) < 30*50+5;
+else
+    includeinds=1:length(xdat);
+end
 xdat=xdat(includeinds); ydat=ydat(includeinds);
 coldat=coldat(includeinds);
 
 colormap('jet');
-scatter(rescale_fac*xdat,rescale_fac*ydat,ps,coldat);
+scatter(rescale_fac*xdat,rescale_fac*ydat,ps,coldat,'filled');
 minx=min(xdat); maxx=max(xdat);
 miny=min(ydat); maxy=max(ydat);
 
