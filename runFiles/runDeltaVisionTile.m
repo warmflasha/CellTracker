@@ -1,12 +1,22 @@
-function runFullTile(direc,outfile,paramfile,step)
-%runFullTile(direc,outfile,maxims,step)
+function runDeltaVisionTile(direc,outfile,paramfile,step,tiffs,prefix)
+%runDeltaVisionTile(direc,outfile,paramfile,step,tiffs,prefix)
 %---------------------
+%Version of runFullTile for DeltaVision (.dv) files
+%Requries MATLAB Bio-Formats files
+%Run from directory containing .dv.log file
 %For a set of tiled images, runs segmentCells (uses parfor for this), runs
 %alignment program for images, outputs in matfile -- peaks -- cell by cells
 %list by image, colonies -- colonies data structure
-%direc -- image directory
+%direc -- image directory 
+%prefix -- prefix for TIFF images
 %outfile -- matfile for output
 %step = step to begin at. See code. allows for skipping finding cells etc.
+%tiffs = 1 (0) means extract tiff images and save to direc (0 to skip,
+%default = 1)
+
+if ~exist('tiffs','var')
+    tiffs = 1;
+end
 
 if ~exist('step','var')
     step=1;
@@ -16,8 +26,20 @@ if ~exist('paramfile','var')
     paramfile='setUserParamSC20xIFEDS';
 end
 
-[dims, wavenames]=getDimsFromScanFile(direc);
-chans=wavenames2chans(wavenames);
+reader=bfGetReader('path/to/data/file');
+omeMeta=reader.getMetadataStore();
+numChans=omeMeta.getChannelCount(0);
+[dims, wavenames]=getDimsFromLogFile('.');
+
+for ii = 1:numChans
+    chanstemp{ii}=['w' char(omeMeta.getChannelEmissionWavelength(0,ii-1))];
+end
+
+if tiffs == 1
+    dvToTiffs(direc,prefix,chanstemp,reader,dims)
+end
+
+chans=orderchans(chanstemp,wavenames);
 
 ff=folderFilesFromKeyword(direc,chans{1});
 maxims=ff(end-1);
@@ -34,6 +56,7 @@ if step < 2
         normIm=normIm/min(min(normIm));
         nIms{ii}=normIm;
     end
+    
     si=size(bIms{1});
     save([direc filesep outfile],'bIms','nIms','dims','si');
 end
@@ -56,7 +79,7 @@ if step < 4
 end
 
 if step < 5
-     assembleMatFiles(direc,imgsperprocessor,nloop,outfile);
+    assembleMatFiles(direc,imgsperprocessor,nloop,outfile);
 end
 %peaksToColonies generates the colony structure from peaks and accords
 %computes alpha volume and then finds all connected components.
@@ -64,10 +87,10 @@ if step < 6
     load([direc filesep outfile],'bIms','nIms');
     [colonies, peaks]=peaksToColonies([direc filesep outfile]);
     plate1=plate(colonies,dims,direc,chans,bIms,nIms);
-    save([direc filesep outfile],'plate1','peaks','-append');  
+    save([direc filesep outfile],'plate1','peaks','-append');
 end
 
-function chans=wavenames2chans(wavenames,nucname)
+function chans=orderchans(chanstemp,wavenames,nucname)
 
 if ~exist('nucname','var')
     nucname='DAPI';
@@ -79,12 +102,35 @@ nuc_ind=find(ii);
 
 allchans=1:length(wavenames);
 nonnucchans=setdiff(allchans,nuc_ind);
-chans{1}=['w' int2str(nuc_ind)];
+chans{1}=chanstemp{nuc_ind};
 for jj=1:length(nonnucchans)
-    chans{jj+1}=['w' int2str(nonnucchans(jj))];
+    chans{jj+1}=chanstemp{nonnucchans(jj)};
 end
 
+function dvToTiffs(direc,prefix,chans,reader,dims)
 
+if ~exist(direc,'file')
+    mkdir(direc);
+end
 
-
-
+for kk=1:length(chans)
+    for ii=1:dims(1)
+        for jj=1:dims(2)
+            if ~mod(ii,2) %even
+                oldnum=(ii-1)*dims(2)+dims(2)-jj+1;
+            else
+                oldnum=(ii-1)*dims(2)+jj;
+            end
+            
+            newnum=(jj-1)*dims(1)+ii;
+            
+            reader.setSeries(oldnum-1);
+            
+            series_plane = bfGetPlane(reader, kk);
+            
+            %t1=imread(fnames(rr==oldnum).name);
+            newname= [direc filesep prefix '_' chans{kk} '_s' int2str(newnum) '_t1.TIF'];
+            imwrite(series_plane,newname);
+        end
+    end
+end
