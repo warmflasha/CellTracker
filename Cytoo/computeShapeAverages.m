@@ -1,13 +1,22 @@
-function [markeravgs, density, counter]=computeShapeAverages(colonies,shapenum)
+function avgOut=computeShapeAverages(colonies,shapenum,intensity_norm)
 
 mkplot = 0;
 binsize = 200;
 minbin = 12;
 
+if ~exist('intensity_norm','var')
+    intensity_norm=0;
+end
+
 inds = find([colonies.shape]==shapenum);
 
 rotmat = [ -1 0; 0 -1];
-q=1;
+%q=1;
+
+    den = zeros(2*minbin+1);
+    counter=den;
+    markers=zeros(2*minbin+1,2*minbin+1,3);
+
 for ii=1:length(inds)
     
     % mean subtract xy coords,
@@ -33,10 +42,6 @@ for ii=1:length(inds)
     indx=(dat(:,1)-mod(dat(:,1),binsize))/binsize+minbin;
     indy=(dat(:,2)-mod(dat(:,2),binsize))/binsize+minbin;
     
-    den = zeros(2*minbin+1);
-    counter=den;
-    markers=zeros(2*minbin+1,2*minbin+1,3);
-    
     for kk=min(indx):max(indx)
         for jj=min(indy):max(indy)
             indstouse = (indx==kk) & (indy==jj);
@@ -54,5 +59,23 @@ for ii=1:length(inds)
     
     density=den./counter;
     markeravgs=markers./counter(:,:,[1 1 1]);
+    
+    if intensity_norm
+        for kk=1:size(markeravgs,3)
+            dat=markeravgs(:,:,kk);
+            dat=dat(:);
+            coun=counter(:);
+            inds_good = coun >  max(coun)/2;
+            
+            mm=median(dat(inds_good));
+            
+            markeravgs(:,:,kk)=markeravgs(:,:,kk)/mm;
+        end
+    end
+    
+    avgOut.markerAvgs=markeravgs;
+    avgOut.density=density;
+    avgOut.counter=counter;
+    avgOut.shape_id=shapenum;
             
 end

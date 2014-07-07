@@ -1,15 +1,22 @@
-function [shapes, rotate]=manualClassifier(matfile,resave)
+function [shapes, rotate]=manualClassifier(matfile,resave,savedmat)
 
 if ~exist('resave','var')
     resave=0;
 end
 
+
+
 pp=load(matfile,'plate1');
 plate1=pp.plate1;
 cellthresh = 50;
 
+if exist('savedmat')
+    load(savedmat);
+else
 shapes=[plate1.colonies.shape];
 rotate=[plate1.colonies.rotate];
+end
+
 
 ncells = [plate1.colonies.ncells];
 
@@ -24,6 +31,17 @@ disp(['There are ' int2str(nc) ' colonies to classify']);
 % subplot(2,1,1);
 %imshow('~/work/CellTracker/Cytoo/shapes.png');
 for kk=1:nc
+    
+    
+    if exist('savedmat','var') && length(rotate) > kk
+        plate1.colonies(inds2classify(kk)).shape=shapes(kk);
+        plate1.colonies(inds2classify(kk)).rotate=rotate(kk);
+        disp(['filling in' int2str(kk) ]);
+        continue;
+    end
+        
+        
+        
     ii=inds2classify(kk);
     clf;
     plate1.colonies(ii).plotColonyColorPoints(0);

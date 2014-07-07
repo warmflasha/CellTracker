@@ -1,4 +1,4 @@
-function showWellPictures(timepoint,plate,well)
+function tt=getWellPictures(timepoint,plate,well)
 
 basefile = '/Volumes/DATA/Screen/Images';
 
@@ -19,11 +19,9 @@ f1= dir([basefile filesep prefix1 pn filesep '*' well '*d1.TIF']);
 f2= dir([basefile filesep prefix2 pn filesep '*' well '*d1.TIF']);
 
 for ii=1:length(f1)
-    tt=imread([basefile filesep prefix1 pn filesep f1(ii).name]);
-    figure; imshow(tt,[]);
+    tt{ii}=imread([basefile filesep prefix1 pn filesep f1(ii).name]);
 end
 
 for ii=1:length(f2)
-    tt=imread([basefile filesep prefix2 pn filesep f2(ii).name]);
-    figure; imshow(tt,[]);
+    tt{ii+length(f1)}=imread([basefile filesep prefix2 pn filesep f2(ii).name]);
 end

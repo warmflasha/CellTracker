@@ -5,7 +5,7 @@ if ~exist('showfig','var')
 end
 
 %matfile directory
-direc = '~/work/Screen/ScreenOutFiles';
+direc = '~/Dropbox/Screening/ScreenOutFiles/';
 lo = 100; hi = 3000;
 ncells=zeros(384,4); mm=zeros(384,4);
 

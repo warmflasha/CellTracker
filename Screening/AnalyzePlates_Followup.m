@@ -5,7 +5,9 @@ if ~exist('showfig','var')
 end
 
 %matfile directory
-direc = 'C:\DATA\Screen\IndividualSiRNA';
+%direc = 'C:\DATA\Screen\IndividualSiRNA';
+direc = '/Volumes/DATA/Screen/IndividualSiRNA';
+
 lo = 100; hi = 3000;
 ncells=zeros(384,4); mm=zeros(384,4);
 
