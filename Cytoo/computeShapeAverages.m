@@ -8,6 +8,10 @@ if ~exist('intensity_norm','var')
     intensity_norm=0;
 end
 
+colstouse = [6 8 10];
+%ncolstouse = [5 5 5];
+ncolstouse=[7 5 11];
+
 inds = find([colonies.shape]==shapenum);
 
 rotmat = [ -1 0; 0 -1];
@@ -49,7 +53,7 @@ for ii=1:length(inds)
             ncells=sum(indstouse);
             
             if ncells > 0
-            markdat=mean(col.data(indstouse,[6 8 10])./col.data(indstouse,[5 5 5]));
+            markdat=mean(col.data(indstouse,colstouse)./col.data(indstouse,ncolstouse));
             den(kk,jj)=den(kk,jj)+ncells;
             markers(kk,jj,:)=squeeze(markers(kk,jj,:))+markdat';
             end
@@ -67,7 +71,13 @@ for ii=1:length(inds)
             coun=counter(:);
             inds_good = coun >  max(coun)/2;
             
-            mm=median(dat(inds_good));
+            sorted_dat=sort(dat(inds_good));
+            
+            qq = find(sorted_dat > 0,1,'first');
+            
+            %mm=median(dat(inds_good));
+            
+            mm=sorted_dat(qq);
             
             markeravgs(:,:,kk)=markeravgs(:,:,kk)/mm;
         end

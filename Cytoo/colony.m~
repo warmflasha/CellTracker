@@ -308,12 +308,8 @@ classdef colony
             %both in pixels. Coords chosen so [mean(x), mean(y)]=[0,0]
             %for colony. Returns indices of points. 
             
-            com_coords=bsxfun(@minus,obj.data(:,1:2),mean(obj.data(:,1:2)));
-            disttopoint=bsxfun(@minus,com_coords,coord);
-            disttopoint=sqrt(sum(disttopoint.*disttopoint,2));
-            inds = disttopoint < radius;
+            coords=bsxfun(@minus,obj.data(:,1:2),mean(obj.data,1:2));
             
-        end
             
             
             
