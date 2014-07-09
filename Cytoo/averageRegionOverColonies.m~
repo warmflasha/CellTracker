@@ -8,7 +8,7 @@ function [avg, err]=averageRegionOverColonies(matfile,colshape,coord,radius,colu
 % columns -- data columns to average,
 % ncolumns -- normalization columns to use (1 for each data column)
 %
-% See also getColonyPoints, colony/getPointsAroundCoordinate
+% See also 
 pp=load(matfile,'plate1');
 
 if ~exist('coord_type','var')
