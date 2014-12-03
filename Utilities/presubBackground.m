@@ -1,4 +1,4 @@
-function [nuc fimg]=presubBackground(nuc,fimg,nucbg,smadbg)
+function [nuc, fimg]=presubBackground(nuc,fimg,nucbg,smadbg)
 
 global userParam;
 
