@@ -10,8 +10,11 @@ end
 
 nImages=length(channames)-1;
 
-f1nm=dir([indir filesep '*' channames{1} '*' 's' int2str(frame) '_t1.TIF']);
-f1nm=[indir filesep f1nm(1).name];
+for ii=1:length(channames)
+    [tmp, ff{ii}]=folderFilesFromKeyword(indir,channames{ii});
+end
+
+f1nm=[indir filesep ff{1}(frame).name];
 disp(['Nuc marker img:' f1nm]);
 
 nuc=imread(f1nm);
@@ -22,8 +25,7 @@ nuc=uint16(65536*nuc);
 si=size(nuc);
 fimg=zeros(si(1),si(2),nImages);
 for jj=2:(nImages+1)
-    f1nm=dir([indir filesep '*' channames{jj} '*' 's' int2str(frame) '_t1.TIF']);
-    f1nm=[indir filesep f1nm(1).name];
+    f1nm=[indir filesep ff{jj}(frame).name];
     disp(['marker img:' f1nm]);
     
     fimgnow=imread(f1nm);
@@ -33,7 +35,7 @@ for jj=2:(nImages+1)
     %fimg(:,:,jj-1)=presubBackground_self(fimgnow);
 end
 
-nuc=presubBackground_self(nuc);
+%nuc=presubBackground_self(nuc);
 
 [maskC statsN]=segmentCells(nuc,fimg);
 [maskCyto, statsN]=addCellAvr2Stats(maskC,fimg,statsN);

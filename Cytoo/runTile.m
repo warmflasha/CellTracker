@@ -10,20 +10,22 @@ end
 
 nImages=length(channames)-1;
 
+for ii=1:length(channames)
+    [tmp, ff{ii}]=folderFilesFromKeyword(indir,channames{ii});
+end
+
 for ii=posRange(1):posRange(2)
     disp(['Running image ' int2str(ii)]);
     %read the files
     try
-        f1nm=dir([indir filesep '*' channames{1} '*' 's' int2str(ii) '_t1.TIF']);
-        f1nm=[indir filesep f1nm(1).name];
+        f1nm=[indir filesep ff{1}(ii).name];
         disp(['Nuc marker img:' f1nm]);
         imfiles(ii).nucfile=f1nm;
         nuc=imread(f1nm);
         si=size(nuc);
         fimg=zeros(si(1),si(2),nImages);
         for jj=2:(nImages+1)
-            f1nm=dir([indir filesep '*' channames{jj} '*' 's' int2str(ii) '_t1.TIF']);
-            f1nm=[indir filesep f1nm(1).name];
+            f1nm=[indir filesep ff{jj}(ii).name];
             fimgnow=imread(f1nm);
             imgfiles(ii).smadfile{jj-1}=f1nm;
             fimgnow=imsubtract(fimgnow,bIms{jj});
@@ -39,7 +41,7 @@ for ii=posRange(1):posRange(2)
         %Initialize error string
         userParam.errorStr=sprintf('Position %d\n',ii);
         
-        [maskC statsN]=segmentCells(nuc,fimg);
+        [maskC, statsN]=segmentCells(nuc,fimg);
         [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
         
         if ~isempty(statsN)
@@ -54,6 +56,6 @@ for ii=posRange(1):posRange(2)
     catch err       
         disp(['Error with image ' int2str(ii)]);
         disp(err.identifier);
-        %rethrow(err);
+        rethrow(err);
     end
 end
