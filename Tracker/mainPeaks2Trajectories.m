@@ -59,6 +59,7 @@ global userParam    % eventually may go to setUserParam fn, but this routine sta
 %%%%%% end of userParam defns
 
 verbose = userParam.verboseCellTrackerEDS;
+verbose = 0;
 
 ntimes = length(peaks);
 % count number of cells X times present in data as crude measure of amount
