@@ -98,6 +98,7 @@ traj = mainPeaks2Trajectories(peaks);
 
 % see this routine for defn of births struct array. REQUIRES SPLINES ALL
 % CELLS
+userParam.nobirths=1;
 if ~userParam.nobirths
     try
         births = findBirthNodes( cells, peaks );
