@@ -972,8 +972,8 @@ tic
 if ~handles.confocalexpt
     chemin=s1.imagedirectory;
     
-    [rangeG, listG] = folderFilesFromKeyword(s1.imagedirectory, s1.smadKeyWord,s1.filterKeyWord);
-    [rangeR, listR] = folderFilesFromKeyword(s1.imagedirectory, s1.nucKeyWord,s1.filterKeyWord);
+    [rangeG, listG] = folderFilesFromKeyword(s1.imagedirectory, s1.smadKeyWord);
+    [rangeR, listR] = folderFilesFromKeyword(s1.imagedirectory, s1.nucKeyWord);
     [range,IR,IG] = intersect(rangeR,rangeG);
     GreenImagesNames = listG(IG);
     RedImagesNames = listR(IR);

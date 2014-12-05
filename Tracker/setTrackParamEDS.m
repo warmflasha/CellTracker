@@ -9,7 +9,7 @@ userParam.L = 30; % this is the max distance (in pixels) objects in successive
 userParam.mergeGap = 4;
                   
 % Trajectories < this length (ie #times) are discarded
-userParam.minTrajLen = 4;
+userParam.minTrajLen = 1;
 userParam.minTrajLen = max(2, userParam.minTrajLen);
 
 % dst cost to map cell to dummy is sclDstCost(1)*DT*mean +

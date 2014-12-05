@@ -94,10 +94,11 @@ traj = mainPeaks2Trajectories(peaks);
 [cells, peaks] = peaksTraj2AWCells(peaks, traj);
 
 % create spline coefs and smooth data, done on all cells no matter how bad
-cells = addSplines2Cells(cells);
+%cells = addSplines2Cells(cells);
 
 % see this routine for defn of births struct array. REQUIRES SPLINES ALL
 % CELLS
+userParam.nobirths=1;
 if ~userParam.nobirths
     try
         births = findBirthNodes( cells, peaks );
@@ -110,9 +111,9 @@ else
     nobirths = 1;
 end
 % adds 0|1 field to cells
-cells = findGoodCells(cells);
+%cells = findGoodCells(cells);
 
-cells = addLocalMax2Cells(cells);
+%cells = addLocalMax2Cells(cells);
 
 if ~nobirths
     save(inmatfile,'cells','peaks','userParam','births','-append');
