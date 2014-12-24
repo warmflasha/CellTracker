@@ -90,7 +90,6 @@ for ii=1:min(nframes,length(goodframes))
     nucfilename=[direc filesep nucfiles(ni).name];
     nuc=imread(nucfilename);
     nuc=smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
-    
     for xx=1:nImages
         smadfilename{xx}=[direc filesep smadfiles{xx}(si(xx)).name];
         fimg(:,:,xx)=smoothImage(imread(smadfilename{xx}),userParam.gaussRadius,userParam.gaussSigma);
