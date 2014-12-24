@@ -32,8 +32,8 @@ for ii=1:length(peaks)
 end
 pts=alldat(:,1:2);
 
-[~, S]=alphavol(pts,100);
-groups=getUniqueBounds(S.bnd);
+[~, S]=alphavol(pts,20);%original value 100
+groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
 allinds=assignCellsToColonies(pts,groups);
 alldat=[alldat full(allinds)];
 

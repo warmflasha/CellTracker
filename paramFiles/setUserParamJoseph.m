@@ -52,7 +52,7 @@ userParam.useCanny = 0;
 
 % filter all 1024x1300 sized images with this gaussian filter to give clean
 % local max, and edge detection, 2 will not work
-userParam.gaussFilterRadius = 2;
+userParam.gaussFilterRadius = 3;
 
 % define threshold for being in cell by two criterion:
 %   percent of nuclear area in cells > percNucInCell  AND
@@ -78,11 +78,14 @@ userParam.verboseEdgeThreshCyto = 0;
 % then define threshold =  cytoHalfMax*(max_img_Vpoly - bckgnd) + bckgnd
 %   The background can either be defined locally for each Vpoly as imopen(img, big-box)) or as 
 % one number for entire image. Std can be computed locally but always >= std for entire image 
-userParam.backgndMethod = 2;
+userParam.backgndMethod = -1;
 userParam.sclCytoStd = 1;
 userParam.cytoHalfMax = 0.5;
 userParam.pctLTBckgnd = 1;  % for Method=0, percent_less_than_background NB percent thus ~1
-userParam.backdiskrad=50;
+
+userParam.presubNucBackground=1;
+userParam.backdiskrad=100;
+
 % nucAreaHi used here also but defined below with similar params.
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -109,11 +112,11 @@ userParam.verboseCountNuc = 0;  % to print statistics and an image
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 4; 
-userParam.radiusMax = 6;
+userParam.radiusMin = 8; 
+userParam.radiusMax = 10;
 userParam.minNucSep = 4;
-userParam.nucIntensityRange = 5;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 5;  
+userParam.nucIntensityRange = 4;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc   = 4;  
 
 %%%%%%%%%%%%%% Parameters for findNucThresh()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -137,8 +140,8 @@ userParam.segFilterRadius = 0;
 userParam.test1LocalMax = 1;
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
-userParam.nucAreaLo =25*rescale^2; 
-userParam.nucAreaHi = 600*rescale^2;  % not too big
+userParam.nucAreaLo =300; 
+userParam.nucAreaHi = 1200;  % not too big
 userParam.nucSolidity = 0.80; % get rid of funny shapes
 userParam.nucAspectRatio = 2.5; % not too far from circular
 

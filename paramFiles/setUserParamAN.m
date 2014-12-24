@@ -1,10 +1,10 @@
-function setUserParamJoseph
-
-%   based on setUserParamsCCC10x(img)
+function setUserParamAN(img)
+%
+%   setUserParamsCCC20x(img)
 %
 % Contains master set of comments on how to adjust parameters and other
 % hints. Parameters based on 110118 images. The argument img is used only
-% to extract dimensions, use [] to default
+% to extract dimensions, use img=[] to use default
 %
 % Note on file compression: to go from 1024x1344 1.6mb .png to ~110kb
 % 512x672, mask both nuc and cyto images with dilation of the total cell
@@ -14,20 +14,19 @@ function setUserParamJoseph
 
 global userParam
 
-rescale = 1;
-if nargin && ~isempty(img) && (min(size(img)) > 1024)
-    % do not use, should have imresize here.
+rescale = 1.0;
+if nargin && ~isempty(img) && (min(size(img)) > 512)
+    % do not use, 
     %rescale = 0.5;
-    fprintf(1,'WARNING from setUserParamCCC10x should not run 10x images, half size\n');
 end
 
-fprintf(1, 'setUserParamCCC10x(): called to define params, rescale factor= %d\n', rescale);
+fprintf(1, 'setUserParamCCC20x(): called to define params, rescale factor= %d\n', rescale);
 
 % When verbose=1 set, image of field of cells produced with diagnostics. If
 % newFigure=1 these will pile up for successive times and eventually crash MATLAB 
 % because of memory limitations. Either run in debug mode and kill by hand or set
 % newFigure=0.
-userParam.newFigure = 1;
+userParam.newFigure = 0;
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;
@@ -44,15 +43,19 @@ userParam.verboseSegmentCells = 0;
 userParam.findNucThresh = 0;
 userParam.countNucCtr   = 1;
 
+% filter all 1024x1300 sized images with this gaussian filter to give clean
+% local max, and edge detection, 2 will not work
+userParam.gaussFilterRadius = 6;
+
+% for images with few nuclei, limit size of voronoi polyhedra to max nuc
+% radius around center (inferred from max area parameter)
+userParam.limitVoronoi = 0;
+
 % parameter for edge detection. Use 'canny' method in edge() unless get
 % nuclei overly large. Check method by on gaussian filtered image 
 % edge(red, 'canny') vs edge(red). If loosing nuclei use Canny. Set to zero
 % to run default.
-userParam.useCanny = 0;
-
-% filter all 1024x1300 sized images with this gaussian filter to give clean
-% local max, and edge detection, 2 will not work
-userParam.gaussFilterRadius = 2;
+userParam.useCanny = 1;
 
 % define threshold for being in cell by two criterion:
 %   percent of nuclear area in cells > percNucInCell  AND
@@ -60,8 +63,8 @@ userParam.gaussFilterRadius = 2;
 % If get huge area defined as 'cell' decrease percNucInCell to miss a few nuclei
 % and get better delineation of cell. Suspect large scale background
 % variation in green channel.
-userParam.percNucInCell = 0.90;
-userParam.cyto2NucArea  = 8;
+userParam.percNucInCell = 0.997;
+userParam.cyto2NucArea  = 5;
 
 % If use edgeThreshCyto() to define cytoplasm for each nuclei separately,
 % do not need previous 2 parameters. Following verbose plots cyto - backgnd
@@ -78,11 +81,12 @@ userParam.verboseEdgeThreshCyto = 0;
 % then define threshold =  cytoHalfMax*(max_img_Vpoly - bckgnd) + bckgnd
 %   The background can either be defined locally for each Vpoly as imopen(img, big-box)) or as 
 % one number for entire image. Std can be computed locally but always >= std for entire image 
-userParam.backgndMethod = 2;
+userParam.backgndMethod = -1;
 userParam.sclCytoStd = 1;
 userParam.cytoHalfMax = 0.5;
 userParam.pctLTBckgnd = 1;  % for Method=0, percent_less_than_background NB percent thus ~1
-userParam.backdiskrad=50;
+userParam.backdiskrad = 50; %radius for imopen to run on background image before subtracting
+
 % nucAreaHi used here also but defined below with similar params.
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -91,6 +95,8 @@ userParam.backdiskrad=50;
 % regmx = imextendedmax(im2, 5) worked somewhat, but gave more false pos.
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
+
+userParam.restrictVoronoi=1; % don't allow huge voronoi cells at border
 
 %   Filtering of nuclei done in three steps: 
 % 1. An optional threshold on allowed min intensity at max.
@@ -108,16 +114,16 @@ userParam.verboseCountNuc = 0;  % to print statistics and an image
 % the image. The nuclei after first and second selection shown in different
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
-userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 4; 
-userParam.radiusMax = 6;
-userParam.minNucSep = 4;
-userParam.nucIntensityRange = 5;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 5;  
+userParam.dontFilterNuc=0; % set to 1 to skip img(center) threshold filtering step
+userParam.radiusMin = 9; 
+userParam.radiusMax = 10;
+userParam.minNucSep = 10;
+userParam.nucIntensityRange = 90;   %original=10; value depends on radiusMin/Max 
+userParam.nucIntensityLoc   = 15;  %original value 10
 
 %%%%%%%%%%%%%% Parameters for findNucThresh()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-userParam.verboseFindNucThresh = 0;
+userParam.verboseFindNucThresh = 1;
 
 % locally refine the input mask, produced by global threshold, by making it
 % coincide with level defined by max gradient, computed separately for each cc.
@@ -126,7 +132,7 @@ userParam.useEdgeThreshNuc = 0;
 % The segmentation method. Watershed is >3x quicker, but needs well defined
 % necks in the binary image gotten via thresholding. chenvese will try to
 % find the max gradient contour, but can eliminate nuclei of very different
-% intensities within same connected component.
+% intensities within same connectec component.
 %userParam.segmentation = 'chenvese';
 userParam.segmentation = 'watershed';
 % can refilter sub images destined for segmentation to eliminate internal
@@ -137,9 +143,9 @@ userParam.segFilterRadius = 0;
 userParam.test1LocalMax = 1;
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
-userParam.nucAreaLo =25*rescale^2; 
-userParam.nucAreaHi = 600*rescale^2;  % not too big
-userParam.nucSolidity = 0.80; % get rid of funny shapes
+userParam.nucAreaLo =100*rescale^2; 
+userParam.nucAreaHi = 5000*rescale^2;  % not too big
+userParam.nucSolidity = 0.50; % get rid of funny shapes
 userParam.nucAspectRatio = 2.5; % not too far from circular
 
 %%%%%%%%%%%%%%% Params for gaussThresh() %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -165,11 +171,10 @@ userParam.gaussThreshSigma  = 3;
 % NB outputData4AWTracker uses only the RadiusMax parameter to decide what data
 % to output
 %
-userParam.donutRadiusMin = 1;  % must be >=0
-userParam.donutRadiusMax = 2;  % set to zero to skip 
-userParam.forceDonut = 0; 
-userParam.intersectDonutCyto = 1;
-
+userParam.donutRadiusMin = 5;  % must be >=0
+userParam.donutRadiusMax = 8;  % set to zero to skip 
+userParam.forceDonut = 1; 
+userParam.intersectDonutCyto = 0;
 if userParam.forceDonut && ~userParam.donutRadiusMax
     fprintf(1, 'WARNING inconsitent userParam for donut option.. check\n');
     userParam.forceDonut = 0;
