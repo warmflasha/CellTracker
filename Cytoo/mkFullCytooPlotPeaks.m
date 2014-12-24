@@ -8,8 +8,6 @@ if ~exist('returndat','var')
     returndat=0;
 end
 
-
-
 pp=load(matfile);
 peaks=pp.peaks;
 ac=pp.acoords;

@@ -22,7 +22,7 @@ end
 
 %[dims, wavenames]=getDimsFromScanFile(direc);
 %chans=wavenames2chans(wavenames);
-chans={'w0000','w0001','w0002'};
+chans={'w0000','w0001','w0003','w0004'};%make sure that the first channel is indeed Dapi (used to find cells; second channel - to quantify
 
 ff=folderFilesFromKeyword(direc,chans{1});
 maxims=ff(end)+1;
@@ -58,21 +58,19 @@ end
 %stored in accords, can also return fully aligned image, but not
 %recommended for large numbers of files.
 if step < 4
-    [acoords]=alignManyPanels(direc,chans{1},3,4,dims,500:900,maxims);
+    [acoords]=alignManyPanels(direc,chans{1},3,4,dims,50:200,maxims);
     save([direc filesep outfile],'acoords','-append');
 end
-
-
-
 
 if step < 5
      assembleMatFiles(direc,imgsperprocessor,nloop,outfile);
 end
+
 %peaksToColonies generates the colony structure from peaks and accords
 %computes alpha volume and then finds all connected components.
 if step < 6
-    load([direc filesep outfile],'bIms','nIms');
-    [colonies, peaks]=peaksToColonies([direc filesep outfile]);
+   load([direc filesep outfile],'bIms','nIms');
+    [colonies, peaks]=peaksToColoniesNEW([direc filesep outfile]);%change this function to peaksToColoniesNEW
     plate1=plate(colonies,dims,direc,chans,bIms,nIms);
     save([direc filesep outfile],'plate1','peaks','-append');  
 end

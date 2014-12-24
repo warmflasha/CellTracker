@@ -42,7 +42,7 @@ classdef colony
                 si=[1024 1344];
             end
             
-            if isempty(data) || size(data,1) < 4
+            if isempty(data) %|| size(data,1) < 4
                 obj.data=[];
                 obj.ncells=0;
                 obj.center=[0 0];
@@ -128,10 +128,10 @@ classdef colony
             %cell array of the same length as imKeyword
             
             
-            
+            disp('Calling this function!!');
             
             imnums=obj.imagenumbers;
-            dim1=find(diff(obj.imagenumbers)>1,1,'first');
+            dim1=find(diff(imnums)>1,1,'first');%dim1=find(diff(obj.imagenumbers)>1,1,'first');
             if isempty(dim1)
                 total1=length(imnums);
                 total2=1;
