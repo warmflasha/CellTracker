@@ -1,4 +1,4 @@
-function [outdat, nuc, fimg, maskCyto]=runOne(indir,channames,frame,bIms,nIms,paramfile)
+function [outdat, nuc fimg maskCyto]=runOne(indir,channames,frame,bIms,nIms,paramfile)
 
 global userParam;
 
@@ -11,7 +11,7 @@ end
 nImages=length(channames)-1;
 
 for ii=1:length(channames)
-    [~, ff{ii}]=folderFilesFromKeyword(indir,channames{ii});
+    [tmp, ff{ii}]=folderFilesFromKeyword(indir,channames{ii});
 end
 
 f1nm=[indir filesep ff{1}(frame).name];

@@ -1,4 +1,4 @@
-function [range, list] = folderFilesFromKeyword(folder, key)
+function [range, list] = folderFilesFromKeyword(folder, key, useonly)
 %
 %   [range, list] = folderFilesFromKeyword(folder, key)
 %
@@ -18,6 +18,7 @@ function [range, list] = folderFilesFromKeyword(folder, key)
 % If all names with 'key' are not in assumed format then return [] arrays with
 % warning and offending name
 
+
     range=[]; 
     list = struct('name', [], 'datenum', []);
 
@@ -30,7 +31,7 @@ function [range, list] = folderFilesFromKeyword(folder, key)
     ctr = 0;
     for ii = 1:length(dirlist)
         name = dirlist(ii).name;
-        if( strfind(name, key) )
+        if( ~isempty(strfind(name, key)) ) && (~exist('useonly','var') || isempty(useonly) || ~isempty(strfind(name,useonly)) )
             ctr = ctr + 1;
             tmp(ctr).name = name;
             tmp(ctr).datenum = dirlist(ii).datenum;

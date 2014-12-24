@@ -1,4 +1,4 @@
-function [maskC, stats] = edgeThreshCytoAW(img, stats, maskN,imgNum)
+function [maskC, stats] = edgeThreshCyto(img, stats, maskN,imgNum)
 %
 %   [maskC, stats] = edgeThreshCyto(img, stats, maskN)
 %
@@ -34,25 +34,13 @@ function [maskC, stats] = edgeThreshCytoAW(img, stats, maskN,imgNum)
 global userParam;
 
 verbose = 0;
-% Select background method. The following parameters may be used depending on
-% the method. Note defn:
-%   cyto_half_max*(max - bckgnd) + bckgnd
-
-if length(stats) < 1
-    maskC = false(size(img));
-    return
-end
 
 
-cyto_half_max = userParam.cytoHalfMax;  % eg ~0.5;
-
-if userParam.backgndMethod > 0.1
-    [bckgnd0, stdb0, backgndI] = findBackgnd(img, 0);
-elseif userParam.backgndMethod==-1
-    bckgnd0=0; stdb0=0;
-else
-    [bckgnd0, stdb0] = minIntensityBckgnd(img, userParam.pctLTBckgnd);
-end
+%This removes background subtraction from this routine, it should be
+%handled separately from the image processing
+userParam.backgndMethod=-1;
+bckgnd0=0; stdb0=0;
+cyto_half_max = 0.5;
 
 
 % use two tests on threshold (1) for pts with gradient when mean is
@@ -81,16 +69,16 @@ bckgnd_list = [];  % incase no nucs in image
 for i = 1:length(stats)
     pixels = stats(i).VPixelIdxList;
     max_img = max(img(pixels));
-    if userParam.backgndMethod == 2
-        pts = double(backgndI(pixels));
-        bckgnd = mean(pts);
-        stdb = max(std(pts), stdb0);  %if backgnd defined by imopen may severely reduce variability at cell
-        % bckgnd = min(bckgnd, bckgnd0 + 2*stdb);   % if entire Vpolygon is cell, don't overestimate backgnd
-        bckgnd_list(i) = bckgnd;
-    else
+%     if userParam.backgndMethod == 2
+%         pts = double(backgndI(pixels));
+%         bckgnd = mean(pts);
+%         stdb = max(std(pts), stdb0);  %if backgnd defined by imopen may severely reduce variability at cell
+%         % bckgnd = min(bckgnd, bckgnd0 + 2*stdb);   % if entire Vpolygon is cell, don't overestimate backgnd
+%         bckgnd_list(i) = bckgnd;
+%     else
         bckgnd = bckgnd0;
         stdb   = stdb0;
-    end
+%     end
     stats(i).BackgroundIntensity(imgNum) = round(bckgnd);
     
     ee = edges(pixels);

@@ -155,53 +155,53 @@ dst_dummy = mean_nn_dist*0.5;
 
 %%%%%%%%%%%%%%%% AW routines with global osize nsize omitted
 %
-% function A=initializeAssociationMatrix(C)
-% % A=initializeAssociationMatrix(C)
-% %-------------------
-% % function to initialize the association matrix
-% % taken from matlab tracker
-%
-% osize = size(C,1) - 1;
-% nsize = size(C,2) - 1;
-%
-% A=zeros(size(C));
-%
-% for i=1:osize
-%     % sort costs of real particles
-%     [srtcst,srtidx] = sort(C(i,:));
-%     % append index of dummy particle
-%     iidx = 1;
-%     dumidx = find(srtidx==(nsize+1));
-%     % search for available particle of smallest cost or dummy
-%     while and(sum(A(:,srtidx(iidx)))~=0, iidx<dumidx), % particle must not be taken
-%         iidx = iidx + 1;                               % AND cost must be less than dummy
-%     end;
-%     A(i,srtidx(iidx)) = 1;
-% end;
-% % set dummy particle for columns with no entry
-% s = sum(A,1);
-% A(osize+1,s < 1) = 1;
-% % dummy always corresponds to dummy
-% A(osize+1,nsize+1) = 1;
-%
-% function ch=checkAssociation(A)
-% % ch=checkAssociation(A)
-% %---------------------------
-% % check association matrix for consistency
-%
-% osize = size(A,1) -1;
-% nsize = size(A,2) -1;
-%
-% ch = 1;
-% s = sum(A(:,1:nsize),1);
-% if find(s(1:nsize)~=1),
-%     disp('Inconsistent initial matrix A. Columns: ');
-%     find(s(1:nsize)~=1)
-%     ch = 0;
-% end;
-% s = sum(A(1:osize,:),2);
-% if find(s(1:osize)~=1),
-%     disp('Inconsistent initial matrix A. Rows:');
-%     find(s(1:osize)~=1)
-%     ch=0;
-% end
+function A=initializeAssociationMatrix(C)
+% A=initializeAssociationMatrix(C)
+%-------------------
+% function to initialize the association matrix
+% taken from matlab tracker
+
+osize = size(C,1) - 1;
+nsize = size(C,2) - 1;
+
+A=zeros(size(C));
+
+for i=1:osize
+    % sort costs of real particles
+    [srtcst,srtidx] = sort(C(i,:));
+    % append index of dummy particle
+    iidx = 1;
+    dumidx = find(srtidx==(nsize+1));
+    % search for available particle of smallest cost or dummy
+    while and(sum(A(:,srtidx(iidx)))~=0, iidx<dumidx), % particle must not be taken
+        iidx = iidx + 1;                               % AND cost must be less than dummy
+    end;
+    A(i,srtidx(iidx)) = 1;
+end;
+% set dummy particle for columns with no entry
+s = sum(A,1);
+A(osize+1,s < 1) = 1;
+% dummy always corresponds to dummy
+A(osize+1,nsize+1) = 1;
+
+function ch=checkAssociation(A)
+% ch=checkAssociation(A)
+%---------------------------
+% check association matrix for consistency
+
+osize = size(A,1) -1;
+nsize = size(A,2) -1;
+
+ch = 1;
+s = sum(A(:,1:nsize),1);
+if find(s(1:nsize)~=1),
+    disp('Inconsistent initial matrix A. Columns: ');
+    find(s(1:nsize)~=1)
+    ch = 0;
+end;
+s = sum(A(1:osize,:),2);
+if find(s(1:osize)~=1),
+    disp('Inconsistent initial matrix A. Rows:');
+    find(s(1:osize)~=1)
+    ch=0;
+end
