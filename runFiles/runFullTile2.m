@@ -19,13 +19,13 @@ end
 %[dims, wavenames]=getDimsFromScanFile(direc);
 %chans=wavenames2chans(wavenames);
 
-chans = {'w0001','w0000'};
+chans = {'w0000','w0004'};
 
 ff=folderFilesFromKeyword(direc,chans{1});
 maxims=ff(end-1);
 
-nloop=12;
-imgsperprocessor=ceil(maxims/12);
+nloop=4;
+imgsperprocessor=ceil(maxims/nloop);
 %generate background image for each channel
 if step < 2
     for ii=1:length(chans)

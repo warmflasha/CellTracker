@@ -24,6 +24,7 @@ for ii=posRange(1):posRange(2)
         disp(['Nuc marker img:' f1nm]);
         imfiles(ii).nucfile=f1nm;
         nuc=imread(f1nm);
+        imgfiles(ii).nucfile=f1nm;
         si=size(nuc);
         %apply gaussian smoothing
         nuc=smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
@@ -64,6 +65,6 @@ for ii=posRange(1):posRange(2)
     catch err       
         disp(['Error with image ' int2str(ii)]);
         disp(err.identifier);
-        rethrow(err);
+        %rethrow(err);
     end
 end
