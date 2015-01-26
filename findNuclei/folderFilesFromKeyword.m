@@ -22,6 +22,11 @@ function [range, list] = folderFilesFromKeyword(folder, key, useonly)
     range=[]; 
     list = struct('name', [], 'datenum', []);
 
+    
+    if exist('useonly','var') && ~iscell(useonly)
+        useonly = {useonly};
+    end
+    
     dirlist = dir(folder);
     if( ~ length(dirlist) )
         fprintf(1, 'folder= %s not found or empty\n', folder);
@@ -31,7 +36,7 @@ function [range, list] = folderFilesFromKeyword(folder, key, useonly)
     ctr = 0;
     for ii = 1:length(dirlist)
         name = dirlist(ii).name;
-        if( ~isempty(strfind(name, key)) ) && (~exist('useonly','var') || isempty(useonly) || ~isempty(strfind(name,useonly)) )
+        if( ~isempty(strfind(name, key)) ) && (~exist('useonly','var') || isempty(useonly) || strfindmulti(name,useonly) )
             ctr = ctr + 1;
             tmp(ctr).name = name;
             tmp(ctr).datenum = dirlist(ii).datenum;
@@ -131,5 +136,22 @@ function [range, list] = folderFilesFromKeyword(folder, key, useonly)
             suffix = [an, suffix];
         end
         
-    
+        function found = strfindmulti(str,cellpatterns)
+            npat = length(cellpatterns);
+            nfound = 0;
+            for ii = 1:npat
+                if ~isempty(strfind(str,cellpatterns{ii}))
+                    nfound = nfound + 1;
+                end
+            end
+            
+            if nfound == npat
+                found = true;
+            else
+                found = false;
+            end
+            
+                
+            
+ 
     
