@@ -19,8 +19,8 @@ userParam.verboseSegmentCells = 1;
 
 
 % image smoothing parameters
-userParam.gaussRadius=5;
-userParam.gaussSigma=2;
+userParam.gaussRadius=10;
+userParam.gaussSigma=3;
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -53,12 +53,12 @@ userParam.radiusMin = 8;
 userParam.radiusMax = 10;
 userParam.minNucSep = 8;
 userParam.nucIntensityRange = 2;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 400;
+userParam.nucIntensityLoc   = 1000;
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =400; 
+userParam.nucAreaLo =100; 
 userParam.nucAreaHi = 5000;  % not too big
 
 

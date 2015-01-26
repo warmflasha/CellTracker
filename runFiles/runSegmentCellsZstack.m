@@ -41,14 +41,14 @@ for ii=1:min(nframes,length(ff.t))
     if isempty(chan) || length(chan) == 1
         fimg = nuc;
     else
-        for ii=2:length(chan)
-            fimg(:,:,ii-1)=andorMaxIntensity(ff,pos,ff.t(ii),chan(ii));
+        for xx=2:length(chan)
+            fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,ff.t(ii),chan(xx));
         end
     end
     
     nuc = smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
-    for ii=1:size(fimg,3)
-        fimg(:,:,ii) = smoothImage(fimg(:,:,ii),userParam.gaussRadius,userParam.gaussSigma);
+    for xx=1:size(fimg,3)
+        fimg(:,:,xx) = smoothImage(fimg(:,:,xx),userParam.gaussRadius,userParam.gaussSigma);
     end
     
     if isfield(userParam,'presubNucBackground') && userParam.presubNucBackground
