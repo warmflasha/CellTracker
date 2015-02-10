@@ -55,10 +55,10 @@ for jj=1:dims(2)
             end
             currimgind=(jj-1)*dims(1)+ii;
             acoords(currimgind).absinds=currinds;
-%             if nargout == 2
-%                 currimg=imread(imFiles(currimgind).name);
-%                 fullIm(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=currimg;
-%             end
+            if nargout == 2
+                currimg=imread(imFiles(currimgind).name);
+                fullIm(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=currimg;
+            end
         end
     end
 end

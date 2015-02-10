@@ -22,4 +22,4 @@ for ii=1:length(files.ordering)
     filename = [filename str1];
 end
 
-filename = [filename '.tif'];
+filename = [files.direc filesep filename '.tif'];
