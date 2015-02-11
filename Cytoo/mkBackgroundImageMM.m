@@ -1,4 +1,4 @@
-function [minIm, meanIm]=mkBackgroundImageMM(files,maxIm,filterrad)
+function [minIm, meanIm]=mkBackgroundImageMM(files,chan,maxIm,filterrad)
 
 
 if ~exist('filterrad','var')
@@ -7,16 +7,20 @@ end
 
 
 q=1;
-nIms=files;
-ImRange=randperm(nIms-1);
+xmax = max(files.pos_x)+1;
+ymax = max(files.pos_y)+1;
+nIms=xmax*ymax;
+ImRange=randperm(nIms);
+
 for jj=1:length(ImRange)
-    ii=ImRange(jj);
+    [x, y]=ind2sub([xmax ymax],ImRange(jj));
+    
+    imnm = mkMMfilename(files,x-1,y-1,[],[],chan);
+    
     if exist('maxIm','var') && q > maxIm
         break;
     end
-    imnm=ImFiles(ii).name;
-    imNow=im2double(imread([direc filesep imnm]));
-    %if max(max(imNow)) > 300
+    imNow=im2double(imread(imnm{1}));
         if q==1
             minIm=imNow;
             meanIm=imNow;
@@ -25,9 +29,6 @@ for jj=1:length(ImRange)
             meanIm=((q-1)*meanIm+imNow)/q;
         end
         q=q+1;
-%      else
-%          continue;
-%      end
 end
 
  gfilt=fspecial('gaussian',filterrad,filterrad/5);

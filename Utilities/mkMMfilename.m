@@ -1,7 +1,7 @@
 function filename=mkMMfilename(files,pos_x,pos_y,z,t,chan)
 
 if ~exist('chan','var')
-    chan = files.chan;
+    chan = 1;
 end
 
 if ~exist('z','var')
@@ -20,7 +20,7 @@ if ~exist('pos_y','var')
     pos_y=[];
 end
 
-if isinteger(chan)
+if ~iscell(chan)
     chan = files.chan(chan);
 end
 

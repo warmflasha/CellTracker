@@ -1,4 +1,8 @@
-function files = readMMdirectory(direc)
+function files = readMMdirectory(direc,nucname)
+
+if ~exist('nucname','var')
+    nucname='DAPI';
+end
 
 
 ftmp = dir(direc);
@@ -17,6 +21,7 @@ files.direc = direc;
 files.prefix = prefix; 
 files.pos_x = unique(pos_x);
 files.pos_y = unique(pos_y);
+files=MMputNucFirst(files,nucname);
 
 
 

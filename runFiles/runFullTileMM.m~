@@ -19,7 +19,6 @@ end
 ff=readMMdirectory(direc);
 dims = [ max(ff.pos_x) max(ff.pos_y)];
 wavenames=ff.chan;
-chan=wavenames2chans(wavenames);
 
 maxims= dims(1)*dims(2);
 nloop=12;
@@ -27,8 +26,8 @@ imgsperprocessor=ceil(maxims/nloop);
 
 %generate background image for each channel
 if step < 2
-    for ii=1:length(chans)
-        [minI meanI]=mkBackgroundImage(direc,chans{ii},min(500,maxims));
+    for ii=1:length(wavenames)
+        [minI, meanI]=mkBackgroundImageMM(ff,wavenames{ii},min(500,maxims));
         bIms{ii}=uint16(2^16*minI);
         normIm=(meanI-minI);
         normIm=normIm.^-1;
@@ -43,7 +42,7 @@ end
 %outfile
 if step < 3
     load([direc filesep outfile],'bIms','nIms');
-    runTileLoop(direc,chans,imgsperprocessor,nloop,maxims,bIms,nIms,paramfile);
+    runTileLoopMM(direc,chans,imgsperprocessor,nloop,maxims,bIms,nIms,paramfile);
 end
 
 %performs a series of pairwise alignments,
@@ -51,7 +50,7 @@ end
 %stored in accords, can also return fully aligned image, but not
 %recommended for large numbers of files.
 if step < 4
-    [acoords]=alignManyPanels(direc,chans{1},1,4,dims,85:150,maxims);
+    [acoords]=alignManyPanels(,1,4,dims,85:150,maxims);
     save([direc filesep outfile],'acoords','-append');
 end
 
@@ -66,24 +65,6 @@ if step < 6
     plate1=plate(colonies,dims,direc,chans,bIms,nIms);
     save([direc filesep outfile],'plate1','peaks','-append');  
 end
-
-function chans=wavenames2chans(wavenames,nucname)
-
-if ~exist('nucname','var')
-    nucname='DAPI';
-end
-
-kk=strfind(wavenames,nucname);
-ii=~cellfun(@isempty,kk);
-nuc_ind=find(ii);
-
-allchans=1:length(wavenames);
-nonnucchans=setdiff(allchans,nuc_ind);
-chans{1}=['w' int2str(nuc_ind)];
-for jj=1:length(nonnucchans)
-    chans{jj+1}=['w' int2str(nonnucchans(jj))];
-end
-
 
 
 
