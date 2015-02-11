@@ -66,6 +66,6 @@ for ii=posRange(1):posRange(2)
     catch err       
         disp(['Error with image ' int2str(ii)]);
         disp(err.identifier);
-        rethrow(err);
+        %rethrow(err);
     end
 end

@@ -17,7 +17,7 @@ if ~exist('paramfile','var')
 end
 
 ff=readMMdirectory(direc);
-dims = [ max(ff.pos_x) max(ff.pos_y)];
+dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
 wavenames=ff.chan;
 
 maxims= dims(1)*dims(2);
@@ -61,8 +61,8 @@ end
 %computes alpha volume and then finds all connected components.
 if step < 6
     load([direc filesep outfile],'bIms','nIms');
-    [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-    plate1=plate(colonies,dims,direc,chans,bIms,nIms);
+    [colonies, peaks]=peaksToColoniesSC([direc filesep outfile]);
+    plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms);
     save([direc filesep outfile],'plate1','peaks','-append');  
 end
 
