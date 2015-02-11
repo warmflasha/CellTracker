@@ -14,22 +14,26 @@ fprintf(1, '%s called to define params\n',mfilename);
 % newFigure=0.
 userParam.newFigure = 0;
 
+%for single cells or colonies:coltype=1 (uses distance-based colonies
+%grouping) coltype=0 uses alphavolume to group circular colonies
+userParam.coltype = 1;
+
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-userParam.verboseSegmentCells = 1;
+userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
 % image smoothing parameters
-userParam.gaussRadius=6;
-userParam.gaussSigma=2;
+userParam.gaussRadius=6;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
+userParam.gaussSigma=2; % no such original parameter found in SetUserParamAN ( gaussThreshSigma is defined below)
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
-userParam.backgroundSmoothSig=10;
+userParam.backgroundSmoothSig=10;  % all three were not in the SetUserParamAN file explicitly
 userParam.backgroundOpenRad = 50;
 
-userParam.presubNucBackground=0;
+userParam.presubNucBackground=0;%
 userParam.presubSmadBackground=0;
-userParam.backdiskrad = 200;
+userParam.backdiskrad = 200; 
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Filtering of nuclei done in three steps: 
@@ -49,27 +53,27 @@ userParam.backdiskrad = 200;
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 20; 
-userParam.radiusMax = 22;
-userParam.minNucSep = 8;
-userParam.nucIntensityRange = 10;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 100;
+userParam.radiusMin = 27; %
+userParam.radiusMax = 35;%
+userParam.minNucSep = 10;%10
+userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc   = 390;  % 390 
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =400; 
-userParam.nucAreaHi = 5000;  % not too big
+userParam.nucAreaLo =370; % measure the actual values and decide on this parameter
+userParam.nucAreaHi = 4000;  % not too big
 
 
 %%%%%PARAMETER BELOW HERE TYPICALLY DO NOT NEED TO BE MODIFIED%%%%%%%%%%%
 
 
 %parameters for cytoplasm calculation
-userParam.donutRadiusMin = 6;  % must be >=0
-userParam.donutRadiusMax = 10;  % set to zero to skip 
+userParam.donutRadiusMin = 4;  % 5 must be >=0
+userParam.donutRadiusMax = 6;  % 8 set to zero to skip 
 userParam.forceDonut = 1; 
-userParam.minPtsCytoplasm = 5;
+userParam.minPtsCytoplasm = 5;%5
 
 %%%%%%%%%%%%%%% Params for gaussThresh() %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Define threshold for grayscale image by fitting gaussian to center of 
@@ -78,7 +82,7 @@ userParam.minPtsCytoplasm = 5;
 % *Sigma * STD(of model fit, ie ignoring points far in + tail). There is
 % buried 'verbose' parameter in this routine. Its assumed images are
 % integer valued, ie not scaled to [0,1]
-userParam.gaussThreshExcess = 5;
+userParam.gaussThreshExcess = 6;%in AN file,5 bf
 userParam.gaussThreshSigma  = 3;
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
@@ -87,10 +91,10 @@ userParam.verboseCountNuc = 0;  % to print statistics and an image
 % nuclei overly large. Check method by on gaussian filtered image 
 % edge(red, 'canny') vs edge(red). If loosing nuclei use Canny. Set to zero
 % to run default.
-userParam.useCanny = 0;
+userParam.useCanny = 1;%0
 
-userParam.nucSolidity = 0.80; % get rid of funny shapes
-userParam.nucAspectRatio = 3; % not too far from circular
+userParam.nucSolidity = 0.50; % get rid of funny shapes %0.80
+userParam.nucAspectRatio = 2.5; % not too far from circular %3
 
 % define threshold for being in cell by two criterion:
 %   percent of nuclear area in cells > percNucInCell  AND
@@ -98,11 +102,11 @@ userParam.nucAspectRatio = 3; % not too far from circular
 % If get huge area defined as 'cell' decrease percNucInCell to miss a few nuclei
 % and get better delineation of cell. Suspect large scale background
 % variation in green channel.
-userParam.percNucInCell = 0.90;
-userParam.cyto2NucArea  = 8;
+userParam.percNucInCell = 0.997;%0.90;
+userParam.cyto2NucArea  = 5;%8;
 
 % If use edgeThreshCyto() to define cytoplasm for each nuclei separately,
 % do not need previous 2 parameters. Following verbose plots cyto - backgnd
-userParam.verboseEdgeThreshCyto = 0;
+userParam.verboseEdgeThreshCyto = 0;% to suppress printed output 
 
 userParam.sclCytoStd = 1;
