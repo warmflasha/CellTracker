@@ -39,7 +39,7 @@ classdef colony
             
             
             if ~exist('si','var') || isempty(si)
-                si=[1024 1344];
+                si=[2048 2048];%1024 1344
             end
             
             if isempty(data) %|| size(data,1) < 4
@@ -128,7 +128,7 @@ classdef colony
             %cell array of the same length as imKeyword
             
             
-            disp('Calling this function!!');
+           % disp('Calling this function!!');
             
             imnums=obj.imagenumbers;
             dim1=find(diff(imnums)>1,1,'first');%dim1=find(diff(obj.imagenumbers)>1,1,'first');

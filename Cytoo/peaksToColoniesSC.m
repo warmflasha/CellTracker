@@ -1,4 +1,4 @@
-function [colonies peaks]=peaksToColonies(matfile)
+function [colonies peaks]=peaksToColoniesSC(matfile)
 
 pp=load(matfile,'peaks','acoords','imgfiles','dims');
 peaks=pp.peaks;
@@ -32,15 +32,19 @@ for ii=1:length(peaks)
 end
 pts=alldat(:,1:2);
 
-[~, S]=alphavol(pts,100);%original value 100
-groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
-allinds=assignCellsToColonies(pts,groups);
-alldat=[alldat full(allinds)];
+allinds=NewColoniesAW(pts);% changed to a new function, the output is not a cell array
+%[~, S]=alphavol(pts,20);%original value 100
+%groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
+%allinds=assignCellsToColonies(pts,groups);
+%alldat=[alldat full(allinds)];
 
+alldat = [alldat, allinds];
+
+ngroups = max(allinds);
 %Make colony structure
-for ii=1:length(groups)
+for ii=1:ngroups;
     cellstouse=allinds==ii;
-    colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[],pp.imgfiles);
+    colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[2048 2048],pp.imgfiles);%[2048 2048]%[1024 1344]
 end
 
 %put data back into peaks
@@ -48,4 +52,3 @@ for ii=1:length(peaks)
     cellstouse=alldat(:,end-1)==ii;
     peaks{ii}=[peaks{ii} alldat(cellstouse,end-1:end)];
 end
-
