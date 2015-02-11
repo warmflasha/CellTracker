@@ -8,7 +8,7 @@ catch
     error('Error evaluating paramfile.');
 end
 
-nImages=length(channames)-1;
+nImages=length(files.chan)-1;
 
 xmax = max(files.pos_x)+1;
 ymax = max(files.pos_y)+1;

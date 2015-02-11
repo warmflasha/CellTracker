@@ -8,7 +8,7 @@ matlabpool('local',nloop);
 parfor ii=1:nloop
     n1=(ii-1)*imgsperprocessor+1;
     n2=min(ii*imgsperprocessor,maxims);
-    outfile=[direc filesep 'out_' int2str(n1) '.mat'];
-    runTile(files,outfile,[n1 n2],bIms,nIms,paramfile);
+    outfile=[files.direc filesep 'out_' int2str(n1) '.mat'];
+    runTileMM(files,outfile,[n1 n2],bIms,nIms,paramfile);
 end
 matlabpool close;

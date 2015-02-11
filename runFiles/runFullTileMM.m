@@ -21,7 +21,7 @@ dims = [ max(ff.pos_x) max(ff.pos_y)];
 wavenames=ff.chan;
 
 maxims= dims(1)*dims(2);
-nloop=12;
+nloop=4;
 imgsperprocessor=ceil(maxims/nloop);
 
 %generate background image for each channel
