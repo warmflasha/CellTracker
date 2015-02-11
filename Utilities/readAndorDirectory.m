@@ -60,6 +60,7 @@ ordering=ordering(reord);
 
 
 for ii=1:nprefix
+    files(ii).direc = direc;
     files(ii).ordering = ordering;
     files(ii).prefix = prefixes{ii};
     files(ii).p=sort(unique(p{ii}));

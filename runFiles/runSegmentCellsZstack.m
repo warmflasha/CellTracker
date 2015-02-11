@@ -76,7 +76,7 @@ for ii=1:min(nframes,length(ff.t))
         
         peaks{ii}=[];
         statsArray{ii}=[];
-        rethrow(err);
+        %rethrow(err);
         continue;
     end
 
