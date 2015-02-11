@@ -50,7 +50,7 @@ end
 %stored in accords, can also return fully aligned image, but not
 %recommended for large numbers of files.
 if step < 4
-    acoords=alignManyPanelsMM(files,1:200,maxims);
+    acoords=alignManyPanelsMM(ff,1:200,maxims);
     save([direc filesep outfile],'acoords','-append');
 end
 

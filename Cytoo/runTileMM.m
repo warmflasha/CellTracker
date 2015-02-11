@@ -21,12 +21,11 @@ for ii=posRange(1):posRange(2)
         %read nuclear image, smooth and background subtract
         
         [x, y]=ind2sub([xmax ymax],ii);
-        f1nm = mkMMfilename(files,x-1,y-1,[],[],files.chan{1});
+        f1nm = mkMMfilename(files,x-1,y-1,[],[],1);
 
         disp(['Nuc marker img:' f1nm]);
-        imfiles(ii).nucfile=f1nm;
-        nuc=imread(f1nm);
-        imgfiles(ii).nucfile=f1nm;
+        imfiles(ii).nucfile=f1nm{1};
+        nuc=imread(f1nm{1});
         si=size(nuc);
         %apply gaussian smoothing
         nuc=smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
@@ -38,10 +37,10 @@ for ii=posRange(1):posRange(2)
         
         fimg=zeros(si(1),si(2),nImages);
         for jj=2:(nImages+1)
-            f1nm = mkMMfilename(files,x-1,y-1,[],[],files.chan{jj});
-            fimgnow=imread(f1nm);
+            f1nm = mkMMfilename(files,x-1,y-1,[],[],jj);
+            fimgnow=imread(f1nm{1});
             fimgnow = smoothImage(fimgnow,userParam.gaussRadius,userParam.gaussSigma);
-            imgfiles(ii).smadfile{jj-1}=f1nm;
+            imgfiles(ii).smadfile{jj-1}=f1nm{1};
             fimgnow=imsubtract(fimgnow,bIms{jj});
             fimgnow=immultiply(im2double(fimgnow),nIms{jj});
             fimg(:,:,jj-1)=uint16(65536*fimgnow);
@@ -67,6 +66,6 @@ for ii=posRange(1):posRange(2)
     catch err       
         disp(['Error with image ' int2str(ii)]);
         disp(err.identifier);
-        %rethrow(err);
+        rethrow(err);
     end
 end
