@@ -44,7 +44,7 @@ for ii=1:nImages
     
     ind = strfind(nm,'_w');
     if ~isempty(ind)
-        inds(4) = inds;
+        inds(4) = ind;
         w{currPrefixNum} = [w{currPrefixNum} str2num(nm((inds(4)+2):(inds(4)+5)))];
     else
         inds(4) = 0;

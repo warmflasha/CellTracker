@@ -1,4 +1,4 @@
-function runFullTile2(direc,outfile,dims,paramfile,step)
+function runFullTile2(direc,outfile,dims,paramfile,step)% the last parameter is 1 or 0; use 1 for distance-based algorythm to group the colonies;0 for alphavol.
 %runFullTile(direc,outfile,maxims,step)
 %---------------------
 %For a set of tiled images, runs segmentCells (uses parfor for this), runs
@@ -16,10 +16,13 @@ if ~exist('paramfile','var')
     paramfile='setUserParamSC20xIFEDS';
 end
 
+if ~isfield('userParam','coltype')
+    userParam.coltype = 1;
+end
 %[dims, wavenames]=getDimsFromScanFile(direc);
 %chans=wavenames2chans(wavenames);
 
-chans = {'w0000','w0004'};
+chans = {'w0000','w0002','w0003'};% 4th, CM, 1 ng/ml: DAPInew,GFP,RFPcustom ( smad 2),CY5 (pSmad 1)
 
 ff=folderFilesFromKeyword(direc,chans{1});
 maxims=ff(end-1);
@@ -59,13 +62,24 @@ end
 if step < 5
      assembleMatFiles(direc,imgsperprocessor,nloop,outfile);
 end
+
 %peaksToColonies generates the colony structure from peaks and accords
 %computes alpha volume and then finds all connected components.
-if step < 6
+
+if step < 6 %&& coltype==1
+   coltype=userParam.coltype;
     load([direc filesep outfile],'bIms','nIms');
-    [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-    plate1=plate(colonies,dims,direc,chans,bIms,nIms);
-    save([direc filesep outfile],'plate1','peaks','-append');  
+    if coltype == 1
+        [colonies, peaks]=peaksToColoniesSC([direc filesep outfile]);% the function PeakstocoloniesSC(SingleCells) uses the distance-based sorting to separate the colonies;use this if have ~ single cells
+    elseif coltype == 0
+        [colonies, peaks]=peaksToColonies([direc filesep outfile]);% function peakstocolonies uses alphavolume to connect colonies;use this for circular colonies
+    else
+        disp('Error: coltype must be 1 or 0');
+    end  
+     plate1=plate(colonies,dims,direc,chans,bIms,nIms);
+     save([direc filesep outfile],'plate1','peaks','-append');
+ 
+    
 end
 
 function chans=wavenames2chans(wavenames,nucname)
