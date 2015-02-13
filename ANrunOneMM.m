@@ -1,4 +1,4 @@
-function runOneMM(direc,posRange,bIms,nIms,paramfile)
+function ANrunOneMM(direc,posNumberX,bIms,nIms,paramfile,nucname)
 
 global userParam;
 
@@ -8,21 +8,26 @@ catch
     error('Error evaluating paramfile.');
 end
 files = readMMdirectory(direc,nucname);
-
-nImages=length(files.chan)-1;
-
 xmax = max(files.pos_x)+1;
 ymax = max(files.pos_y)+1;
 
-for ii=posRange(1):posRange(2)
-    disp(['Running image ' int2str(ii)]);
+imagetorun=files.pos_x(posNumberX);
+%if posNumberX > xmax 
+  %  imagetorun=files.pos_y(posNumberY);
+
+  %  end
+
+imagetorun=files.pos_x(posNumberX);
+
+ ii=imagetorun;
+    disp(['Running image ' int2str(imagetorun+1)]);
     %read the files
     try
         
         %read nuclear image, smooth and background subtract
         
-        [x, y]=ind2sub([xmax ymax],ii);
-        f1nm = mkMMfilename(files,x-1,y-1,[],[],1);
+        %[x, y]=ind2sub([xmax ymax],ii);
+        f1nm = mkMMfilename(files,posNumberX,[],[],[],1);
 
         disp(['Nuc marker img:' f1nm]);
         imfiles(ii).nucfile=f1nm{1};
@@ -36,26 +41,30 @@ for ii=posRange(1):posRange(2)
         nuc=uint16(65536*nuc);
         
         
-        fimg=zeros(si(1),si(2),nImages);
-        for jj=2:(nImages+1)
-            f1nm = mkMMfilename(files,x-1,y-1,[],[],jj);
+        fimg=zeros(si(1),si(2),1);
+        for jj=2:(1+1)
+            f1nm = mkMMfilename(files,posNumberX,[],[],[],jj);
             fimgnow=imread(f1nm{1});
             fimgnow = smoothImage(fimgnow,userParam.gaussRadius,userParam.gaussSigma);
-            imgfiles(ii).smadfile{jj-1}=f1nm{1};
+            imgfiles(ii).smadfile{jj}=f1nm{1};%
             fimgnow=imsubtract(fimgnow,bIms{jj});
             fimgnow=immultiply(im2double(fimgnow),nIms{jj});
-            fimg(:,:,jj-1)=uint16(65536*fimgnow);
+            fimg(:,:,jj)=uint16(65536*fimgnow);%
+       
         end
-        
 
         
         %Initialize error string
         userParam.errorStr=sprintf('Position %d\n',ii);
         
         [maskC, statsN]=segmentCells2(nuc,fimg);
-        %[~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
+        [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
+       % if ~isempty(statsN)
+          data  = stats2xy(statsN);
+            %outdat=outputData4AWTracker(statsN,nuc,ii);
+        %end
         figure, imshow(nuc,[]); hold on;                            
-        plot(outdat(:,1),outdat(:,2),'r.','MarkerSize',10); hold on;
+        plot(data(:,1),data(:,2),'r.','MarkerSize',10); hold on;
         
                 
     catch err       
