@@ -12,9 +12,6 @@ if ~exist('step','var')
     step=1;
 end
 
-if ~exist('paramfile','var')
-    paramfile='setUserParamSC20xIFEDS';
-end
 
 ff=readMMdirectory(direc);
 dims = [ max(ff.pos_x) max(ff.pos_y)];
