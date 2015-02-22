@@ -1,16 +1,18 @@
-function fullIm=assembleColony(direc,imKeyWord,matfile,colnum,crop)
+function fullIm=ANassembleColonyMM(direc,colnum,crop)   %imKeyWord
 
 if ~exist('crop','var')
     crop=0;
 end
 si=[2048 2048];
 %si=[1024 1344];
+ff=readMMdirectory(direc);
+dims = [ max(ff.pos_x) max(ff.pos_y)];
+wavenames=ff.chan;
 
-
-cc=load(matfile,'acoords','colonies','dims');
+cc=load('outallControlMM.mat','acoords','plate1');% matfile
 ac=cc.acoords;
-coldata=cc.colonies(colnum).data;
-dims=cc.dims;
+coldata=cc.plate1.colonies(colnum).data;
+%dims=cc.dims;
 
 xmax=max(coldata(:,1)); xmin=min(coldata(:,1));
 ymax=max(coldata(:,2)); ymin=min(coldata(:,2));
@@ -32,12 +34,15 @@ for ii=1:length(imnums_red)
     end
 end
 
-[junk, imFiles]=folderFilesFromKeyword(direc,imKeyWord{1});
+%[junk, imFiles]=folderFilesFromKeyword(direc,imKeyWord{1});
 
 
-for jj=1:length(imKeyWord)
+for jj=1:length(wavenames)
     fullIm{jj}=zeros(si(1)*max(coords(:,1)),si(2)*max(coords(:,2)));
     for ii=1:length(imnums)
+        [pos_x pos_y]=sub2ind(dims,imnums(ii));
+        
+        imname = mkMMfilename(files,pos_x,pos_y,[],[],wavenames(jj));
         currinds=[(coords(ii,1)-1)*si(1)+1 (coords(ii,2)-1)*si(2)+1];
         for kk=2:coords(ii,1)
             currinds(1)=currinds(1)-ac(basenum+(coords(ii,2)-1)*dims(1)+kk).wabove(1);
@@ -48,11 +53,11 @@ for jj=1:length(imKeyWord)
         currimgind=basenum+(coords(ii,2)-1)*dims(1)+coords(ii,1)-1;
         disp(int2str(currimgind))
         ac(currimgind).absinds=currinds;
-        if jj==1
-            imname=imFiles(currimgind).name;
-        else
-            imname=strrep(imFiles(currimgind).name,imKeyWord{1},imKeyWord{jj});
-        end
+       % if jj==1
+            %imname=imFiles(currimgind).name;
+       % else
+         %   imname=strrep(imFiles(currimgind).name,wavenames{1},wavenames{jj});
+       % end
         currimg=imread([direc filesep imname]);
         if exist('backIm','var')
             currimg=imsubtract(currimg,backIm);

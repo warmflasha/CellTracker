@@ -8,16 +8,17 @@ catch
     error('Error evaluating paramfile.');
 end
 files = readMMdirectory(direc,nucname);
+nImages=length(files.chan)-1;
 xmax = max(files.pos_x)+1;
 ymax = max(files.pos_y)+1;
 
-imagetorun=files.pos_x(posNumberX);
+imagetorun=files.pos_y(posNumberX);%pos_x
 %if posNumberX > xmax 
   %  imagetorun=files.pos_y(posNumberY);
 
   %  end
 
-imagetorun=files.pos_x(posNumberX);
+%imagetorun=files.pos_x(posNumberX);
 
  ii=imagetorun;
     disp(['Running image ' int2str(imagetorun+1)]);
@@ -26,8 +27,8 @@ imagetorun=files.pos_x(posNumberX);
         
         %read nuclear image, smooth and background subtract
         
-        %[x, y]=ind2sub([xmax ymax],ii);
-        f1nm = mkMMfilename(files,posNumberX,[],[],[],1);
+        [x, y]=ind2sub([xmax ymax],ii);
+        f1nm = mkMMfilename(files,x-1,y-1,[],[],1);%posNumberX
 
         disp(['Nuc marker img:' f1nm]);
         imfiles(ii).nucfile=f1nm{1};
@@ -43,7 +44,7 @@ imagetorun=files.pos_x(posNumberX);
         
         fimg=zeros(si(1),si(2),1);
         for jj=2:(1+1)
-            f1nm = mkMMfilename(files,posNumberX,[],[],[],jj);
+            f1nm = mkMMfilename(files,x-1,y-1,[],[],jj);
             fimgnow=imread(f1nm{1});
             fimgnow = smoothImage(fimgnow,userParam.gaussRadius,userParam.gaussSigma);
             imgfiles(ii).smadfile{jj}=f1nm{1};%

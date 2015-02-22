@@ -14,7 +14,7 @@ fprintf(1, '%s called to define params\n',mfilename);
 % newFigure=0.
 userParam.newFigure = 0;
 
-%for single cells or colonies:coltype=1 (uses distance-based colonies
+%for single cells vs circular colonies:coltype=1 (uses distance-based colonies
 %grouping) coltype=0 uses alphavolume to group circular colonies
 userParam.coltype = 1;
 
@@ -24,7 +24,7 @@ userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on 
 
 % image smoothing parameters
 userParam.gaussRadius=6;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=3; % no such original parameter found in SetUserParamAN ( gaussThreshSigma is defined below)
+userParam.gaussSigma=4; % (gaussThreshSigma is defined below)
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -53,16 +53,16 @@ userParam.backdiskrad = 200;
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 25; %
-userParam.radiusMax = 35;%
+userParam.radiusMin = 22; %22
+userParam.radiusMax = 32;%32
 userParam.minNucSep = 10;%10
-userParam.nucIntensityRange = 30;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 390;  % 390 
+userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc   = 380;  % 390 
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =390; % measure the actual values and decide on this parameter
+userParam.nucAreaLo =360; % measure the actual values and decide on this parameter
 userParam.nucAreaHi = 4000;  % not too big
 
 

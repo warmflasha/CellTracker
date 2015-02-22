@@ -12,6 +12,9 @@ if ~exist('step','var')
     step=1;
 end
 
+if ~isfield('userParam','coltype')
+    userParam.coltype = 1;
+end
 
 ff=readMMdirectory(direc);
 dims = [ max(ff.pos_x) max(ff.pos_y)];
@@ -57,12 +60,21 @@ end
 %peaksToColonies generates the colony structure from peaks and accords
 %computes alpha volume and then finds all connected components.
 if step < 6
+    coltype=userParam.coltype;
     load([direc filesep outfile],'bIms','nIms');
-    [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-    plate1=plate(colonies,dims,direc,chans,bIms,nIms);
+    if coltype == 1
+    [colonies, peaks]=peaksToColoniesSC([direc filesep outfile]);
+    elseif coltype == 0
+        [colonies, peaks]=peaksToColonies([direc filesep outfile]);% function peakstocolonies uses alphavolume to connect colonies;use this for circular colonies
+    else
+        disp('Error: coltype must be 1 or 0');
+    end
+    plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms);
     save([direc filesep outfile],'plate1','peaks','-append');  
+    
 end
 
 
+    
 
 
