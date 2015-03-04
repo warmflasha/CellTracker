@@ -1,6 +1,20 @@
 function filename = getAndorFileName(files,pos,time,z,w)
+% filename = getAndorFileName(files,pos,time,z,w)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% returns file name from a image from the Andor iQ software
+% inputs: -files: file structure returned by readAndorDirectory
+%         -pos: position number
+%         -time: time number
+%         -z: z-stack number
+%         -w: channel number
+% note: -all numberings begin from 0 with andor software
+%       -empty array [] can be input for 
+%           any item that is not present in the dataset 
+%
+% see also: readAndorDirectory, andorMaxIntensity
 
-filename = files.prefix;
+
+filename = files.prefix; 
 
 
 for ii=1:length(files.ordering)
