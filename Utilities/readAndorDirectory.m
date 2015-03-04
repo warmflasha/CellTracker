@@ -1,4 +1,12 @@
 function files = readAndorDirectory(direc)
+% files = readAndorDirectory(direc)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% takes a directory produced by the Andor iQ3 software and returns a
+% structure containing information about the files. 
+% input directory should have all images stored as single-layed tif 
+%
+% see also: getAndorFileName, andorMaxIntensity
+
 
 allfiles = dir([direc filesep '*.tif']);
 

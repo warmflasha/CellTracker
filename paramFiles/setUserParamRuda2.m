@@ -12,7 +12,7 @@ fprintf(1, '%s called to define params\n',mfilename);
 % newFigure=1 these will pile up for successive times and eventually crash MATLAB 
 % because of memory limitations. Either run in debug mode and kill by hand or set
 % newFigure=0.
-userParam.newFigure = 0;
+userParam.newFigure = 1;
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 1;
@@ -48,12 +48,15 @@ userParam.backdiskrad = 200;
 % the image. The nuclei after first and second selection shown in different
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
-userParam.dontFilterNuc=1; % set to 1 to skip filtering step
-userParam.radiusMin = 15; 
-userParam.radiusMax = 20;
-userParam.minNucSep = 10;
-userParam.nucIntensityRange = 5;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 50;
+
+userParam.verboseCountNuc = 0;
+
+userParam.dontFilterNuc=0; % set to 1 to skip filtering step
+userParam.radiusMin = 8; 
+userParam.radiusMax = 10;
+userParam.minNucSep = 5;
+userParam.nucIntensityRange = 10;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc   = 200;
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
@@ -81,15 +84,13 @@ userParam.minPtsCytoplasm = 5;
 userParam.gaussThreshExcess = 5;
 userParam.gaussThreshSigma  = 3;
 
-userParam.verboseCountNuc = 0;  % to print statistics and an image
-
 % parameter for edge detection. Use 'canny' method in edge() unless get
 % nuclei overly large. Check method by on gaussian filtered image 
 % edge(red, 'canny') vs edge(red). If loosing nuclei use Canny. Set to zero
 % to run default.
 userParam.useCanny = 0;
 
-userParam.nucSolidity = 0.8; % get rid of funny shapes
+userParam.nucSolidity = 0.7; % get rid of funny shapes
 userParam.nucAspectRatio = 3; % not too far from circular
 
 % define threshold for being in cell by two criterion:

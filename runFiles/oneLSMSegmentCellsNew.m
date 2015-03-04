@@ -1,18 +1,17 @@
-function [outdat, tt]=oneLSMSegmentCells(lsmfile,chan)
+function [outdat, tt]=oneLSMSegmentCellsNew(lsmfile,chan)
 
-tt=tiffread27(lsmfile);
-[tmp, suf]=strtok(lsmfile,'.');
-if strcmp(suf,'.lsm')
-    nuc=tt.data{chan(1)};
-    for ii=2:length(chan)
-        fimg(:,:,ii-1)=tt.data{chan(ii)};
-    end
-else
-    nuc=tt(chan(1)).data;
-    for ii=2:length(chan)
-        fimg(:,:,ii-1)=tt(chan(ii)).data;
-    end
+
+global userParam;
+tt=bfopen(lsmfile);
+
+nuc=tt{1}{chan(1),1};
+
+nuc = smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
+for ii=2:length(chan)
+    fimg(:,:,ii-1)=tt{1}{chan(ii),1};
 end
+
+
 [maskC, statsN]=segmentCells2(nuc,fimg);
 [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
 outdat=outputData4AWTracker(statsN,nuc,length(chan)-1);

@@ -49,19 +49,19 @@ userParam.backdiskrad = 200;
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 
-userParam.verboseCountNuc = 2;
+userParam.verboseCountNuc = 0;
 
-userParam.dontFilterNuc=1; % set to 1 to skip filtering step
-userParam.radiusMin = 15; 
-userParam.radiusMax = 20;
-userParam.minNucSep = 10;
+userParam.dontFilterNuc=0; % set to 1 to skip filtering step
+userParam.radiusMin = 8; 
+userParam.radiusMax = 10;
+userParam.minNucSep = 5;
 userParam.nucIntensityRange = 10;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 1200;
+userParam.nucIntensityLoc   = 200;
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =500; 
+userParam.nucAreaLo =100; 
 userParam.nucAreaHi = 5000;  % not too big
 
 
@@ -90,7 +90,7 @@ userParam.gaussThreshSigma  = 3;
 % to run default.
 userParam.useCanny = 0;
 
-userParam.nucSolidity = 0.8; % get rid of funny shapes
+userParam.nucSolidity = 0.7; % get rid of funny shapes
 userParam.nucAspectRatio = 3; % not too far from circular
 
 % define threshold for being in cell by two criterion:
