@@ -1,4 +1,4 @@
-function ANrunOneMM(direc,posNumberX,bIms,nIms,paramfile,nucname)
+function ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname)
 
 global userParam;
 
@@ -7,28 +7,30 @@ try
 catch
     error('Error evaluating paramfile.');
 end
-files = readMMdirectory(direc,nucname);
-nImages=length(files.chan)-1;
-xmax = max(files.pos_x)+1;
-ymax = max(files.pos_y)+1;
 
-imagetorun=files.pos_y(posNumberX);%pos_x
-%if posNumberX > xmax 
-  %  imagetorun=files.pos_y(posNumberY);
+ff = readMMdirectory(direc,nucname);
+dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
+nImages=length(ff.chan)-1;
+xmax = max(ff.pos_x)+1;
+ymax = max(ff.pos_y)+1;
 
-  %  end
+ %ii=imagetorun;
+ %imagetorun=ff.pos_x(posRange);
 
-%imagetorun=files.pos_x(posNumberX);
-
- ii=imagetorun;
-    disp(['Running image ' int2str(imagetorun+1)]);
+  ii=posRange; 
+ % if posRange>xmax
+      
+ %     ii=ff.pos_y(posRange);
+      
+ % end
+    disp(['Running image ' int2str(ii-1)]);
     %read the files
     try
         
         %read nuclear image, smooth and background subtract
         
         [x, y]=ind2sub([xmax ymax],ii);
-        f1nm = mkMMfilename(files,x-1,y-1,[],[],1);%posNumberX
+        f1nm = mkMMfilename(ff,x-1,y-1,[],[],1);%posNumberX
 
         disp(['Nuc marker img:' f1nm]);
         imfiles(ii).nucfile=f1nm{1};
@@ -44,7 +46,7 @@ imagetorun=files.pos_y(posNumberX);%pos_x
         
         fimg=zeros(si(1),si(2),1);
         for jj=2:(1+1)
-            f1nm = mkMMfilename(files,x-1,y-1,[],[],jj);
+            f1nm = mkMMfilename(ff,x-1,y-1,[],[],jj);
             fimgnow=imread(f1nm{1});
             fimgnow = smoothImage(fimgnow,userParam.gaussRadius,userParam.gaussSigma);
             imgfiles(ii).smadfile{jj}=f1nm{1};%
@@ -69,8 +71,8 @@ imagetorun=files.pos_y(posNumberX);%pos_x
         
                 
     catch err       
-        disp(['Error with image ' int2str(ii)]);
+        disp(['Error with image ' int2str(ii-1)]);
         disp(err.identifier);
-        rethrow(err);
+        %rethrow(err);
     end
 end

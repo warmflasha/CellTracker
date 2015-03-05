@@ -6,7 +6,7 @@ ac=pp.acoords;
 dims=pp.dims;
 
 p=ANremoveIncompletePeaks(peaks);%AN
-peaks=removeDuplicateCells(p,ac);
+peaks=removeDuplicateCells(peaks,ac);
 
 k1=num2cell(ones(1,length(peaks)));
 lens=cellfun(@size,peaks,k1);
