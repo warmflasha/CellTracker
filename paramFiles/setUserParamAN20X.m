@@ -14,7 +14,7 @@ fprintf(1, '%s called to define params\n',mfilename);
 % newFigure=0.
 userParam.newFigure = 0;
 
-%for single cells or colonies:coltype=1 (uses distance-based colonies
+%for single cells vs circular colonies:coltype=1 (uses distance-based colonies
 %grouping) coltype=0 uses alphavolume to group circular colonies
 userParam.coltype = 1;
 
@@ -24,7 +24,7 @@ userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on 
 
 % image smoothing parameters
 userParam.gaussRadius=6;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=2; % no such original parameter found in SetUserParamAN ( gaussThreshSigma is defined below)
+userParam.gaussSigma=4; % 3(gaussThreshSigma is defined below)
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -53,17 +53,17 @@ userParam.backdiskrad = 200;
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 27; %
-userParam.radiusMax = 35;%
+userParam.radiusMin = 22; %22
+userParam.radiusMax = 37;%32
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 390;  % 390 
+userParam.nucIntensityLoc   = 270;  % 290 510
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =370; % measure the actual values and decide on this parameter
-userParam.nucAreaHi = 4000;  % not too big
+userParam.nucAreaLo =380; % measure the actual values and decide on this parameter
+userParam.nucAreaHi = 4500;  % not too big
 
 
 %%%%%PARAMETER BELOW HERE TYPICALLY DO NOT NEED TO BE MODIFIED%%%%%%%%%%%
@@ -82,8 +82,8 @@ userParam.minPtsCytoplasm = 5;%5
 % *Sigma * STD(of model fit, ie ignoring points far in + tail). There is
 % buried 'verbose' parameter in this routine. Its assumed images are
 % integer valued, ie not scaled to [0,1]
-userParam.gaussThreshExcess = 6;%in AN file,5 bf
-userParam.gaussThreshSigma  = 3;
+userParam.gaussThreshExcess = 7;%6 in AN file,5 bf
+userParam.gaussThreshSigma  = 5;%3
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
 

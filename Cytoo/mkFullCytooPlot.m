@@ -30,11 +30,15 @@ for ii=1:length(col)
         alldat(q:(q+col(ii).ncells-1),:)=[dtoplot col(ii).data(:,3:end)];
         q=q+col(ii).ncells;
     end
-    plot(dtoplot(:,2),dtoplot(:,1),'.','Color',cc(mod(ii,19)+1,:));
+    %plot(dtoplot(:,2),dtoplot(:,1),'.','Color',cc(mod(ii,19)+1,:));
+        plot(dtoplot(:,2),dtoplot(:,1),'.','Color','k');
+
     txtcolor=cc(mod(ii+10,19)+1,:);
     cen=[col(ii).center(2)+toadd(2) col(ii).center(1)+toadd(1)];
-    if printnum && col(ii).ncells > 200
-        text(cen(1),cen(2),int2str(ii),'Color','m');
+    if printnum %&& col(ii).ncells > 200
+        dims = [27 18];
+        [t1, t2]=ind2sub(dims,col(ii).imagenumbers(1));
+        text(cen(1),cen(2),[int2str(t1) '-' int2str(t2)],'Color','m');
     end
     %disp(int2str(ii));
     end
