@@ -1,0 +1,16 @@
+function assembleMatFilesCluster(direc,outfile)
+
+[~,ff]=folderFilesFromKeyword([direc filesep '.tmp_analysis'],'.mat');
+
+for ii=1:length(ff)
+        
+        peaksall{jj}=peaks{jj};
+        imgfilesall(jj)=imgfiles(jj);
+    end
+end
+
+imgfiles=imgfilesall;
+
+peaks=peaksall;
+save([direc filesep outfile],'peaks',,'imgfiles','-append');
+
