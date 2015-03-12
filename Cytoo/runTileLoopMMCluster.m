@@ -16,5 +16,5 @@ for ii=1:nImages
     fprintf(fid,'#PBS -m abe\n');    
     fprintf(fid,['matlab -nodisplay -r "runTileMMCluster(''' direc ''',outall.mat,' int2str(ii) ',''' paramfile '''); quit"']);
     fclose(fid);
-    system(['qsub ./' scriptfile]);
+    system(['qsub ' scriptfile]);
 end
