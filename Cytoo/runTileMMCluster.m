@@ -5,7 +5,7 @@ global userParam;
 try
     eval(paramfile);
 catch
-    error('Error evaluating paramfile.');
+    error(['Error evaluating paramfile: ' paramfile]);
 end
 
 files=readMMdirectory(direc);
@@ -59,8 +59,10 @@ if ~isempty(statsN)
     imgfiles.errorStr=userParam.errorStr;
     % compress and save the binary mask for nuclei
     imgfiles.compressNucMask = compressBinaryImg([statsN.PixelIdxList], size(nuc));
+else
+    outdat = [];
+end
     outfile = [direc filesep '.tmp_analysis' filesep 'out_' int2str(pos) '.mat'];
     save(outfile,'outdat','userParam','imgfiles');
-end
 
 

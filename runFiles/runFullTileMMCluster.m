@@ -8,12 +8,19 @@ function runFullTileMMCluster(direc,outfile,paramfile,step)
 %outfile -- matfile for output
 %step = step to begin at. See code. allows for skipping finding cells etc.
 
+
+global userParam;
+
 if ~exist('step','var')
     step=1;
 end
 
 if ~exist('paramfile','var')
     paramfile='setUserParamSC20xIFEDS';
+end
+
+if ~isfield('userParam','coltype')
+    userParam.coltype = 0;
 end
 
 ff=readMMdirectory(direc);
@@ -42,7 +49,10 @@ end
 %outfile
 if step < 3
     runTileLoopMMCluster(direc,paramfile);
+    lastfile = length(ff.pos_x)*length(ff.pos_y);
+    wait_for_existence([direc filesep '.tmp_analysis' filesep 'out_' int2str(lastfile) '.mat'],'file',1,1e10);
 end
+
 
 %performs a series of pairwise alignments,
 %each img is aligned img on top and to the left, pixel overlap
@@ -54,13 +64,20 @@ if step < 4
 end
 
 if step < 5
-     assembleMatFilesCluster(direc,imgsperprocessor,nloop,outfile);
+     assembleMatFilesCluster(direc,outfile);
 end
 %peaksToColonies generates the colony structure from peaks and accords
 %computes alpha volume and then finds all connected components.
 if step < 6
+    coltype = userParam.coltype;
     load([direc filesep outfile],'bIms','nIms');
+    if coltype == 1
     [colonies, peaks]=peaksToColoniesSC([direc filesep outfile]);
+    elseif coltype == 0
+        [colonies, peaks]=peaksToColonies([direc filesep outfile]);% function peakstocolonies uses alphavolume to connect colonies;use this for circular colonies
+    else
+        disp('Error: coltype must be 1 or 0');
+    end
     plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms);
     save([direc filesep outfile],'plate1','peaks','-append');  
 end

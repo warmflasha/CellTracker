@@ -6,7 +6,7 @@ for ii=1:length(ff)
     ind=strfind(ff(ii).name,'.');
     ind2=strfind(ff(ii).name,'_');
     num=str2double(ff(ii).name((ind2+1):(ind-1)));
-    pp=load(ff(ii).name);
+    pp=load([direc filesep '.tmp_analysis' filesep ff(ii).name]);
     peaks{num}=pp.outdat;
     imgfilesall(num)=pp.imgfiles;
 end
