@@ -8,9 +8,7 @@ nImages = length(files.pos_x)*length(files.pos_y);
 imgsperprocessor=12;
 nloop = ceil(nImages/imgsperprocessor);
 
-disp('here1');
-for ii=1:1 %:nloop
-    disp('here2');
+for ii=1:nloop
     scriptfile = [direc filesep '.jobscripts' filesep 'job_' int2str(ii) '.pbs'];
     fid = fopen(scriptfile,'w');
     fprintf(fid,['#PBS -N job_' int2str(ii) ' \n']); 
