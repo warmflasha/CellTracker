@@ -23,6 +23,14 @@ if ~isfield('userParam','coltype')
     userParam.coltype = 0;
 end
 
+if ~exist([direc filesep '.tmp_analysis'],'dir')
+    mkdir([direc filesep '.tmp_analysis']);
+end
+
+if ~exist([direc filesep '.jobscripts'],'dir')
+    mkdir([direc filesep '.jobscripts']);
+end
+
 ff=readMMdirectory(direc);
 dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
 wavenames=ff.chan;
@@ -49,8 +57,6 @@ end
 %outfile
 if step < 3
     runTileLoopMMCluster(direc,paramfile);
-    lastfile = length(ff.pos_x)*length(ff.pos_y);
-    wait_for_existence([direc filesep '.tmp_analysis' filesep 'out_' int2str(lastfile) '.mat'],'file',1,1e10);
 end
 
 
@@ -64,6 +70,8 @@ if step < 4
 end
 
 if step < 5
+     lastfile = length(ff.pos_x)*length(ff.pos_y);
+     wait_for_existence([direc filesep '.tmp_analysis' filesep 'out_' int2str(lastfile) '.mat'],'file',1,1e10);
      assembleMatFilesCluster(direc,outfile);
 end
 %peaksToColonies generates the colony structure from peaks and accords
