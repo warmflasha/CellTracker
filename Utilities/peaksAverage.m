@@ -1,9 +1,17 @@
-function [mm pictimes]=peaksAverage(matfile,cols,ps)
+function [mm pictimes]=peaksAverage(matfile,cols,ps,timescale)
 if ~exist('ps','var')
     ps='k.-';
 end
 
 load(matfile,'peaks','pictimes');
+
+if ~exist('pictimes','var')
+    pictimes=1:length(peaks);
+    if exist('timescale','var')
+        pictimes=pictimes*timescale;
+    end
+end
+
 
 xx=min(length(peaks),length(pictimes));
 

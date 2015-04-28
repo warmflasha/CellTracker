@@ -1,4 +1,4 @@
-function runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
+function runSegmentCellsZstack_try(direc,pos,chan,paramfile,outfile,nframes)
 %
 %   runSegmentCells(direc,outfile,nframes,nucstring,smadstring,paramfile)
 %
@@ -42,6 +42,7 @@ for ii=1:max(min(nframes,length(ff.t)),1)
     else
         nuc=andorMaxIntensity(ff,pos,frametouse,[]);
     end
+    
     
     if isempty(chan) || length(chan) == 1
         fimg = nuc;
