@@ -27,9 +27,7 @@ for ii=1:length(col)
         minpic=min(col(ii).data(:,end-1));
         toadd=[ac(minpic).absinds(2) ac(minpic).absinds(1)];
     else
-        toadd=[ac(col(ii).imagenumbers).absinds];
-        toadd=reshape(toadd,length(col(ii).imagenumbers),2);
-        toadd=min(toadd,[],1);
+        toadd=[ac.absin
     end
         
     dtoplot=bsxfun(@plus,col(ii).data(:,1:2),toadd);
