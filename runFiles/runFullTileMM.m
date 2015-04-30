@@ -60,7 +60,7 @@ end
 %peaksToColonies generates the colony structure from peaks and accords
 %computes alpha volume and then finds all connected components.
 if step < 6
-    coltype=userParam.coltype;
+    coltype=userParam.coltype; coltype=0;
     load([direc filesep outfile],'bIms','nIms');
     if coltype == 1
     [colonies, peaks]=peaksToColoniesSC([direc filesep outfile]);

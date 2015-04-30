@@ -24,7 +24,7 @@ classdef colony
         
         
         %CONSTRUCTOR function
-        function obj=colony(data,acoords,dims,si,imgfiles)
+        function obj=colony(data,acoords,dims,si,imgfiles,mm)
             %Constructor function for colony object
             %obj=colony(data,acoords,dims)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,31 +63,44 @@ classdef colony
                 ac.absinds=[1 1];
                 obj.imagecoords=ac;
                 newdata=data;
-            elseif nargin<=5
+            elseif nargin<=6
                 %store image stuff for later reconstruction
                 %will take a rectangular grid of images to avoid
                 %problems later
-                imnums=unique(data(:,end-1));
-                obj.imagecoords=acoords(obj.imagenumbers);
-                yimg=fix((imnums-1)/dims(1));
-                ximg=rem((imnums-1),dims(1));
-                xmin=min(ximg); xmax=max(ximg);
-                ymin=min(yimg); ymax=max(yimg);
                 
-                xrange=xmax-xmin+1; yrange=ymax-ymin+1;
-                allimgs=zeros(xrange*yrange,1);
-                
-                for ii=ymin:ymax
-                    allimgs((xrange*(ii-ymin)+1):(xrange*(ii-ymin)+xrange))...
-                        =ii*dims(1)+((xmin+1):(xmax+1));
+                if ~exist('mm','var') || mm==0
+                    imnums=unique(data(:,end-1));
+                    obj.imagecoords=acoords(obj.imagenumbers);
+                    yimg=fix((imnums-1)/dims(1));
+                    ximg=rem((imnums-1),dims(1));
+                    xmin=min(ximg); xmax=max(ximg);
+                    ymin=min(yimg); ymax=max(yimg);
+                    
+                    xrange=xmax-xmin+1; yrange=ymax-ymin+1;
+                    allimgs=zeros(xrange*yrange,1);
+                    
+                    for ii=ymin:ymax
+                        allimgs((xrange*(ii-ymin)+1):(xrange*(ii-ymin)+xrange))...
+                            =ii*dims(1)+((xmin+1):(xmax+1));
+                    end
+                    
+                    obj.imagenumbers=allimgs;
+                    obj.imagecoords=acoords(allimgs);
+                    
+                    %put coordinates in image coordinates
+                    %of colony image, not plate coordinates
+                    [newdata, mask]=realignPoints(obj,si,imgfiles);
+                    
+                else
+                    imnums=unique(data(:,end-1));
+                    %obj.imagecoords=acoords(obj.imagenumbers);
+                    [ximg, yimg]=ind2sub(dims,imnums);
+                    [t1, t2]=meshgrid(min(ximg):max(ximg),min(yimg):max(yimg));
+                    imnums=sub2ind(dims,t1(:),t2(:));
+                    obj.imagenumbers=imnums;
+                    obj.imagecoords=acoords(imnums);
+                    [newdata, mask]=realignPointsMM(obj,si,imgfiles,dims,acoords);
                 end
-                
-                obj.imagenumbers=allimgs;
-                obj.imagecoords=acoords(allimgs);
-                
-                %put coordinates in image coordinates
-                %of colony image, not plate coordinates
-                [newdata, mask]=realignPoints(obj,si,imgfiles);
                 obj.compressNucMask=mask;
                 obj.data(:,1:2)=newdata;
             else
@@ -128,7 +141,7 @@ classdef colony
             %cell array of the same length as imKeyword
             
             
-           % disp('Calling this function!!');
+            % disp('Calling this function!!');
             
             imnums=obj.imagenumbers;
             dim1=find(diff(imnums)>1,1,'first');%dim1=find(diff(obj.imagenumbers)>1,1,'first');
@@ -215,7 +228,7 @@ classdef colony
             
         end
         
-        function fullImage=assembleColonyMM(obj,direc,colnum,backIm,normIm)
+        function fullImage=assembleColonyMM(obj,direc,acoords,si,backIm,normIm)
             %Assemble the image of the colony.
             %
             %fullImage=assembleColony(obj,direc,imKeyWord,overlayPoints,backIm)
@@ -229,82 +242,40 @@ classdef colony
             %cell array of the same length as imKeyword
             
             
-           % disp('Calling this function!!');
-          
-
-        ff=readMMdirectory(direc);
-        dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
-        %wavenames=ff.chan; 
-        %imname = mkMMfilename(ff,pos_x,pos_y,[],[],wavenames(jj));   
-       % coldata=obj(colnum).data;
-         
-            imnums=obj(colnum).imagenumbers;
-            dim1=find(diff(imnums)>1,1,'first');%dim1=find(diff(obj.imagenumbers)>1,1,'first');
-            if isempty(dim1)
-                total1=length(imnums);
-                total2=1;
-            else
-                total1=dim1;
-                total2=length(imnums)/dim1;
-            end
             
-            ac=obj.imagecoords;
             
-                    
-            %[junk, imFiles]=folderFilesFromKeyword(direc,imKeyWord{1});
-                    [pos_x, pos_y]=ind2sub(dims,imnums);
-                    %direc = [files.direc filesep files.prefix 'Pos_' pos_x '_' pos_y];
-                    imnameCell = mkMMfilename(ff,pos_x-1,pos_y-1,[],[],ff.chan);
-                    
-            if isempty(imnameCell)
-                error('Error: files with first keyword not found...');
-            end
+            ff=readMMdirectory(direc);
+            dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
             
-           tmp1=imread([imnameCell{1}]);% AN imFiles(1).name
-           si=size(tmp1);
-            %si=[2048 2048];
+            
+            imnums=obj.imagenumbers;
+            [pos_x, pos_y]=ind2sub(dims,imnums);
+            
+            %             tosub=[ac.absinds];
+            %             tosub=reshape(tosub,2,length(ac));
+            %             tosub=min(tosub,[],2)';
             
             for jj=1:length(ff.chan)
-                %fullImage{jj}=zeros(si(1)*max(coords(:,1)),si(2)*max(coords(:,2)));
-                fullImage{jj}=uint16(zeros(si(1)*total1,si(2)*total2));
+                fullImage{jj}=uint16(zeros(si(1)*length(unique(pos_x)),si(2)*length(unique(pos_y))));
+            end
+            
+            for ii=1:length(imnums)
+                %currinds = ac(ii).absinds-tosub+1;
                 
-                for ii=1:length(imnums)
-                    %[pos_x pos_y]=ind2sub(dims,imnums(ii));
-                   % imname = mkMMfilename(ff,pos_x,pos_y,[],[],ff.chan);
+                xnow = pos_x(ii); ynow=pos_y(ii);
+                currinds=[(max(pos_x)-xnow)*si(1)+1 (ynow-min(pos_y))*si(2)+1];
+                for kk=(min(pos_y)+1):ynow
+                    currinds(2)=currinds(2)-acoords(sub2ind(dims,xnow,kk)).wabove(1);
+                end
+                for mm= xnow:(max(pos_x)-1)
+                    currinds(1)=currinds(1)-acoords(sub2ind(dims,mm,ynow)).wside(1);
+                end
+                currinds=currinds([2 1]); %somehow the above ended up backwar
+                
+                filenames = mkMMfilename(ff,pos_x(ii)-1,pos_y(ii)-1,[],[],ff.chan);
+                for jj=1:length(filenames)
+                    currimg=imread(filenames{jj});
                     
-                    if isempty(dim1)
-                        over2=0;
-                        over1=ii-1;
-                    else
-                        over2=fix((ii-1)/dim1);
-                        over1=rem((ii-1),dim1);
-                        
-                    end
-                    
-                    
-                    
-                    currinds=[over1*si(1)+1 over2*si(2)+1];
-                    for kk=1:over1
-                        currinds(1)=currinds(1)-ac(ii-(kk-1)).wabove(1);
-                    end
-                    for mm=1:over2
-                        currinds(2)=currinds(2)-ac(ii-(mm-1)*dim1).wside(1);
-                    end
-                    
-                        imname=imnameCell{jj};%ff.chan{ii};
-                   
-                    
-                    %If file doesn't exist, return empty array for this
-                    %keyword.
-                    if ~exist(imname,'file')
-                        disp(['Warning: file ' imname ' not found. Skipping this keyword.']);
-                        fullImage{jj}=[];
-                        break;
-                    end
-                    %disp(imname);
-                    currimg=imread(imname);
-                    
-                    %background subtraction
                     if exist('backIm','var')
                         currimg=imsubtract(currimg,backIm{jj});
                     end
@@ -316,10 +287,9 @@ classdef colony
                     end
                     
                     fullImage{jj}(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=newIm;
-                    
                 end
-                
             end
+            
             
             
         end
@@ -414,7 +384,7 @@ classdef colony
         function inds=getPointsAroundCoordinate(obj,coord,radius)
             %Extract all cells inside radius around coord. radius and coord
             %both in pixels. Coords chosen so [mean(x), mean(y)]=[0,0]
-            %for colony. Returns indices of points. 
+            %for colony. Returns indices of points.
             
             com_coords=bsxfun(@minus,obj.data(:,1:2),mean(obj.data(:,1:2)));
             disttopoint=bsxfun(@minus,com_coords,coord);
@@ -422,9 +392,9 @@ classdef colony
             inds = disttopoint < radius;
             
         end
-            
-            
-            
+        
+        
+        
     end
 end
 
@@ -497,4 +467,60 @@ for ii=1:length(imnums)
 end
 
 compressednuc=compressBinaryImg(sub2ind([total1*si(1) total2*si(2)],nucpixall(:,1),nucpixall(:,2)),[total1*si(1) total2*si(2)]);
+end
+
+function [newdata, compressednuc]=realignPointsMM(obj,si,imgfiles,dims,acoords)
+
+imnums=obj.imagenumbers;
+[ximg, yimg]=ind2sub(dims,imnums);
+ac = obj.imagecoords;
+
+nucpixall=[];
+for ii=1:length(imnums)
+    
+    
+    %get the data from current image
+    currimgcells=obj.data(:,end-1)==imnums(ii);
+    origdata=obj.data(currimgcells,1:2);
+    
+    %back to image coords (not plate coords)
+    origdata=bsxfun(@minus,origdata,[ac(ii).absinds(2) ac(ii).absinds(1)]);
+    
+    
+    %currimgind=sub2ind(dims,jj,ii);
+    xnow = ximg(ii); ynow=yimg(ii);
+    currinds=[(max(ximg)-xnow)*si(1)+1 (ynow-min(yimg))*si(2)+1];
+    for kk=(min(yimg)+1):ynow
+        currinds(2)=currinds(2)-acoords(sub2ind(dims,xnow,kk)).wabove(1);
+    end
+    for mm= xnow:(max(ximg)-1)
+        currinds(1)=currinds(1)-acoords(sub2ind(dims,mm,ynow)).wside(1);
+    end
+    currinds=currinds([2 1]); %somehow the above ended up backwar
+    %acoords(currimgind).absinds=[currinds(2) currinds(1)]; %for image coords
+    
+    origdata=bsxfun(@plus,origdata,[currinds(2)-1 currinds(1)-1]);
+    
+    if ~isempty(imgfiles(imnums(ii)).compressNucMask)
+        nucmask=uncompressBinaryImg(imgfiles(imnums(ii)).compressNucMask);
+        [nucpix_x, nucpix_y]=ind2sub(size(nucmask),find(nucmask));
+        
+        badinds1=nucpix_x < ac(ii).wabove(1);
+        badinds2=nucpix_y < ac(ii).wside(1);
+        
+        badinds=badinds1 | badinds2;
+        
+        nucpix_x(badinds)=[]; nucpix_y(badinds)=[];
+        
+        nucpix=bsxfun(@plus,[nucpix_x nucpix_y],[currinds(1)-1 currinds(2)-1]);
+        
+        nucpixall=[nucpixall; nucpix];
+    end
+    
+    newdata(currimgcells,:)=origdata;
+    
+end
+total1 = max(ximg)-min(ximg)+1;
+total2 = max(yimg)-min(yimg)+1;
+compressednuc=compressBinaryImg(sub2ind([total2*si(1) total1*si(2)],nucpixall(:,1),nucpixall(:,2)),[total1*si(1) total2*si(2)]);
 end

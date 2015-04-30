@@ -1,4 +1,4 @@
-function runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
+function runSegmentCellsZstack_bfopen(direc,pos,chan,paramfile,outfile,nframes)
 %
 %   runSegmentCells(direc,outfile,nframes,nucstring,smadstring,paramfile)
 %
@@ -6,6 +6,8 @@ function runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
 
 
 global userParam;
+
+usebfopen = 1;
 
 try
     eval(paramfile);
@@ -22,34 +24,34 @@ if length(chan) < 2
     nImages = 1;
 else
     nImages=length(chan)-1;
+end    
+
+for ww=1:length(ff.w)
+    for zz=1:length(ff.z)
+        filename = getAndorFileName(ff,pos,0,ff.z(zz),ff.w(ww));
+        tmpimg = bfopen(filename);
+        imgs{ww,zz}=tmpimg{1};
+    end
 end
 
+ntimes = size(imgs{1,1},1);
+
+
 %main loop over frames
-for ii=1:max(min(nframes,length(ff.t)),1)
+for ii=1:min(ntimes,nframes)
     
-    if ~isempty(ff.t)
-        frametouse = ff.t(ii);
-    else
-        frametouse = [];
-    end
     tic;
-    disp(['frame ' int2str(frametouse)]);
+    disp(['frame ' int2str(ii)]);
     % setup string to hold all the error messages for this frame number
     userParam.errorStr = sprintf('frame= %d\n', ii);
     
-    if ~isempty(chan)
-        nuc=andorMaxIntensity(ff,pos,frametouse,chan(1));
-    else
-        nuc=andorMaxIntensity(ff,pos,frametouse,[]);
+    nuc=imgs{1,1}{ii,1};
+    fimg(:,:,1)=imgs{2,1}{ii,1};
+    for zz=2:length(ff.z)
+        nuc=max(nuc,imgs{1,zz}{ii,1});
+        fimg(:,:,1)=max(fimg(:,:,1),imgs{2,zz}{ii,1});
     end
     
-    if isempty(chan) || length(chan) == 1
-        fimg = nuc;
-    else
-        for xx=2:length(chan)
-            fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,frametouse,chan(xx));
-        end
-    end
     
     nuc = smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
     for xx=1:size(fimg,3)

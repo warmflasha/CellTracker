@@ -1,9 +1,13 @@
-function [colonies peaks]=peaksToColonies(matfile)
+function [colonies peaks]=peaksToColonies(matfile,mm)
 
 pp=load(matfile,'peaks','acoords','imgfiles','dims');
 peaks=pp.peaks;
 ac=pp.acoords;
 dims=pp.dims;
+
+if ~exist('mm','var')
+    mm=1;
+end
 
 peaks=removeDuplicateCells(peaks,ac);
 
@@ -40,7 +44,7 @@ alldat=[alldat full(allinds)];
 %Make colony structure
 for ii=1:length(groups)
     cellstouse=allinds==ii;
-    colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[],pp.imgfiles);
+    colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[],pp.imgfiles,mm);
 end
 
 %put data back into peaks

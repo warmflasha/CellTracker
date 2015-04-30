@@ -1,6 +1,6 @@
 function showImgAndPoints(img,pts)
 
-figure; 
+%figure; 
 
 if islogical(img)
     imshow(img);

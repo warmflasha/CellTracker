@@ -27,7 +27,7 @@ for jj=1:dims(1)
             fname = mkMMfilename(files,jj-1,ii-1);
             currimg=imread(fname{1});
             if ii > 1 %if not in top row, align with above
-                [~ , ind, ind2, sf]=alignTwoImages(previmg,currimg,1,parrange,perpsearch);
+                [ni , ind, ind2, sf]=alignTwoImages(previmg,currimg,1,parrange,perpsearch);
                 acoords(currimgind).wabove=[ind ind2 sf];
             else
                 acoords(currimgind).wabove=[0 0];
@@ -36,7 +36,7 @@ for jj=1:dims(1)
             if jj < dims(1) %align with left
                 leftimgnm = mkMMfilename(files,jj,ii-1);
                 leftimg=imread(leftimgnm{1});
-                [~, ind, ind2, sf]=alignTwoImages(leftimg,currimg,4,parrange,perpsearch);
+                [ni, ind, ind2, sf]=alignTwoImages(leftimg,currimg,4,parrange,perpsearch);
                 acoords(currimgind).wside=[ind ind2 sf];
             else
                 acoords(currimgind).wside=[0 0];
@@ -59,7 +59,7 @@ for jj=1:dims(1)
             for mm=jj:dims(1)
                 currinds(1)=currinds(1)-acoords(sub2ind(dims,mm,ii)).wside(1);
             end
-            acoords(currimgind).absinds=currinds;
+            acoords(currimgind).absinds=[currinds(2) currinds(1)]; %for image coords
         end
     end
 end

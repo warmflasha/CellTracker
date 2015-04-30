@@ -1,0 +1,39 @@
+function cellCenters=circles2cells(centers,radii)
+
+ratio_cutoff = 0.5;
+
+ncirc=length(rr);
+
+cc=centers;
+rr=radii';
+
+dists = ipdm(cc);
+
+dist_ratios = dists./rr(ones(ncirc,1),:);
+
+counted = zeros(ncirc,1);
+
+q=1;
+
+inds = dist_ratios < ratio_cutoff;
+
+[px, py]=ind2sub(size(dist_ratios),inds);
+qq=1;
+while sum(counted) < ncirc
+    q=find(counted==0,'first');
+    groups{qq}=q;
+    while ~isempty(indstoadd)
+        groups{qq}=unique([groups{qq}, py(locp)]);
+        counted(py(locp))=1;
+        px(locp)=[]; py(locp)
+        [indstoadd, locp]=ismember(groups{qq},px);
+    end
+    
+    [indstoadd, locp]=ismember(groups{qq},py);
+    while ~isempty(indstoadd)
+        groups{qq}=unique([groups{qq}, px(locp)]);
+        counted(px(locp))=1;
+    end
+    
+    
+        

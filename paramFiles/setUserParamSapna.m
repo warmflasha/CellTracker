@@ -1,4 +1,4 @@
-function setUserParamRuda
+function setUserParamSapna
 %
 %
 % Contains master set of comments on how to adjust parameters and other
@@ -29,7 +29,7 @@ userParam.backgroundOpenRad = 50;
 
 userParam.presubNucBackground=1;
 userParam.presubSmadBackground=1;
-userParam.backdiskrad = 200;
+userParam.backdiskrad = 300;
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Filtering of nuclei done in three steps: 
@@ -51,18 +51,18 @@ userParam.backdiskrad = 200;
 
 userParam.verboseCountNuc = 0;
 
-userParam.dontFilterNuc=0; % set to 1 to skip filtering step
+userParam.dontFilterNuc=1; % set to 1 to skip filtering step
 userParam.radiusMin = 8; 
 userParam.radiusMax = 10;
-userParam.minNucSep = 5;
+userParam.minNucSep = 30;
 userParam.nucIntensityRange = 10;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 200;
+userParam.nucIntensityLoc   = 500;
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =100; 
-userParam.nucAreaHi = 5000;  % not too big
+userParam.nucAreaLo =500; 
+userParam.nucAreaHi = 50000;  % not too big
 
 
 %%%%%PARAMETER BELOW HERE TYPICALLY DO NOT NEED TO BE MODIFIED%%%%%%%%%%%
@@ -71,7 +71,7 @@ userParam.nucAreaHi = 5000;  % not too big
 %parameters for cytoplasm calculation
 userParam.donutRadiusMin = 6;  % must be >=0
 userParam.donutRadiusMax = 10;  % set to zero to skip 
-userParam.forceDonut = 0; 
+userParam.forceDonut = 1; 
 userParam.minPtsCytoplasm = 5;
 
 %%%%%%%%%%%%%%% Params for gaussThresh() %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,8 +90,8 @@ userParam.gaussThreshSigma  = 3;
 % to run default.
 userParam.useCanny = 0;
 
-userParam.nucSolidity = 0.7; % get rid of funny shapes
-userParam.nucAspectRatio = 3; % not too far from circular
+userParam.nucSolidity = 0.6; % get rid of funny shapes
+userParam.nucAspectRatio = 4; % not too far from circular
 
 % define threshold for being in cell by two criterion:
 %   percent of nuclear area in cells > percNucInCell  AND
