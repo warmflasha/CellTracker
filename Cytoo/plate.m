@@ -12,6 +12,8 @@ classdef plate
         chans %name of channels in image files
         bIms % background images
         nIms % normalization images
+        mm % 1 for micromanager directories
+        si % image size
     end
     
     methods
@@ -57,7 +59,7 @@ classdef plate
             
         end
         
-        function fI=getColonyImages(obj,colnum,direc)
+        function fI=getColonyImages(obj,colnum,acoords,direc)
             
             %function to call the assemble colony method and get images of
             %colony number colnum. will use plate1.direc unless the direc
@@ -89,7 +91,11 @@ classdef plate
             
             
             if any(strcmp(properties(obj),'nIms')) && any(strcmp(properties(obj),'bIms'))
-                fI=obj.colonies(colnum).assembleColony(usedir,obj.chans,obj.bIms,obj.nIms);
+                if ~any(strcmp(properties(obj),'mm')) || obj.mm == 0
+                    fI=obj.colonies(colnum).assembleColony(usedir,obj.chans,obj.bIms,obj.nIms);
+                else
+                    fI=obj.colonies(colnum).assembleColonyMM(usedir,acoords,obj.si,obj.bIms,obj.nIms);
+                end
             else
                 fI=obj.colonies(colnum).assembleColony(usedir,obj.chans);
             end
