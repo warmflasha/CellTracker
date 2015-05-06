@@ -7,10 +7,9 @@ end
 
 
 q=1;
-% xmax = max(files.pos_x)+1;
-% ymax = max(files.pos_y)+1;
-   xmax = max(files.pos_x)+1;%AN
-   ymax = max(files.pos_y)-1;%AN
+xmax = max(files.pos_x)+1;
+ymax = max(files.pos_y)+1;
+
 nIms=xmax*ymax;
 ImRange=randperm(nIms);
 
