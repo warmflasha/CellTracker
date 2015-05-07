@@ -60,9 +60,9 @@ for ii=posRange(1):posRange(2)
             imgfiles(ii).errorStr=userParam.errorStr;
             % compress and save the binary mask for nuclei
             imgfiles(ii).compressNucMask = compressBinaryImg([statsN.PixelIdxList], size(nuc) );
-            if size(peaks{ii},2)>12% AN
+            
             save(outfile,'peaks','userParam','imgfiles');
-            end
+          
         end
         
     catch err       

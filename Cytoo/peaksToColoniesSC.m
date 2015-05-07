@@ -5,7 +5,7 @@ peaks=pp.peaks;
 ac=pp.acoords;
 dims=pp.dims;
 
-p=ANremoveIncompletePeaks(peaks);%AN
+%p=ANremoveIncompletePeaks(peaks);%AN
 peaks=removeDuplicateCells(peaks,ac);
 
 k1=num2cell(ones(1,length(peaks)));
@@ -23,7 +23,7 @@ alldat=zeros(totcells,ncol+1);
 
 q=1;
 for ii=1:length(peaks)
-    if ~isempty(peaks{ii})
+    if ~isempty(peaks{ii}) 
         currdat=peaks{ii};
         toadd=[ac(ii).absinds(2) ac(ii).absinds(1)];
         currdat(:,1:2)=bsxfun(@plus,currdat(:,1:2),toadd);
@@ -33,7 +33,8 @@ for ii=1:length(peaks)
 end
 pts=alldat(:,1:2);
 
-allinds=NewColoniesAW(pts);% changed to a new function, the output is not a cell array
+allinds=NewColoniesAW(pts);
+
 %[~, S]=alphavol(pts,20);%original value 100
 %groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
 %allinds=assignCellsToColonies(pts,groups);
@@ -42,6 +43,9 @@ allinds=NewColoniesAW(pts);% changed to a new function, the output is not a cell
 alldat = [alldat, allinds];
 
 ngroups = max(allinds);
+
+
+
 %Make colony structure
 for ii=1:ngroups;
     cellstouse=allinds==ii;
