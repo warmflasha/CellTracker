@@ -33,20 +33,20 @@
  %nms = {'esi017FullCytoo42hr'};              %midcoord[11 18]  fincoord[19 18]
  %nms = {'esi017FullCytoo51and61hr'};         %midcoord[12 12]  fincoord[21 20]
  %nms = {'esi017_7260hr_repeat'};             %midcoord[11 9]   fincoord[22 21]
- nms = {'esi017_42hr53hr_denser'};            %midcoord[11 10]  fincoord[22 22]
+ % nms = {'esi017_42hr53hr_denser'};            %midcoord[11 10]  fincoord[22 22]
  %nms = {'esi017_42hr53hr_smalldensity'} ;    %midcoord[10 10]  fincoord[22 21]
+  nms = {'esi017withControl42hr'};            %midcoord[10 10]  fincoord[23 21]  % most recent dataset
  
- 
- % nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};                     
+  nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};                     
  % nms2 = {'1 ng/ml(42hrs)','10 ng/ml (42hrs)' };                             
  % nms2 = {'10 ng/ml (51hr)','10 ng/ml (61hr)','1 ng/ml (51hr)','1 ng/ml(61hr)'};
  % nms2 = {'1 ng/ml (60hr)','1 ng/ml (72hr)','10 ng/ml (60hr)','10 ng/ml (72hr)'}; 
-  nms2 = {'10 ng/ml (53hr)','10 ng/ml (42hr)','1 ng/ml (53hr)','1 ng/ml (42hr)'};  
+  %nms2 = {'10 ng/ml (53hr)','10 ng/ml (42hr)','1 ng/ml (53hr)','1 ng/ml (42hr)'};  
  
  
-[n,t] = RunAnalysisFullChipAN(0.3,4,nms,nms2,[11 10],[22 22],[6 5],[6 8],'cdx2','eomes');
+ [n,t] = RunAnalysisFullChipAN(0.5,4,nms,nms2,[10 10],[23 21],[8 5],[8 10],'Eomes','sox17');
 
-
+% [n,totalcells] = RunAnalysisFullChipAN(thresh,Nplot,nms,nms2,midcoord,fincoord,index1,index2,param1,param2)
 
     
  %%
@@ -84,9 +84,9 @@
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =320
+ N = 520;
 
-ANrunOneMM('esi017_7260hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI');
+ANrunOneMM('FullChip42hrwithControl_1',N,bIms,nIms,'setUserParamAN20X','DAPI');
 %
 %%
 %to run the full set of images (obtained from the MM software)
@@ -94,6 +94,6 @@ ANrunOneMM('esi017_7260hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI');
 %single cell and circular large colonies is done within the peakstocolonies
 %function
 
- runFullTileMM('Q1_AN_(10ng_53hr)','Q1testcolchoice','setUserParamAN20X');
+ runFullTileMM('FullChip42hrwithControl_1','esi017withControl42hr','setUserParamAN20X',5);
  
 %function runFullTileMM(direc,outfile,paramfile,step)

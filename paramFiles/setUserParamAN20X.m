@@ -23,7 +23,7 @@ userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on 
 
 
 % image smoothing parameters
-userParam.gaussRadius=7;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
+userParam.gaussRadius=6;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
 userParam.gaussSigma=3; % 3(gaussThreshSigma is defined below)
 
 %%%%Background parameters
@@ -57,12 +57,12 @@ userParam.radiusMin = 25; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 490;  % 490 for the 40*e10^3 cells per chip dataset
+userParam.nucIntensityLoc   = 430;  % 490 for the 40*e10^3 cells per chip dataset
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =370; % measure the actual values and decide on this parameter
+userParam.nucAreaLo =380; % measure the actual values and decide on this parameter
 userParam.nucAreaHi = 4500;  % not too big
 
 
@@ -82,7 +82,7 @@ userParam.minPtsCytoplasm = 5;%5
 % *Sigma * STD(of model fit, ie ignoring points far in + tail). There is
 % buried 'verbose' parameter in this routine. Its assumed images are
 % integer valued, ie not scaled to [0,1]
-userParam.gaussThreshExcess = 7;%6 in AN file,5 bf
+userParam.gaussThreshExcess = 6;%6 in AN file,5 bf
 userParam.gaussThreshSigma  = 3;%3
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
