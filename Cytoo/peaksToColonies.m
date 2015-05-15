@@ -1,11 +1,17 @@
 function [colonies peaks]=peaksToColonies(matfile,mm)
 
-pp=load(matfile,'peaks','acoords','imgfiles','dims','userParam'); % AN: added to load userParam file to see which option(single cell or alphavol) to use in the peakstocolonies later on
+pp=load(matfile,'peaks','acoords','imgfiles','dims','userParam'); % AN
 peaks=pp.peaks;
 ac=pp.acoords;
 dims=pp.dims;
-coltype=pp.userParam.coltype; % AN
-pp.userParam.coltype
+param = pp.userParam;
+
+if ~isfield(param,'coltype')
+    disp('Error: coltype must be 1 or 0');
+
+end
+
+coltype=param.coltype; % AN
 
 if ~exist('mm','var')
     mm=1;
@@ -45,9 +51,9 @@ pts=alldat(:,1:2);
 % allinds=assignCellsToColonies(pts,groups);
 % alldat=[alldat full(allinds)];
 
-%------------------------------------------ this is where the chice is made
-if  exist('coltype','var') && coltype == 1    %analysis for the single cell data
-    disp('Running the SC colony analysis');
+
+if  coltype == 1    %analysis for the single cell data
+    disp('Running the SingleCell colony analysis');
     allinds=NewColoniesAW(pts);
     alldat = [alldat, allinds];
     ngroups = max(allinds);
@@ -55,7 +61,7 @@ if  exist('coltype','var') && coltype == 1    %analysis for the single cell data
     %Make colony structure for the single cell algorythm
     for ii=1:ngroups;
         cellstouse=allinds==ii;
-        colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[2048 2048],pp.imgfiles);%[2048 2048]%[1024 1344]
+        colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[2048 2048],pp.imgfiles);%[1024 1344]
     end
     
     %put data back into peaks
@@ -64,8 +70,8 @@ if  exist('coltype','var') && coltype == 1    %analysis for the single cell data
         peaks{ii}=[peaks{ii} alldat(cellstouse,end-1:end)];
     end
 end
-if  coltype == 0 || ~ exist('coltype','var') % analysis for the circular colonies data; defaule it no coltype variable is specified in the parameterfile
-    disp('Running the alphavol');
+if  coltype == 0  % analysis for the circular colonies data; 
+    disp('Running the alphavol-based colony grouping');
     [~, S]=alphavol(pts,100);
     groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
     

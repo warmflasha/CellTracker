@@ -53,10 +53,9 @@
  % title('control according to the label');
  % [n,totalcells] = RunAnalysisFullChipAN(thresh,Nplot,nms,nms2,midcoord,fincoord,index1,index2,param1,param2)
 
- %[] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
 
 
-    plotallanalysisAN(0.3,nms,nms2,[],[],[6 5],[6 8],'Cdx2','Eomes',1);
+    plotallanalysisAN(0.3,4,nms,nms2,[6 5],[6 8],'Cdx2','Eomes',1);
     
  %%
  %scripts for the functions to run Nplot separate matfiles and plot  mean values, scatter plots, colony analysis 
@@ -68,11 +67,11 @@
  
  
  %nms = {'H2BoutallControlMM','H2Boutall01MM','H2Boutall1MM','H2Boutall10MM'}; 
- %nms = {'Q4_1ng42hr','Q2_10ng42hr','Q3_1ng53hr','Q1_10ng53hr'};    % from
+ nms = {'Q4_1ng42hr','Q2_10ng42hr','Q3_1ng53hr','Q1_10ng53hr'};    % from
  %the high density full chip
  %nms = {'Q4_1ng42hr','Q2_10ng42hr','Q3gitUpdated','Q1_10ng53hr'}; 
  %nms = {'esi017_30hr_1ng_repeat','esi017_42hr_1ng_repeat','esi017_30hr_10ng_repeat','esi017_42hr_10ng_repeat'};
- nms = {'Venus_outall_001_NEW','Venus_outall_01_NEW','Venus_outall_1_NEW','Venus_outall_10_NEW'}; 
+ %nms = {'Venus_outall_001_NEW','Venus_outall_01_NEW','Venus_outall_1_NEW','Venus_outall_10_NEW'}; 
  %nms = {'ESI049BMP4atControl','ESI049BMP4at01','ESI049BMP4at1','ESI049BMP4at10'};
  %nms = {'outallcontrolH2BSignMM','outall01H2BSignMM','outall1H2BSignMM','outall10H2BSignMM'};
  %nms = {'h2bsignS2_control_MM','h2bsignS2_01_MM','h2bsignS2_1_MM','h2bsignS2_10_MM'};
@@ -91,7 +90,7 @@
    
     % [a,totalcells]= RunAnalysisQuadrantsAN(0.3,4,nms,nms2,[6 5],[6 8],'Cdx2','Eomes');
   
-                                        plotallanalysisAN(0.3,nms,nms2,[],[],[10 5],[10 8],'Cdx2','Eomes',0);
+                                        plotallanalysisAN(0.3,4,nms,nms2,[6 5],[6 8],'Cdx2','Eomes',0);
   
   % GeneralizedScatterAN(Nplot,nms2,index2,param1,param2,peaks,toplot,plottype);
    

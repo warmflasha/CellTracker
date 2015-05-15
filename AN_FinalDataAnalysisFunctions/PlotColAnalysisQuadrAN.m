@@ -4,17 +4,17 @@
 % quadrants/matfiles
 
 
-function [totalcells]=PlotColAnalysisQuadrAN(Nplot,colonies,M,thresh,nms2,param1,index1)
+function [totalcells]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1)
 
+M = M+100;
 
-
-for k=1:Nplot
+for k=1:size(nms2,2)
     
-    totalcolonies = zeros(M(k),1);
-    genepositive = zeros(M(k),1);
-    geneposcolonies = zeros(M(k),1);
+    totalcolonies = zeros(M,1);
+    genepositive = zeros(M,1);
+    geneposcolonies = zeros(M,1);
     
-    totalcells=zeros(M(k),1);
+    totalcells=zeros(M,1);
     
     % colonies{k} = col;
     

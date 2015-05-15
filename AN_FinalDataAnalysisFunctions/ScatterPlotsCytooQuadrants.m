@@ -27,46 +27,51 @@
 % param2 - name for the y axis in the final plot (depends on the meaning of
 % the peaks' columns, e.g. peaks{}(:,index2(2)) may correspond to another gene a given experiment)
 % see also: MeanCytooQuadrants
-function [valuestwo,valuesthree]=ScatterPlotsCytooQuadrants(Nplot,nms,nms2,index2,param1,param2)
+function [b,c]=ScatterPlotsCytooQuadrants(Nplot,nms,nms2,index2,param1,param2)
 
 for xx=1:Nplot
     
     filename = ['.' filesep nms{xx} '.mat'];%
     load(filename,'peaks');
    % disp(['loaded file: ' filename]);
-    
+     
     colors = {'r','g','b','k'};
-    valuesfour = [];
-    valuesone =[];
-    valuestwo=[];
-    valuesthree=[];
     
+    [a,b,c,d] = mkVectorsForScatterAN(peaks,index2);
     
-    for ii=1:length(peaks)
-        if ~isempty(peaks{ii})
-            if length(index2)==1
-                valuesone =[valuesone; peaks{ii}(:,index2(1))];
-            else
-                valuestwo =[valuestwo; peaks{ii}(:,index2(1))./peaks{ii}(:,5)];          % data plotted on the x axis
-                valuesthree =[valuesthree; peaks{ii}(:,index2(2))./peaks{ii}(:,5)];      % data plotted on the y axis
-                if length(index2) > 2
-                    valuesfour = [valuesfour; peaks{ii}(:,index2(3))./peaks{ii}(:,5)];
-                end
-            end
-        end
-        
-    end
-    limit1(xx) = max(valuestwo);
-    limit2(xx) = max(valuesthree);
+     %-----------------------
+%     valuescmap = [];
+%     valuesone =[];
+%     valuestwo=[];
+%     valuesthree=[];
+%     
+%     
+%     for ii=1:length(peaks)
+%         if ~isempty(peaks{ii})
+%             if length(index2)==1
+%                 valuesone =[valuesone; peaks{ii}(:,index2(1))];
+%             else
+%                 valuestwo =[valuestwo; peaks{ii}(:,index2(1))./peaks{ii}(:,5)];          % data plotted on the x axis
+%                 valuesthree =[valuesthree; peaks{ii}(:,index2(2))./peaks{ii}(:,5)];      % data plotted on the y axis
+%                 if length(index2) > 2
+%                     valuescmap = [valuesfour; peaks{ii}(:,index2(3))./peaks{ii}(:,5)];
+%                 end
+%             end
+%         end
+%         
+%     end
+    %-------------------------------------
+    limit1(xx) = max(b);
+    limit2(xx) = max(c);
     
     if length(index2)==1
-        figure(2),  subplot(2,2,xx),plot(valuesone,colors{xx},'marker','*'), legend(nms2{xx});
+        figure(2),  subplot(2,2,xx),plot(a,colors{xx},'marker','*'), legend(nms2{xx});
         
     else
-        figure(2), subplot(2,2,xx),scatter(valuestwo,valuesthree,colors{xx}), legend(nms2{xx});hold on
+        figure(2), subplot(2,2,xx),scatter(b,c,colors{xx}), legend(nms2{xx});hold on
     end
     if length(index2)>2
-        figure(2),  subplot(2,2,xx),scatter(valuestwo,valuesthree,[],valuesfour), legend(nms2{xx});hold on
+        figure(2),  subplot(2,2,xx),scatter(b,c,[],d), legend(nms2{xx});hold on
     end
     
     

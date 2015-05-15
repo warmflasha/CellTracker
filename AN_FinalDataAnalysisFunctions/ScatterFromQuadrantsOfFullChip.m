@@ -26,13 +26,13 @@
 % the peaks columns, e.g. peaks{}(:,6) e.g., Cdx2 in a given experiment)
 % param2 - name for the y axis in the final plot
 
-function [valuestwo,valuesthree] = ScatterFromQuadrantsOfFullChip(Nplot,nms,nms2,midcoord,fincoord,index2,param1,param2);
+function [valuestwo,valuesthree] = ScatterFromQuadrantsOfFullChip(Nplot,nms2,index2,param1,param2);
 
-filename = ['.' filesep  nms{1} '.mat'];
-
-load(filename);
-
-[toplot,peaks] = GetSeparateQuadrantImgNumbersAN(Nplot,filename,midcoord,fincoord);
+% filename = ['.' filesep  nms{1} '.mat'];
+% 
+% load(filename);
+% 
+% [toplot,peaks] = GetSeparateQuadrantImgNumbersAN(Nplot,filename,midcoord,fincoord);
 
 for j=1:Nplot
     peaksnew=[];
@@ -43,40 +43,45 @@ for j=1:Nplot
     
     
     colors = {'r','g','b','k'};
-    valuesone =[];
-    valuestwo=[];
-    valuesthree=[];
-    valuescmap = [];
-    for ii=1:length(peaksnew)
-        if ~isempty(peaksnew{ii}) ;
-            
-            if length(index2) == 1
-                valuesone =[valuesone; peaksnew{ii}(:,index2(1))];%
-                
-            else
-                valuestwo =[valuestwo; peaksnew{ii}(:,index2(1))./peaksnew{ii}(:,5)];        % the values on the x-axis of the resulting plot
-                valuesthree =[valuesthree; peaksnew{ii}(:,index2(2))./peaksnew{ii}(:,5)];    % the values on the y-axis of the resulting plot
-                if length(index2) > 2
-                    valuescmap =[valuescmap; peaksnew{ii}(:,index2(3))./peaksnew{ii}(:,5)];
-                    
-                end
-            end
-            
-        end
-    end
-    limit1(j) = max(valuestwo);
-    limit2(j) = max(valuesthree);
+    [a,b,c,d] = mkVectorsForScatterAN(peaksnew,index2);
     
+    %----------------------------------------------
+%     valuesone =[];
+%     valuestwo=[];
+%     valuesthree=[];
+%     valuescmap = [];
+%     for ii=1:length(peaksnew)
+%         if ~isempty(peaksnew{ii}) ;
+%             
+%             if length(index2) == 1
+%                 valuesone =[valuesone; peaksnew{ii}(:,index2(1))];%
+%                 
+%             else
+%                 valuestwo =[valuestwo; peaksnew{ii}(:,index2(1))./peaksnew{ii}(:,5)];        % the values on the x-axis of the resulting plot
+%                 valuesthree =[valuesthree; peaksnew{ii}(:,index2(2))./peaksnew{ii}(:,5)];    % the values on the y-axis of the resulting plot
+%                 if length(index2) > 2
+%                     valuescmap =[valuescmap; peaksnew{ii}(:,index2(3))./peaksnew{ii}(:,5)];
+%                     
+%                 end
+%             end
+%             
+%         end
+%     end
+    
+    %--------------------------------
+    limit1(j) = max(b);
+    limit2(j) = max(c);
+    % valuescmap = valuescmap./limit2; % normalize
     
     if length(index2)==1
-        figure(2),  subplot(2,2,j),scatter(valuesone,colors{j},'marker','*');
+        figure(2),  subplot(2,2,j),scatter(a,colors{j},'marker','*');
         
     else
         
-        figure(2), subplot(2,2,j),scatter(valuestwo,valuesthree,colors{j},'marker','*'),legend(nms2{j});hold on
+        figure(2), subplot(2,2,j),scatter(b,c,colors{j},'marker','*'),legend(nms2{j});hold on
         
         if length(index2) > 2
-            figure(2),  subplot(2,2,j),scatter(valuestwo,valuesthree,[],valuescmap),legend(nms2{j});hold on
+            figure(2),  subplot(2,2,j),scatter(b,c,[],d),legend(nms2{j});hold on
             
         end
         
@@ -88,10 +93,17 @@ for j=1:Nplot
 end
 limit1 = max(limit1);
 limit2 = max(limit2);
+%valuescmap =  valuescmap./limit2;
+% caxis = ([0 cscale]);
 for j=1:Nplot
     figure(2),  subplot(2,2,j)
     xlim([0 limit1]);
     ylim([0 limit2]);
+    %if length(index2) > 2          % normalize all values of the colormap to the max value if the y-axis data and add the colormap to all plots
+    %         valuescmap = colormap;
+    % caxis = ([0 cscale]);
+    %      colorbar;
+    %     end
 end
 
 end
