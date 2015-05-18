@@ -40,7 +40,7 @@ for j=1:Niter     % AW: the k-loop is not needed; the j loop can be removed too 
     dataver(j)=mean(dat);
     
 end
-dataver;
+
 err  = std(dataver);
 aver = mean(dataver);
 

@@ -1,14 +1,14 @@
 % plots the fractions of gene-positive cells, gene-positive colonies and number of cells as a function of colony size 
-% see also:  PlotColAnalysisFullChipAN
-% colonies is a cell array of colony data, separate for each of Nplot
+% 
+% colonies is a cell array of colony data, separate for each of 
 % quadrants/matfiles
+% M is the maximum colony size from the given colony structure
 
 
 function [totalcells]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1)
 
-M = M+100;
 
-for k=1:size(nms2,2)
+for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     
     totalcolonies = zeros(M,1);
     genepositive = zeros(M,1);
@@ -16,14 +16,11 @@ for k=1:size(nms2,2)
     
     totalcells=zeros(M,1);
     
-    % colonies{k} = col;
-    
     for ii=1:size(colonies{k},2)
         if ~isempty(colonies{k}(ii).data);
             nc = colonies{k}(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
-            %totalcells(nc)=totalcells(nc)+nc;
             tmp = colonies{k}(ii).data(:,index1(1))./colonies{k}(ii).data(:,5) > thresh;
             genepositive(nc)=genepositive(nc)+sum(tmp);
             geneposcolonies(nc)=geneposcolonies(nc)+any(tmp);

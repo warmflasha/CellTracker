@@ -1,54 +1,48 @@
 %
-% Generalized function to plot infomation from Nplot number of outall
-% files.
+% Generalized function to plot infomation from number of outall
+% files.The number of outall files = size of the 'nms' string
 % plottype = parameter that determines whether the data needs to be devided
 % into the quadrants
-% plottype = 1 need to devide into quadrants: generate 'toplot,'peaksnew' and 'coloniesnew'
-% plottype = 0 treat all outall miatfiles separately
+% plottype = 1 need to devide into quadrants: generate 'toplot,'peaksnew'
+% and 'coloniesnew' within the respective functions. ( this is not
+% optimized for the case if you have more than one file to separate into
+% quadrants
+% plottype = 0 treat all outall matfiles separately
+% thresh - used in the GeneralizedColonyAnalysisAN function; determined
+% based on scatter plots
+% nms2 - strin specifying the experimental conditions for the separate
+% matfiles or the quadrants within the single outall file.
+% index1 - specifies which peaks' column to use for y-value of the means plot  If index has two components
+% [ index1(1) index1(2)] - the ratio of the columns is plotted (usually index1(2) is DAPI).
+% index2 = the columns of the 'peaks' data to plot from the matfile. if input
+% only one number - get the plot of this column = not normalized data; If
+% imput it as a 2-col vector index2(1) index2(2) then these are the x and y
+% values of the scatter plot respectively
+% param1 - label of the y-axis for the mean values plot ( and the x-axis in
+% the scatter plots), input as a string; corresponds to the index1(1) and index2(1) values above;
+% param2 - label of the y-axis of the scatter plot; corresponds to the
+% index2(2) parameter above
 
 function [] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
 
-
 if   ~exist('plottype','var')
-   disp('Error: specify whether to devide the outall file into the quadrants (plottype var)')
-   pause on
-   pause
-end 
- if    plottype==0 && size(nms2,2)>1 && size(nms,2) == 1
-   disp('Error:wrong input (one of nms2, plottype or nms is incorrect}')
-   pause on
-   pause
-end 
-
-for k=1:size(nms,2)                                        % load the outall files (regardless of separate quadrants or not)
-              
-    filename{k} = ['.' filesep  nms{k} '.mat'];
-        
-        load(filename{k},'peaks');
-        disp(['loaded file: ' filename{k}]);
-        
-        
+    disp('Error: specify whether to devide the outall file into the quadrants (plottype var)') %error
+    return
 end
-                       
-           
-       if  plottype==1 % if you have only one outall matfile and you DO need to devide it into quadrants
-      
-        
-          [toplot,peaks] = GetSeparateQuadrantImgNumbersAN(nms,filename{k},midcoord,fincoord);
-        
-          [newdata] = GeneralizedMeanAN(nms2,index1,param1,toplot,peaks,plottype); % 
-          [b,c]=GeneralizedScatterAN(nms2,index2,param1,param2,peaks,toplot,plottype);
-           GeneralizedColonyAnalysisAN(filename,thresh,nms,nms2,peaks,toplot,index1,param1,plottype);
-
-    end 
-      
-           [~] = GeneralizedMeanAN(filename,nms2,index1,param1,[],peaks,plottype); 
-           [~,~]=GeneralizedScatterAN(nms2,index2,param1,param2,peaks,[],plottype);
-           GeneralizedColonyAnalysisAN(filename,thresh,nms,nms2,peaks,toplot,index1,param1,plottype);
-
+if    plottype==0 && size(nms2,2)>1 && size(nms,2) == 1
+    error('Error:if nms2 >1 but you only have one outfile, you must separate into qu')
     
-%     [valuestwo,valuesthree] = ScatterFromQuadrantsOfFullChip(Nplot,nms2,index2,param1,param2); % pot the scatter plots
-%     totalcells = ANColAnalysisFromFullChip(Nplot,nms,thresh,nms2,param1,index1,midcoord,fincoord);
+end
+if    plottype==1 && size(nms,2) > 1
+    error('Do such analysis for each file separately ( with size(nms,2) = 1 and plottype = 1)')
+    
+end
+
+[newdata] = GeneralizedMeanAN(nms,nms2,midcoord,fincoord,index1,param1,plottype);
+[b,c] =     GeneralizedScatterAN(nms,nms2,midcoord,fincoord,index2,param1,param2,plottype);
+GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype);
+
+
 end
 
 

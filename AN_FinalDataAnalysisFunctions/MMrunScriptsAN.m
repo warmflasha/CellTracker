@@ -56,7 +56,7 @@
  %[] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
 
 
-    plotallanalysisAN(0.3,nms,nms2,[],[],[6 5],[6 8],'Cdx2','Eomes',1);
+    plotallanalysisAN(0.3,nms,nms2,[0],[0],[6 5],[6 8],'Cdx2','Eomes',1);
     
  %%
  %scripts for the functions to run Nplot separate matfiles and plot  mean values, scatter plots, colony analysis 
@@ -79,19 +79,21 @@
  
  %nms = {'Q4_1ng42hr'};
  
- %nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};    
- nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q31ng/ml(53 hr)','10ng/ml(53 hr)'};
+ nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};    
+ %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q31ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q3updatedcode1ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'esi017(30 hr 1 ng/ml)','esi017(42 hr 1 ng/ml)','esi017(30 hr 10 ng/ml)','esi017(42 hr 10 ng/ml)'};  
  %nms2 = {'h2bSignControl','h2bSign 0.1 ng/ml','h2bsign 1 ng/ml','h2bsign 10 ng/ml'};
 
  %nms2 = {'1ng/ml(42 hr)'};
       
-                                       % plotallanalysisAN(thresh,Nplot,nms,nms2,index1,index2,param1,param2,plottype)          
+                                            
    
     % [a,totalcells]= RunAnalysisQuadrantsAN(0.3,4,nms,nms2,[6 5],[6 8],'Cdx2','Eomes');
-  
-                                        plotallanalysisAN(0.3,nms,nms2,[],[],[10 5],[10 8],'Cdx2','Eomes',0);
+    
+ % [] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
+ 
+     plotallanalysisAN(0.3,nms,nms2,[],[],[10 5],[10 8],'Cdx2','Sox2',1);
   
   % GeneralizedScatterAN(Nplot,nms2,index2,param1,param2,peaks,toplot,plottype);
    
