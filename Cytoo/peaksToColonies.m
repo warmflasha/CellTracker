@@ -8,7 +8,7 @@ param = pp.userParam;
 
 if ~isfield(param,'coltype')
     disp('Error: coltype must be 1 or 0');
-
+    return 
 end
 
 coltype=param.coltype; % AN
