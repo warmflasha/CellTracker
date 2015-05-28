@@ -1,6 +1,6 @@
 
 % function plots the mean values of the specified columns of peaks for four different quadrants of the
-% cytoo chip ( or for any four or more given number of matfiles).
+% cytoo chip ( or for any Nplot number of matfiles).
 % Useful if the data was collected separately/or needs to be ploted
 % from separate mat files.
 % The input arguments are:
@@ -10,34 +10,44 @@
 % nms2 =  cell array of strings with the names of the experimental conditions
 % corresponding to each matfile/quadrant of the chip. The same strings
 % appear as a legend of the plots
-% col = the column of the 'peaks' data to plot from each matfile. if input
+% index1 = the column of the 'peaks' data to plot from each matfile. if input
 % only one number - get the mean of this column = not normalized data
-% values; if input two numbers [col(1),col(2)], obtain the mean for
-% the ratio of peaks data (col)1)/col(2); usually normalize to DApi, make
-% col(2) = 5;need to be within the directory with the matfiles
-% [aver, err, alldata]=Bootstrapping(peaks,Niter,nsample,col) Niter and
-% nsample may be changed depending on the size of the dataset
-% 
+% values; if input two numbers [index1(1) ,index1 (2)], obtain the mean for
+% the ratio of peaks' data (index1(1)/index1(2); usually normalize to DApi, make
+% index1(2) = 5;need to be within the directory with the matfiles
+% param1 - y label;depends on the 'meaning' of the peaks' column in a a given experiment 
+%
 % see also: Bootstrapping
-function MeanCytooQuadrants(Nplot,nms,nms2,col);
+
+function [newdata] = MeanCytooQuadrants(Nplot,nms,nms2,index1,param1)
 
 for k=1:Nplot
     
     filename = ['.' filesep nms{k} '.mat'];%
     load(filename,'peaks');
-    % disp(['loaded file: ' filename]);
+    disp(['loaded file: ' filename]);
+      
     
-    colors = {'r','g','b','k'};
-    
-    [avgs, errs]=Bootstrapping(peaks,100,1000,[6 5]);
+    [avgs, errs, ~]=Bootstrapping(peaks,100,1000,index1);
     newdata(k,1)=avgs;
     newdata(k,2)=errs;
 end
-figure,errorbar(newdata(:,1),newdata(:,2),'b*') ;
+limit2 = max(avgs)+1;
+figure (1),errorbar(newdata(:,1),newdata(:,2),'b*') ;
 
-set(gca,'Xtick',1:4);
-set(gca,'Xticklabel',{nms2{k});
-ylabel(['Mean of Column ',num2str(col(1)),' of peaks data']);
+set(gca,'Xtick',1:Nplot);
+set(gca,'Xticklabel',nms2);
+    
+    ylim([0 limit2]);
+
+if size(index1) == 1
+    ylabel(param1);
+else
+    ylabel([param1,'/DAPI']);
+end
+
+end
+
 
    
 

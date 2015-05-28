@@ -1,9 +1,11 @@
 function [colonies peaks]=peaksToColonies(matfile,mm)
 
-pp=load(matfile,'peaks','acoords','imgfiles','dims');
+pp=load(matfile,'peaks','acoords','imgfiles','dims','userParam'); % AN: added to load userParam file to see which option(single cell or alphavol) to use in the peakstocolonies later on
 peaks=pp.peaks;
 ac=pp.acoords;
 dims=pp.dims;
+coltype=pp.userParam.coltype; % AN
+pp.userParam.coltype
 
 if ~exist('mm','var')
     mm=1;
@@ -36,10 +38,31 @@ for ii=1:length(peaks)
 end
 pts=alldat(:,1:2);
 
-[~, S]=alphavol(pts,100);%original value 100
-groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
-allinds=assignCellsToColonies(pts,groups);
-alldat=[alldat full(allinds)];
+% [~, S]=alphavol(pts,100);%original value 100            
+% groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
+% 
+% 
+% allinds=assignCellsToColonies(pts,groups);
+% alldat=[alldat full(allinds)];
+
+%------------------------------------------ this is where the chice is made
+if  exist('coltype','var') && coltype == 1    %analysis for the single cell data                           
+    disp('Running the SC colony analysis');
+    allinds=NewColoniesAW(pts);
+    alldat = [alldat, allinds];
+    groups = max(allinds);
+    
+else if  coltype == 0 || ~ exist('coltype','var') % analysis for the circular colonies data; defaule it no coltype variable is specified in the parameterfile
+        disp('Running the alphavol');
+        [~, S]=alphavol(pts,pp.userParam.alphavol);
+        groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
+            
+        allinds=assignCellsToColonies(pts,groups);
+        alldat=[alldat full(allinds)];
+    end
+    
+end 
+%------------------------------- %below this point all the same as in either peakstoColoniesSC ot peakstocolonies           
 
 %Make colony structure
 for ii=1:length(groups)

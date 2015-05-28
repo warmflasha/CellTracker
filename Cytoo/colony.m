@@ -332,7 +332,24 @@ classdef colony
             end
             
             
-            dmax=max(dists);
+            
+            if (rad > 700)
+              rad1 = 500*1.5;
+            elseif (rad > 500 && rad < 650)
+              rad1 = 375*1.5;
+            elseif (rad > 300 && rad < 450)
+              rad1 = 250*1.5;
+            elseif (rad > 100 && rad < 200)
+              rad1 = 125*1.5;
+            end
+            
+            
+            if(max(dists)<rad1)
+                dmax=max(dists);
+            else
+                dmax = rad1;
+            end
+            
             cellsinbin=zeros(ceil(dmax/binsize),1); rA=cellsinbin;
             q=1;
             for jj=0:binsize:dmax

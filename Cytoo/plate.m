@@ -5,6 +5,7 @@ classdef plate
         colonies %contains colony objects on plate
         dims %image dimensions of plate
         inds1000 %indices of 1000um colonies
+        inds750 % indices of 750um colonies
         inds500 %indices of 500um colonies
         inds250 %indices of 250um colonies
         indsSm %indices of smaller colonies
@@ -43,17 +44,21 @@ classdef plate
             obj.colonies=colonies;
             obj.dims=dims;
             col=colonies;
-            
-            gind= [col.aspectRatio] > 0.66 & [col.aspectRatio] < 1.5;
+            ncell = [col.ncells]; % _SC
             rad=[col.radius];
-            col1000=gind & rad > 1200;
-            col500 = gind & rad < 1200 & rad > 700;
-            col250 = gind & rad < 650 & rad > 300;
+            
+            gind= [col.aspectRatio] > 0.66 & [col.aspectRatio] < 1.5 & [ncell./(rad^2) > 0.0030]; %_SC
+     
+            col1000=gind & rad > 700;
+            col750 = gind & rad < 650 & rad > 500;
+            col500 = gind & rad < 450 & rad > 300;
+            col250 = gind & rad < 200 & rad > 100;
             colSm=gind & rad < 250;
             
             
             obj.inds1000=find(col1000);
             obj.inds500=find(col500);
+            obj.inds750= find(col750);
             obj.inds250=find(col250);
             obj.indsSm=find(colSm);
             
