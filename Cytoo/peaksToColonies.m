@@ -54,11 +54,10 @@ if  exist('coltype','var') && coltype == 1    %analysis for the single cell data
     
 else if  coltype == 0 || ~ exist('coltype','var') % analysis for the circular colonies data; defaule it no coltype variable is specified in the parameterfile
         disp('Running the alphavol');
-<<<<<<< HEAD
+
         [~, S]=alphavol(pts,pp.userParam.alphavol);
-=======
-        [~, S]=alphavol(pts,100);
->>>>>>> 2af767ab3ddf261467e2b020e62fd952516c1011
+
+       
         groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
             
         allinds=assignCellsToColonies(pts,groups);
