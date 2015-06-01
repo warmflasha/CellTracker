@@ -40,7 +40,7 @@ end
 
 [newdata] = GeneralizedMeanAN(nms,nms2,midcoord,fincoord,index1,param1,plottype);
 [b,c] =     GeneralizedScatterAN(nms,nms2,midcoord,fincoord,index2,param1,param2,plottype);
-GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype);
+[~,~,~] = GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype);
 
 
 end

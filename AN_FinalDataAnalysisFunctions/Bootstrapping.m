@@ -30,7 +30,7 @@ for ii=1:length(peaks)
     end
     
 end
-dat =zeros(length(alldata),1);
+dat =zeros(Niter,1);
 
 for j=1:Niter     % AW: the k-loop is not needed; the j loop can be removed too if replaced properly with ...
     for k=1:nsample
@@ -40,6 +40,7 @@ for j=1:Niter     % AW: the k-loop is not needed; the j loop can be removed too 
     dataver(j)=mean(dat);
     
 end
+
 
 err  = std(dataver);
 aver = mean(dataver);

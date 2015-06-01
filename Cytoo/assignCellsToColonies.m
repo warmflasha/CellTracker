@@ -1,5 +1,5 @@
 function allinds=assignCellsToColonies(pts,groups,mkplot)
-
+disp('is called here'); % AN, db
 
 if ~exist('mkplot','var')
     mkplot=0;

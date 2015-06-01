@@ -5,7 +5,7 @@
 % M is the maximum colony size from the given colony structure
 
 
-function [totalcells]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1)
+function [totalcells,ratios,ratios2]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1)
 
 
 for k=1:size(nms2,2) % need to loop over the number of experimental conditions
@@ -13,8 +13,8 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     totalcolonies = zeros(M,1);
     genepositive = zeros(M,1);
     geneposcolonies = zeros(M,1);
-    
     totalcells=zeros(M,1);
+    
     
     for ii=1:size(colonies{k},2)
         if ~isempty(colonies{k}(ii).data);
@@ -22,7 +22,7 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
             
             totalcolonies(nc)=totalcolonies(nc)+1;
             tmp = colonies{k}(ii).data(:,index1(1))./colonies{k}(ii).data(:,5) > thresh;
-            genepositive(nc)=genepositive(nc)+sum(tmp);
+            genepositive(nc)= genepositive(nc)+sum(tmp);
             geneposcolonies(nc)=geneposcolonies(nc)+any(tmp);
             
         end

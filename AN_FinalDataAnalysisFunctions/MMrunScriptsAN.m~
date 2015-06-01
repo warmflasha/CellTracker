@@ -37,9 +37,9 @@
 % nms = {'esi017_42hr53hr_denser(2)'};          %midcoord[11 10]  fincoord[22 22]
  %nms = {'esi017_42hr53hr_smalldensity'} ;    %midcoord[10 10]  fincoord[22 21]
  %nms = {'esi017withControl42hr'};            %midcoord[10 10] or (midcoord better[12 13]) fincoord[23 21]  % most recent dataset
-  %nms = {'esi017_42hrVol_1ngBMP'};     %midcoord[11 11]  fincoord[22 21]  % volume-dependent,1ng/ml label
+  nms = {'esi017_42hrVol_1ngBMP'};     %midcoord[11 11]  fincoord[22 21]  % volume-dependent,1ng/ml label
  % nms = {'esi017_42hrVol_control(1)'};     %midcoord[10 11]  fincoord[20 21]  % volume-dependent,contro(1) label
-  nms = {'esi017_42hrVol_control(2)'};       %midcoord[11 10]  fincoord[21 22]  % volume-dependent,contro(2) label
+  %nms = {'esi017_42hrVol_control(2)'};       %midcoord[11 10]  fincoord[21 22]  % volume-dependent,contro(2) label
   
   %nms = {'esi017fDish_control'};    
   %nms = {'esi017fDish_1ngml'}; 
@@ -50,7 +50,7 @@
   %nms2 = {'Bra','Bra','Sox17','Sox17'};
   
   
-  nms2 = {'100ul','150ul','200ul','225ul'};
+  %nms2 = {'100ul','150ul','200ul','225ul'};
  %nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};                     
   % nms2 = {'1 ng/ml(42hrs)','10 ng/ml (42hrs)' };                             
  % nms2 = {'10 ng/ml (51hr)','10 ng/ml (61hr)','1 ng/ml (51hr)','1 ng/ml(61hr)'};
@@ -65,7 +65,7 @@
  %[] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
 
 
-    plotallanalysisAN(0.5,nms,nms2,[],[],[6 5],[6 10],'CY5','RFP',1);
+    plotallanalysisAN(0.3,nms,nms2,[],[],[8 5],[8 6],'Sox2','cdx2',1);
     
  %%
  %scripts for the functions to run Nplot separate matfiles and plot  mean values, scatter plots, colony analysis 
@@ -92,11 +92,11 @@
  %nms = {'Venus_outall_001_NEW','Venus_outall_01_NEW','Venus_outall_1_NEW','Venus_outall_10_NEW'}; 
  %nms = {'ESI049BMP4atControl','ESI049BMP4at01','ESI049BMP4at1','ESI049BMP4at10'};
  %nms = {'outallcontrolH2BSignMM','outall01H2BSignMM','outall1H2BSignMM','outall10H2BSignMM'};
- nms = {'h2bsignS2_control_MM','h2bsignS2_01_MM','h2bsignS2_1_MM','h2bsignS2_10_MM'};
+ %nms = {'h2bsignS2_control_MM','h2bsignS2_01_MM','h2bsignS2_1_MM','h2bsignS2_10_MM'};
  
  %nms = {'esi017noqdratall_control(2)'};
  % nms2 = {'control ','10 ng/ml'};  
- nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};  
+ 
  %nms2 = {'control'};
  %nms2 = {'control(2) ','control(1) ','1 ng/ml ','10 ng/ml'};    
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q31ng/ml(53 hr)','10ng/ml(53 hr)'};
@@ -113,7 +113,7 @@
  % [] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
  
      
-     plotallanalysisAN(0.5,nms,nms2,[],[],[6 5],[8 6],'Cy5','RFP',0);
+     plotallanalysisAN(0.5,nms,nms2,[],[],[6 5],[6 10],'Cy5','RFP',1);
  
   
   % GeneralizedScatterAN(Nplot,nms2,index2,param1,param2,peaks,toplot,plottype);

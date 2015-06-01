@@ -7,14 +7,14 @@
 function [toplot,peaks] = GetSeparateQuadrantImgNumbersAN(nms2,peaks,dims,midcoord,fincoord)
  
 %filename = ['.' filesep  nms{k} '.mat'];
-        
+
 % load(filename,'peaks','dims');
 % disp([filename]);
 
 if isempty(midcoord) && isempty(fincoord)
-        midcoord = [dims(1)/2; dims(2)/2];
-        fincoord = [dims(1)-1; dims(2)-1];
-        end
+    midcoord = [round(dims(1)/2); round(dims(2)/2)];
+    fincoord = [dims(1)-1; dims(2)-1];
+end
 
 
 xx=0:midcoord(1);
