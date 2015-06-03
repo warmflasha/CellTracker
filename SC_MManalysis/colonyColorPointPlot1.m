@@ -1,4 +1,4 @@
-function colonyColorPointPlot1(col,dcols,ps,rescale_fac,centerpos)
+function colonyColorPointPlot1(col,dcols,rescale_fac,ps, centerpos)
 %function colonyColorPointPlot(col,dcols)
 %---------------------------------------
 %Colony scatter plot with points colored by data
@@ -9,7 +9,7 @@ function colonyColorPointPlot1(col,dcols,ps,rescale_fac,centerpos)
 
 xdat=col.data(:,1);
 ydat=col.data(:,2);
-center = col.center; 
+
 rad = col.radius;
 
 if length(dcols)==1
@@ -26,18 +26,13 @@ end
 
 
 
-
-if ~exist('rescale_fac','var')
-    rescale_fac=0.66; %conversion from pixels to microns
-end
-
 if ~exist('centerpos','var')
     centerpos=1;
 end
 
 
 if (max(coldat) > 3)
-    limit = 2;
+    limit = 3;
 else
     limit = max(coldat);
 end
@@ -55,19 +50,9 @@ if centerpos
     ydat=bsxfun(@minus,ydat,mean(ydat));
 end
 
-if (rad > 700)
-    rad1 = 500*1.5;
-elseif (rad > 500 && rad < 650)
-        rad1 = 375*1.5;
-elseif (rad > 300 && rad < 450)
-    rad1 = 250*1.5;
-elseif (rad > 100 && rad < 200)
-    rad1 = 125*1.5;
-else
-    error('Too small colony, Terminating');
-end
 
-includeinds=sqrt(xdat.*xdat+ydat.*ydat) < rad1;
+
+includeinds=sqrt(xdat.*xdat+ydat.*ydat) < rad;
 xdat=xdat(includeinds); ydat=ydat(includeinds);
 coldat=coldat(includeinds);
 

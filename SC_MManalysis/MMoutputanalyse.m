@@ -1,5 +1,6 @@
 function MMoutputanalyse (dir, outfile, coldatacolr, radavg, colavg, colcolr)
 %%%%%
+
 % dir: Directory that has the output file. If the current directory
 % contains the output file, then pass '.' as an argument. 
 % outfile : Output file. 
@@ -30,13 +31,16 @@ end
     load(file);
 
 % select the colonies of required diameter
-col{1} = plate1.inds250; 
+col{1} = plate1.inds200; 
 col{2} = plate1.inds500;
-col{3} = plate1.inds750;
+col{3} = plate1.inds800;
 col{4} = plate1.inds1000;
 
-crad = [250,500,750,1000];
+crad = [200,500,800,1000];
 ch = [6,8,10];
+
+%
+conv = userParam.umtopxl;
 
 %legend labels
 for i = 1:numel(ch)
@@ -47,6 +51,7 @@ end
 
 if(radavg == 'y'|| radavg =='Y')
 
+   
 for i = 1:numel(col)
     
     mkfl = sprintf('radialavg/dia_%d/', crad(i));
@@ -59,7 +64,7 @@ for i = 1:numel(col)
     for j = 1:numel(col{i})
         
         for k = 1:numel(ch)
-           [rA{k}, cb1] = plate1.colonies(col{i}(j)).radialAverage(ch(k), 5, 50);
+           [rA{k}, cb1, dmax] = plate1.colonies(col{i}(j)).radialAverage(ch(k), 5, 50);
         end
         
         rAm = zeros(numel(rA{1}), numel(ch));
@@ -71,31 +76,16 @@ for i = 1:numel(col)
       %%  
         a = plate1.colonies(col{i}(j));
         rad = a.radius;
-            if (rad > 700)
-              rad1 = 500;
-            elseif (rad > 500 && rad < 650)
-              rad1 = 375;
-            elseif (rad > 300 && rad < 450)
-              rad1 = 250;
-            elseif (rad > 100 && rad < 200)
-              rad1 = 125;
-            elseif (rad < 100)
-              colno = sprintf('dia_%d_col_%d', i, j); 
-              disptx = strcat('Too small colony : ', colno);
-              disp(disptx);
-            end
-        
+            
         n = numel(rA{1});
         
         %
-        if(rad*0.66 < rad1) 
-            xlim = rad*0.66;
-        else
-            xlim = rad1;
-        end
+        
+        xlim = dmax/conv; % dmax: distance of the furthest point from the center 
+        
         
         x = linspace(0, xlim, n);
-        
+
         figure('visible', 'off');
         
         plot(x, rAm);
@@ -137,7 +127,7 @@ mkdir (mkfile);
 
 clear rad1 rA rAm
 
- 
+
 for i = 1: numel(crad)
    
     
@@ -159,25 +149,10 @@ for i = 1: numel(crad)
     
     radm = mean(rad{i});
     
-            if (radm > 700)
-              rad1 = 500;
-            elseif (radm > 450 && radm < 650)
-              rad1 = 375;
-            elseif (radm > 300 && radm < 450)
-             rad1 = 250;
-            elseif (radm > 100 && radm < 200)
-             rad1 = 125;
-            else
-              colno = sprintf('dia_%d_col_%d', i, j); 
-              disptx = strcat('Too small colony : ', colno);
-              disp(disptx);
-            end
-    
-        if(radm*0.66 < rad1)
+           
+       
             xlim = radm*0.66;
-        else
-            xlim = rad1;
-        end
+        
         
         x = linspace(0,xlim, numel(ra{1}));
     
@@ -207,7 +182,7 @@ end
 
 if (colcolr == 'y' || colcolr == 'Y')
     
-   
+  
     for i= 1:numel(col)
         for j = 1: numel(col{i})
             
@@ -216,8 +191,9 @@ if (colcolr == 'y' || colcolr == 'Y')
           mkdir(mkfile);
 
           for k = 1:numel(ch)
-      
-           colonyColorPointPlot(plate1.colonies(col{i}(j)), [ch(k),5]);
+              
+           rescale_factor = 1/conv; % pixxels to um conversion
+           colonyColorPointPlot1(plate1.colonies(col{i}(j)), [ch(k),5], rescale_factor);
            f = sprintf('ch%d',  ch(k));
            fn = strcat(mkfile, '/', f); 
         
@@ -235,7 +211,7 @@ end
 %PlotColonyColorPoint (Just all datapoints in a given colony)
 if (coldatacolr == 'y' || coldatacolr == 'Y')
    
-    
+   
     for i = 1:numel(col)
          
         

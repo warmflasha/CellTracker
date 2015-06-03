@@ -72,7 +72,7 @@ if step < 6
 %     else
 %         disp('Error: coltype must be 1 or 0');
 %     end
-    plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms);
+    plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms, outfile);
     plate1.mm = 1;
     plate1.si = size(bIms{1});
     save([direc filesep outfile],'plate1','peaks','-append');  
