@@ -16,9 +16,9 @@ catch
 end
 
 ff=readAndorDirectory(direc);
-if ~exist('nframes','var')
-    nframes = length(ff.t);
-end
+% if ~exist('nframes','var')
+%     nframes = length(ff.t);
+% end
 
 if length(chan) < 2
     nImages = 1;
@@ -35,7 +35,9 @@ for ww=1:length(ff.w)
 end
 
 ntimes = size(imgs{1,1},1);
-
+if ~exist('nframes','var')
+    nframes = ntimes;
+end
 
 %main loop over frames
 for ii=1:min(ntimes,nframes)

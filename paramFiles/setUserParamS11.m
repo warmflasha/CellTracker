@@ -1,4 +1,4 @@
-function setUserParamRuda
+function setUserParamS11
 %
 %
 % Contains master set of comments on how to adjust parameters and other

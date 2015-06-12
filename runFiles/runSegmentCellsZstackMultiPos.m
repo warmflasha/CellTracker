@@ -1,4 +1,4 @@
-function runSegmentCellsZstackMultiPos(direc,time,chan,paramfile,outfile,nframes)
+function runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
 %
 %   runSegmentCells(direc,outfile,nframes,nucstring,smadstring,paramfile)
 %
@@ -38,16 +38,16 @@ for ii=1:max(min(nframes,length(ff.p)),1)
     userParam.errorStr = sprintf('frame= %d\n', ii);
     
     if ~isempty(chan)
-        nuc=andorMaxIntensity(ff,frame,tt,chan(1));
+        nuc=andorMaxIntensity(ff,frametouse,tt,chan(1));
     else
-        nuc=andorMaxIntensity(ff,pos,tt,[]);
+        nuc=andorMaxIntensity(ff,frametouse,tt,[]);
     end
     
     if isempty(chan) || length(chan) == 1
         fimg = nuc;
     else
         for xx=2:length(chan)
-            fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,frametouse,chan(xx));
+            fimg(:,:,xx-1)=andorMaxIntensity(ff,frametouse,tt,chan(xx));
         end
     end
     
@@ -68,7 +68,6 @@ for ii=1:max(min(nframes,length(ff.p)),1)
     
     %record some info about image file.
     imgfiles(ii).filestruct=ff;
-    imgfiles(ii).pos = pos;
     imgfiles(ii).w = chan;
     
     %run routines to segment cells, do stats, and get the output matrix
