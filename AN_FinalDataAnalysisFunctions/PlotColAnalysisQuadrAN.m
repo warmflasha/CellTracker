@@ -5,7 +5,7 @@
 % M is the maximum colony size from the given colony structure
 
 
-function [totalcells,ratios,ratios2]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1)
+function [totalcells,ratios,ratios2]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag)
 
 
 for k=1:size(nms2,2) % need to loop over the number of experimental conditions
@@ -34,18 +34,18 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     end
     
     allcells = sum(totalcells);
-    ratios = genepositive./totalcells;
-    ratios2 = geneposcolonies./totalcolonies;
+    ratios{k} = genepositive./totalcells;
+    ratios2{k} = geneposcolonies./totalcolonies;
     
-    
-    figure(3), subplot(2,2,k),  plot(ratios,'b*'); legend(nms2{k});
+    if flag == 1
+    figure(3), subplot(2,2,k),  plot(ratios{k},'b*'); legend(nms2{k});
     xlabel('Number of cells in the colony');
     ylabel(['FractionOf',(param1),'PositiveCells']);
     title ([thresh]);
     xlim([0 10]);
     ylim([0 1]);
     
-    figure(4),  subplot(2,2,k), plot(ratios2,'b*'); legend(nms2{k});
+    figure(4),  subplot(2,2,k), plot(ratios2{k},'b*'); legend(nms2{k});
     xlabel('Number of cells in the colony');
     ylabel(['FractionOf',(param1),'PositiveColonies']);
     title ([thresh]);
@@ -57,6 +57,7 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     ylabel('Total cells');
     title ([thresh]);
     xlim([0 15]);
+    end
     
 end
 

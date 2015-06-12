@@ -65,7 +65,7 @@
  %[] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
 
 
-    plotallanalysisAN(0.5,nms,nms2,[],[],[6 5],[6 10],'CY5','RFP',1);
+    plotallanalysisAN(0.5,nms,nms2,[],[],[6 5],[6 10],'CY5','RFP',1,flag);
     
  %%
  %scripts for the functions to run Nplot separate matfiles and plot  mean values, scatter plots, colony analysis 
@@ -86,19 +86,20 @@
   %nms2 = {'Oct4','Smad2','Cdx2','Cdx2'};
   %nms2 = {'Bra','Bra','Sox17','Sox17'};
   %nms = { 'esi017noqdratall_control(2)','esi017noqdratall_control(cdx2)','esi017noqdratall_1ngmlBMP','esi017noqdratall_10ngmlBMP'};    % from
- %the high density full chip
+ nms = { 'esi017noQd_C(2)_Repeat','esi017noQd_C(1)_Repeat','esi017noQd_1ng_Repeat','esi017noQd_10ng_Repeat'};
+  %the high density full chip
  %nms = {'Q4_1ng42hr','Q2_10ng42hr','Q3gitUpdated','Q1_10ng53hr'}; 
  %nms = {'esi017_30hr_1ng_repeat','esi017_42hr_1ng_repeat','esi017_30hr_10ng_repeat','esi017_42hr_10ng_repeat'};
  %nms = {'Venus_outall_001_NEW','Venus_outall_01_NEW','Venus_outall_1_NEW','Venus_outall_10_NEW'}; 
  %nms = {'ESI049BMP4atControl','ESI049BMP4at01','ESI049BMP4at1','ESI049BMP4at10'};
  %nms = {'outallcontrolH2BSignMM','outall01H2BSignMM','outall1H2BSignMM','outall10H2BSignMM'};
- nms = {'h2bsignS2_control_MM','h2bsignS2_01_MM','h2bsignS2_1_MM','h2bsignS2_10_MM'};
+ %nms = {'h2bsignS2_control_MM','h2bsignS2_01_MM','h2bsignS2_1_MM','h2bsignS2_10_MM'};
  
  %nms = {'esi017noqdratall_control(2)'};
  % nms2 = {'control ','10 ng/ml'};  
- nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};  
+ %nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};  
  %nms2 = {'control'};
- %nms2 = {'control(2) ','control(1) ','1 ng/ml ','10 ng/ml'};    
+ nms2 = {'control(2)','control(1) ','1 ng/ml ','10 ng/ml'};    
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q31ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q3updatedcode1ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'esi017(30 hr 1 ng/ml)','esi017(42 hr 1 ng/ml)','esi017(30 hr 10 ng/ml)','esi017(42 hr 10 ng/ml)'};  
@@ -113,7 +114,7 @@
  % [] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
  
      
-     plotallanalysisAN(0.5,nms,nms2,[],[],[6 5],[8 6],'Cy5','RFP',0);
+     plotallanalysisAN(4.5,nms,nms2,[],[],[10 5],[10 6],'RFP','CY5',0,1);
  
   
   % GeneralizedScatterAN(Nplot,nms2,index2,param1,param2,peaks,toplot,plottype);
@@ -123,9 +124,9 @@
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N = 400;
+ N = 20;
 
- ANrunOneMM('2015-28-05-FullChip10ngml(Cdx2etc)_1',N,bIms,nIms,'setUserParamAN20X','DAPI');
+ ANrunOneMM('2015-08-06-NoQdrAtAll(control2)EomNanogOct_1',N,bIms,nIms,'setUserParamAN20X','DAPI');
 %
 %%
 %to run the full set of images (obtained from the MM software)
@@ -133,6 +134,6 @@
 %single cell and circular large colonies is done within the peakstocolonies
 %function
 
- runFullTileMM('2015-28-05-FullChip10ngml(Cdx2etc)_1','esi017noqdratall_10ngmlBMP.mat','setUserParamAN20X');
+ runFullTileMM('2015-08-06-NoQdrAtAll(control2)EomNanogOct_1','esi017noQd_C(2)_Repeat.mat','setUserParamAN20X');
 
 %function runFullTileMM(direc,outfile,paramfile,step) 

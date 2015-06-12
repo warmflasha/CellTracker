@@ -2,10 +2,12 @@
 % function to plot  the results of colony-size-dependent analysis.
 % all the arguments are the same as described in the MMrunscriptsAN and
 % 'plotallanalysisAN' function
+% flag is 1 or zero, if 1, the the plots of the collony analysis will be
+% shown, ig flag == 0, not shown;
 % see also: plotallanalysisAN,MMrunscriptsAN
 
 
-function [totalcells,ratios,ratios2] = GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype)
+function [totalcells,ratios,ratios2] = GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag)
 if plottype == 1
     for k=1:size(nms,2)
         
@@ -43,7 +45,7 @@ if plottype == 1
         end
         
     end
-    [totalcells,ratios,ratios2] = PlotColAnalysisQuadrAN(coloniesnew,M,thresh,nms2,param1,index1);
+    [totalcells,ratios,ratios2] = PlotColAnalysisQuadrAN(coloniesnew,M,thresh,nms2,param1,index1,flag);
 end
 
 if plottype == 0 % do NOT need to separate into quadrants
@@ -60,7 +62,7 @@ if plottype == 0 % do NOT need to separate into quadrants
         
     end
     M = max(M);
-    [totalcells,ratios,ratios2] = PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1); % separate function which does the plotting
+    [totalcells,ratios,ratios2] = PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag); % separate function which does the plotting
     
 end
 end

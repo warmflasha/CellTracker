@@ -22,8 +22,10 @@
 % the scatter plots), input as a string; corresponds to the index1(1) and index2(1) values above;
 % param2 - label of the y-axis of the scatter plot; corresponds to the
 % index2(2) parameter above
+% flag = specifies whether to display the plots of the colony-wise
+% annalysis
 
-function [] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype)
+function [] = plotallanalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 
 if   ~exist('plottype','var') 
     disp('Error: specify whether to devide the outall file into the quadrants (plottype var)') %error
@@ -40,8 +42,8 @@ end
 
 [newdata] = GeneralizedMeanAN(nms,nms2,midcoord,fincoord,index1,param1,plottype);
 [b,c] =     GeneralizedScatterAN(nms,nms2,midcoord,fincoord,index2,param1,param2,plottype);
-[~,~,~] = GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype);
-
+[~,~,~] = GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag);
+[rawdata] =  Intensity_vs_ColSize(nms,nms2,index1,param1);
 
 end
 
