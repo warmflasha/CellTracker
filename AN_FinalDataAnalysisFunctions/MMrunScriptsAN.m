@@ -91,11 +91,12 @@
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q3updatedcode1ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'esi017(30 hr 1 ng/ml)','esi017(42 hr 1 ng/ml)','esi017(30 hr 10 ng/ml)','esi017(42 hr 10 ng/ml)'};  
  %nms2 = {'h2bSignControl','h2bSign 0.1 ng/ml','h2bsign 1 ng/ml','h2bsign 10 ng/ml'};
- dir = '2015-08-06-NoQdrAtAll(control1)Cdx2etc_1';
-    % plotallanalysisAN(4.5,nms,nms2,[],[],[10 5],[10 6],'RFP','CY5',0,1);
+ dir = '2015-08-06-NoQdrAtAll(control2)EomNanogOct_1';
+    
+ % plotallanalysisAN(4.5,nms,nms2,[],[],[10 5],[10 6],'RFP','CY5',0,1);
      
 
-  [a, b] =   findcolonyAN(dir,2,[1 3],nms,2,[10 5],3,1,15,0);
+  [a, b] =   findcolonyAN(dir,2,[1 3],nms,1,[10 5],3,1,15,0);
 %%
 % script to optimize the segmentation parameters. Can look at a chse image
 % and adjust the parameters. N is a linear index, image number

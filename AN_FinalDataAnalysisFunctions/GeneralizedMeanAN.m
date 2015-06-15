@@ -8,11 +8,11 @@
 % see code and description of the MMrunScriptsAN
 
 
-function [newdata] = GeneralizedMeanAN(nms,nms2,midcoord,fincoord,index1,param1,plottype)
+function [newdata] = GeneralizedMeanAN(nms,nms2,dir,midcoord,fincoord,index1,param1,plottype)
 
 if plottype == 1
     for k=1:size(nms,2)                                 % load however many files are in the nms string
-        filename{k} = ['.' filesep  nms{k} '.mat'];
+        filename{k} = [dir filesep  nms{k} '.mat'];
         load(filename{k},'peaks','dims');
         disp(['loaded file: ' filename{k}]);
         
@@ -45,7 +45,7 @@ end
 
 if plottype == 0
     for k=1:size(nms,2)        % load however many files are in the nms string
-        filename{k} = ['.' filesep  nms{k} '.mat'];
+        filename{k} = [dir filesep  nms{k} '.mat'];
         load(filename{k},'peaks');
         disp(['loaded file: ' filename{k}]);
         %
@@ -54,7 +54,7 @@ if plottype == 0
         newdata(k,2)=errs;
     end
     
-    figure (1),errorbar(newdata(:,1),newdata(:,2),'b*') ;
+    figure(1),errorbar(newdata(:,1),newdata(:,2),'b*') ;
     
     set(gca,'Xtick',1:size(nms2,2));
     set(gca,'Xticklabel',nms2);

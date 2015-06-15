@@ -7,11 +7,11 @@
 % see also: plotallanalysisAN,MMrunscriptsAN
 
 
-function [totalcells,ratios,ratios2] = GeneralizedColonyAnalysisAN(thresh,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag)
+function [totalcells,ratios,ratios2] = GeneralizedColonyAnalysisAN(thresh,dir,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag)
 if plottype == 1
     for k=1:size(nms,2)
         
-        filename{k} = ['.' filesep  nms{k} '.mat'];
+        filename{k} = [dir filesep  nms{k} '.mat'];
         
         load(filename{k},'peaks','dims','plate1');
         colonies{k} = plate1.colonies;
@@ -51,7 +51,7 @@ end
 if plottype == 0 % do NOT need to separate into quadrants
     for k=1:size(nms,2)
         
-        filename{k} = ['.' filesep  nms{k} '.mat'];
+        filename{k} = [dir filesep  nms{k} '.mat'];
         
         load(filename{k},'plate1');
         colonies{k} = plate1.colonies;
