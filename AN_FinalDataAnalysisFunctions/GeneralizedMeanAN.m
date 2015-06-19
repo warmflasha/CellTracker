@@ -8,7 +8,7 @@
 % see code and description of the MMrunScriptsAN
 
 
-function [newdata] = GeneralizedMeanAN(flag,nms,nms2,dir,midcoord,fincoord,index1,param1,plottype)
+function [newdata] = GeneralizedMeanAN(nms,nms2,dir,midcoord,fincoord,index1,param1,plottype,flag)
 
 if plottype == 1
     for k=1:size(nms,2)                                 % load however many files are in the nms string
@@ -29,6 +29,7 @@ if plottype == 1
         newdata(k,1)=avgs;
         newdata(k,2)=errs;
     end
+
     if flag == 1
     figure (1),errorbar(newdata(:,1),newdata(:,2),'b*') ;
     

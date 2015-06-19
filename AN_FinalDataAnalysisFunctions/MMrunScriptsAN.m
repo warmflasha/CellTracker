@@ -73,7 +73,9 @@
   %nms2 = {'Oct4','Smad2','Cdx2','Cdx2'};
   %nms2 = {'Bra','Bra','Sox17','Sox17'};
 % nms = { 'esi017noqdratall_control(2)','esi017noqdratall_control(cdx2)','esi017noqdratall_1ngmlBMP','esi017noqdratall_10ngmlBMP'};    % from
- nms = { 'esi017noQd_C(2)_Repeat','esi017noQd_C(1)_Repeat','esi017noQd_1ng_Repeat','esi017noQd_10ng_Repeat'};
+ %nms = { 'esi017noQd_C(2)_Repeat','esi017noQd_C(1)_Repeat','esi017noQd_1ng_Repeat','esi017noQd_10ng_Repeat'};
+ 
+ nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
  
  %nms = {'Q4_1ng42hr','Q2_10ng42hr','Q3gitUpdated','Q1_10ng53hr'}; 
  %nms = {'esi017_30hr_1ng_repeat','esi017_42hr_1ng_repeat','esi017_30hr_10ng_repeat','esi017_42hr_10ng_repeat'};
@@ -86,25 +88,26 @@
  % nms2 = {'control ','10 ng/ml'};  
  %nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};  
  %nms2 = {'control'};
- nms2 = {'control(2)','control(1) ','1 ng/ml ','10 ng/ml'};    
+ nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'}; 
+% nms2 = {'control(2)','control(1) ','1 ng/ml ','10 ng/ml'};    
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q31ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q3updatedcode1ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'esi017(30 hr 1 ng/ml)','esi017(42 hr 1 ng/ml)','esi017(30 hr 10 ng/ml)','esi017(42 hr 10 ng/ml)'};  
  %nms2 = {'h2bSignControl','h2bSign 0.1 ng/ml','h2bsign 1 ng/ml','h2bsign 10 ng/ml'};
- dir = '2015-08-06-NoQdrAtAll(control2)EomNanogOct_1';
+ dir = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2015-06-16-FinerBMP4Concentrations/Outall_FinerConcentrations';
     
- % plotallanalysisAN(4.5,nms,nms2,[],[],[10 5],[10 6],'RFP','CY5',0,1);
-     
+   [aver2,a,~,~,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[6 5],[6 10],'Cdx2','Bra',0,1);
+    % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 
-  [a, b] =   findcolonyAN(dir,2,[1 3],nms,1,[10 5],3,1,15,0);
+ % [a, b] =   findcolonyAN(dir,2,[1 3],nms,1,[10 5],3,1,15,0);
 %%
 % script to optimize the segmentation parameters. Can look at a chse image
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N = 20;
+ N = 148;
 
- ANrunOneMM('2015-08-06-NoQdrAtAll(control2)EomNanogOct_1',N,bIms,nIms,'setUserParamAN20X','DAPI');
+ ANrunOneMM('30ngml(Sox2BraCdx2)_1',N,bIms,nIms,'setUserParamAN20X','DAPI');
 %
 %%
 %to run the full set of images (obtained from the MM software)
@@ -112,6 +115,18 @@
 %single cell and circular large colonies is done within the peakstocolonies
 %function
 
- runFullTileMM('2015-08-06-NoQdrAtAll(control2)EomNanogOct_1','esi017noQd_C(2)_Repeat.mat','setUserParamAN20X');
+ runFullTileMM('Control(Sox2BraCdx2)_1','esi017noQd_C_finerConc.mat','setUserParamAN20X');
+ runFullTileMM('01ngml(Sox2BraCdx2)_1','esi017noQd_01_finerConc.mat','setUserParamAN20X');
 
+runFullTileMM('03ngml(Sox2BraCdx2)_1','esi017noQd_03_finerConc.mat','setUserParamAN20X');
+
+runFullTileMM('1ngml(Sox2BraCdx2)_1','esi017noQd_1_finerConc.mat','setUserParamAN20X');
+
+runFullTileMM('3ngml(Sox2BraCdx2)_1','esi017noQd_3_finerConc.mat','setUserParamAN20X');
+
+runFullTileMM('10ngml(Sox2BraCdx2)_1','esi017noQd_10_finerConc.mat','setUserParamAN20X');
+
+runFullTileMM('30ngml(Sox2BraCdx2)_1','esi017noQd_30_finerConc.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
 %function runFullTileMM(direc,outfile,paramfile,step) 
