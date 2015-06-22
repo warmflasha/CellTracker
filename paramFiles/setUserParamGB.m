@@ -19,7 +19,7 @@ userParam.newFigure = 0;
 userParam.coltype = 0;
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-userParam.verboseSegmentCells = 2;% set to 0, not to print the detailed info on segmentation 
+userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
 % image smoothing parameters
@@ -85,7 +85,7 @@ userParam.minPtsCytoplasm = 5;%5
 userParam.gaussThreshExcess = 7;%6 in AN file,5 bf
 userParam.gaussThreshSigma  = 5;%3
 
-userParam.verboseCountNuc = 2;  % to print statistics and an image
+userParam.verboseCountNuc = 0;  % to print statistics and an image
 
 % parameter for edge detection. Use 'canny' method in edge() unless get
 % nuclei overly large. Check method by on gaussian filtered image 
