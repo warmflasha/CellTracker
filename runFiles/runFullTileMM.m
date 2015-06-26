@@ -71,7 +71,9 @@ if step < 6
     [colonies, peaks]=peaksToColonies([direc filesep outfile]);
     
     plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms);
-    save([direc filesep outfile],'plate1','peaks','-append');
+    plate1.mm = 1;
+    plate1.si = size(bIms{1});
+    save([direc filesep outfile],'plate1','peaks','-append');  
     
 end
 

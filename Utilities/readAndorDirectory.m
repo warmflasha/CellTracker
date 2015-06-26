@@ -59,6 +59,14 @@ for ii=1:nImages
     end
 end
 
+inds_nonzero=inds(inds>0);
+
+first_ind=min(inds_nonzero);
+if nprefix==1
+    prefixes{1}=allfiles(1).name(1:(first_ind-1));
+end
+
+
 ordering = 'ftzw';
 drop = inds == 0;
 ordering(drop) =[];
