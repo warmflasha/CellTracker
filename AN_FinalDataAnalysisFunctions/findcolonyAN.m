@@ -50,7 +50,7 @@ if toshow > size(A,1)
    return;
 end
 if flag == 1
-for j=1:toshow
+for j=2:toshow
 fi = assembleColonyMM(colonies{dataset}(A(j)),dir,acoords,[2048 2048],bIms,nIms);
 dat = colonies{dataset}(A(j)).data(:,index1(1))./colonies{dataset}(A(j)).data(:,5);
 im = colonies{dataset}(A(j)).imagenumbers;
@@ -60,7 +60,7 @@ y=y-1;
 disp([x,y]);
 figure(j),subplot(1,2,1), imshow(fi{chan(1)},[]);
 hold on;  plot(colonies{dataset}(A(j)).data(:,1),colonies{dataset}(A(j)).data(:,2),'r*');
-text(colonies{dataset}(A(j)).data(:,1)+5,colonies{dataset}(A(j)).data(:,2),num2str(im),'Color','y');
+%text(colonies{dataset}(A(j)).data(:,1)+5,colonies{dataset}(A(j)).data(:,2),num2str(im),'Color','y');
 title('dapi');
 
 figure(j),subplot(1,2,2),imshow(fi{chan(2)},[]);

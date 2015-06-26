@@ -29,10 +29,11 @@ if step < 2
     for ii=1:length(wavenames)
         [minI, meanI]=mkBackgroundImageMM(ff,ii,min(500,maxims));
         bIms{ii}=uint16(2^16*minI);
-        normIm=(meanI-minI);
-        normIm=normIm.^-1;
-        normIm=normIm/min(min(normIm));
-        nIms{ii}=normIm;
+        nIms{ii}=ones(size(bIms{ii}));
+%         normIm=(meanI-minI);
+%         normIm=normIm.^-1;
+%         normIm=normIm/min(min(normIm));
+%         nIms{ii}=normIm;
     end
     save([direc filesep outfile],'bIms','nIms','dims');
 end

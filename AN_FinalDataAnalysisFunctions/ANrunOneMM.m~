@@ -1,11 +1,3 @@
-% If flag == 0, then the images to be read were taken manually and contain
-% only one coordinate for the index ( Pos0,Pos1...etc). then different
-% function is used to read the MM directory (readMMdirectoryOneCoord) and
-% make MM filename (mkMMfilenameOneCoord)
-% if flag == 1,then the images to be read in conten double indexing, as MM
-% assigns: prefix-Pos_00x_00y. then the usual functions are used:
-% 'readMMdirectory' and 'mkMMfilename'
-
 function ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
 
 global userParam;
@@ -23,8 +15,15 @@ nImages=length(ff.chan)-1;
 xmax = max(ff.pos_x)+1;
 ymax = max(ff.pos_y)+1;
 
+ %ii=imagetorun;
+ %imagetorun=ff.pos_x(posRange);
+
   ii=posRange; 
- 
+ % if posRange>xmax
+      
+ %     ii=ff.pos_y(posRange);
+      
+ % end
     disp(['Running image ' int2str(ii-1)]);
     %read the files
     try
@@ -78,15 +77,23 @@ ymax = max(ff.pos_y)+1;
         %rethrow(err);
     end
 end
-if flag == 0 || isempty('flag'); 
+if flag == 0 || isempty('flag');
     
     ff = readMMdirectoryOneCoord(direc,nucname);
- 
+ %dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
  nImages=length(ff.chan)-1;
  xmax = max(ff.pos_x)+1;
- 
-  ii=posRange; 
+ %ymax = max(ff.pos_y)+1;
 
+ %ii=imagetorun;
+ %imagetorun=ff.pos_x(posRange);
+
+  ii=posRange; 
+ % if posRange>xmax
+      
+ %     ii=ff.pos_y(posRange);
+      
+ % end
     disp(['Running image ' int2str(ii-1)]);
     %read the files
     try
@@ -112,7 +119,7 @@ if flag == 0 || isempty('flag');
         fimg=zeros(si(1),si(2),1);
         for jj= ii; %2:(1+1)
             f1nm = mkMMfilenameOneCoord(ff,x-1,[],[],jj);
-            fimgnow=imread(f1nm{1});
+            fimgnow=imread(f1nm);
             fimgnow = smoothImage(fimgnow,userParam.gaussRadius,userParam.gaussSigma);
             imgfiles(ii).smadfile{jj}=f1nm{1};%
             fimgnow=imsubtract(fimgnow,bIms{jj});
