@@ -105,9 +105,9 @@
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N = 3;
+ N = 1;
 
- ANrunOneMM('01Chip_1',N,bIms,nIms,'setUserParamAN20X','DAPI',0);
+ ANrunOneMM('03Chip_1',N,bIms,nIms,'setUserParamAN20X','DAPI',0);
 %
 %%
 %to run the full set of images (obtained from the MM software)

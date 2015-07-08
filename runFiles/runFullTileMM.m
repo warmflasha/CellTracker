@@ -29,10 +29,11 @@ if step < 2
     for ii=1:length(wavenames)
         [minI, meanI]=mkBackgroundImageMM(ff,ii,min(500,maxims));
         bIms{ii}=uint16(2^16*minI);
-        normIm=(meanI-minI);
-        normIm=normIm.^-1;
-        normIm=normIm/min(min(normIm));
-        nIms{ii}=normIm;
+        nIms{ii}=ones(size(bIms{ii}));
+%         normIm=(meanI-minI);
+%         normIm=normIm.^-1;
+%         normIm=normIm/min(min(normIm));
+%         nIms{ii}=normIm;
     end
     save([direc filesep outfile],'bIms','nIms','dims');
 end
@@ -59,19 +60,16 @@ if step < 5
 end
 %peaksToColonies generates the colony structure from peaks and accords
 %computes alpha volume and then finds all connected components / OR groups
-%the cells based on their proxomoty to each other (single cell data) into
+%the cells based on their proximoty to each other (single cell data) into
 %colonies
 if step < 6
     
-    %coltype=userParam.coltype; coltype=0;
+    
     load([direc filesep outfile],'bIms','nIms');
-    %if coltype == 1
+    
+    
     [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-    %elseif coltype == 0
-       % [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-%     else
-%         disp('Error: coltype must be 1 or 0');
-%     end
+    
     plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms);
     plate1.mm = 1;
     plate1.si = size(bIms{1});

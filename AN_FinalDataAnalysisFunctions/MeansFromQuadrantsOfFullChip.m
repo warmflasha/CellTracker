@@ -23,13 +23,17 @@
 % are plotting and what it represents ( e.g. 'Sox2 expression');
 % see also: Bootstrapping
 
-function [newdata] = MeansFromQuadrantsOfFullChip(Nplot,nms,nms2,midcoord,fincoord,index1,param1);
+function [newdata] = MeansFromQuadrantsOfFullChip(Nplot,nms2,index1,param1,toplot);
 
-filename = ['.' filesep  nms{1} '.mat'];
-
-[toplot,peaks] = GetSeparateQuadrantImgNumbersAN(Nplot,filename,midcoord,fincoord);
+%filename = ['.' filesep  nms{1} '.mat'];
 
 %load(filename,'peaks');
+%disp([filename]);
+
+%[toplot,peaks] = GetSeparateQuadrantImgNumbersAN(Nplot,filename,midcoord,fincoord);
+
+
+
 for j=1:Nplot
     peaksnew=[];
     for k=1:length(toplot{j})
@@ -49,8 +53,11 @@ figure(1), errorbar(newdata(:,1),newdata(:,2),'r*') ;
 set(gca,'Xtick',1:Nplot);
 set(gca,'Xticklabel',nms2);
 
-ylabel(param1);
-
+if length(index1)>1
+ylabel([param1,'/DAPI']);
+else
+    ylabel(param1);
+end
 ylim([0 limit2]);
 
 end
