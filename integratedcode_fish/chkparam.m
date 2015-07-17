@@ -1,8 +1,8 @@
 %Reading just one file
 %Set Parameters in Parameter file
 
- ii = 2;
+ ii = 1;
  
  ff=readAndorDirectory('.');
- runOneAndor(ff, 'setUserParamCG', ii, [], []);
+ runOneAndor(ff, 'setUserParamSapna', ii, [], 0);
  

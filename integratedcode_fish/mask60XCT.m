@@ -2,13 +2,10 @@ function LcFull = mask60XCT (ff, i)
 
 
 %% Creating masks for 60X images
-% i = position
 
 %% read file
-
-
-%find the z position with maximum intensity.
-
+% find the z position with maximum intensity.
+% i = position to be analysed
 
 nuc = andorMaxIntensity(ff,i,0,0);
 nuc_o = nuc;
@@ -27,13 +24,12 @@ nuc =presubBackground_self(nuc);
 
 %%  Normalize image
 diskrad = 100;
-low_thresh = 500;
+low_thresh = 1000;
 
 nuc(nuc < low_thresh)=0;
 norm = imdilate(nuc,strel('disk',diskrad));
 normed_img = im2double(nuc)./im2double(norm);
 normed_img(isnan(normed_img))=0;
-
 
 %% gradient image
 hy = fspecial('sobel');
@@ -55,30 +51,49 @@ cc(badinds,:)=[]; rr(badinds,:)=[];
 % convert circlees to cells (will merge close circles) 
 cen = circles2cells(cc,rr);
 
-%% save results
+%%
 
-figure('visible', 'off');
+figure;
+
 imshow(zeros(1024,1024));
 hold on;
 
-[vx, vy] = voronoi(cen(:,1), cen(:,2));
-plot(vx, vy, 'w');
+if (size(cen,1) == 2)
+    midpt = [mean(cen(:,1)), mean(cen(:,2))];
+    slope = (cen(1,2)-cen(2,2))/(cen(1,1) - cen(2,1));
+    
+    slopen = -1/slope;
+    intercept = midpt(2) - slopen*midpt(1);
+    xlim = get(gca, 'Xlim');
+   
+    pt1y = slopen*xlim(1) + intercept;
+    pt2y = slopen*xlim(2) + intercept;
+    
+    line([xlim(1) xlim(2)], [pt1y pt2y], 'Color', 'w');
+
+elseif (size(cen,1) == 1)
+        hold on;
+        
+elseif (size(cen,1) > 2)
+    [vx, vy] = voronoi(cen(:,1), cen(:,2));
+    plot(vx, vy, 'w');
+end
 
 
-fim = getframe(gca);
+
+ fim = getframe(gca);
 
 fim = frame2im(fim);
-
-
 bfim = im2bw(fim); % converting to binary image
 cbfim = imcomplement(bfim); %taking complement (masks are labelled other way round)
 
 rcbfim = imresize(cbfim, [1024 1024]); 
 LcFull = bwlabel(rcbfim,4);
 
-%%
-% removing discrepancies between LcFull and cen (if any)
-
+%% 
+% % %%
+% % % removing discrepancies between LcFull and cen (if any)
+% % 
 cent = size(cen,1);
 l1 = length(unique(LcFull));
 l2 = l1-1;
@@ -112,23 +127,9 @@ end
 
 end
 
-%close all;
+close all;
 
-% file = sprintf('fishsegtest4_%02d.mat', i+1);
-% fn = strcat(dire, '/masks/', file); 
-% 
-% save(fn,'LcFull');
 
-% just to save images having detected cells
-% imshow(nuc_o,[]);hold on; plot(cen(:,1),cen(:,2),'r*');
-% title('Original Image with cells identified');
-% 
-% cid = getframe(gca);
-% cid = frame2im(cid);
-% 
-% f = sprintf('cid%02d', i);
-% fn = strcat(dire, '/cellid/', f, '.tif'); 
-% 
-% imwrite(cid, fn);
+
 
 

@@ -114,9 +114,10 @@ end
 % end
 % sn = 4;
 nch = 3; %channel to be analysed
-TestSpotThreshold(dir1, z1, pos, sn, nch, sname); %Run this file to check
+%TestSpotThreshold(dir1, z1, pos, sn, nch, sname); 
+%Run this file to check
 %the intensity threshold. 
-%RunSpotRecognitiontest(dir1, z1, pos, sn, nch, sname);
+RunSpotRecognitiontest(dir1, z1, pos, sn, nch, sname);
 %%
 dir1 = '/Users/sapnac18/Desktop/Images_BC_6_29/extractedimages/imagesforanalyses';
 

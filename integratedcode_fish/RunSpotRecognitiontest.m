@@ -10,7 +10,7 @@ channel = nch; % fluorescence channel to apply spatzcells
 %% 1. Check Spot recognition parameters
 
 %spot_folder = [ip.exp.path '/spots_quantify_t7ntch2/'];
-df1             = sprintf('/spots_quantify_t7ntch%d/data/', nch);
+df1             = sprintf('/spots_quantify_t7ntch%d/', nch);
 spot_folder     = [ip.exp.path df1];
 
 tic;

@@ -1,6 +1,6 @@
-function tabulatemRNAposfish (dir1, sn, n_ch)
+function tabulatemRNAposfish (dir1, sn, ch)ee
 %sn: no. of samples
-%n_ch = no. of channels
+%n_ch = Channels to be analysed
 
 
 %%
@@ -8,8 +8,9 @@ function tabulatemRNAposfish (dir1, sn, n_ch)
 dir = dir1;
 mkdir ([dir '/results']);
 
-for i = 1:n_ch
-ldfile{i} =  sprintf('/Users/sapnac18/Desktop/CellTracker/cell_images/fish2/moreimages/spots_quantify_t7ntch%d/data/FISH_spots_data_new.mat', i);
+for i = 1:length(ch)
+file  =  sprintf('/spots_quantify_t7ntch%d/data/FISH_spots_data_new.mat', ch(i));
+ldfile{i} = strcat(dir1, file);
 load (ldfile{i});
 csi{i} = enlistcell_new;
 om{i} = One_mRNA;
@@ -17,17 +18,22 @@ end
 
 
 %%
-
+sno = 1;
 for sno = 1:sn
-clear finalmat;    
+clear finalmat csi_ch csi_f;   
 
-csi_ch1 = csi{1};
-csi_ch2 = csi{2};
+for nch= 1:length(ch)
+csi_ch{nch} = csi{ch(nch)};
+csi_f{nch} = csi_ch{nch}(sno);
+end
 
-csi_f1 = csi_ch1{sno};
-csi_f2 = csi_ch2{sno};
+finalmat(:,1:2) = [csi_f{1}{1}(:,2), csi_f{1}{1}(:,1)];
 
-finalmat(:,1:4) = [csi_f1(:,2), csi_f1(:,1), csi_f1(:,4)/om{1}, csi_f2(:,4)/om{2}];
+col_no = 3;
+for nch = 1:length(ch)
+    finalmat(:,col_no) = [csi_f{nch}{1}(:,4)/om{nch}];
+    col_no = col_no + 1;
+end
 %%
 % finalmat contains required details of all the cells in one sample. 
 % Column 1: Frame in which cell is identified
@@ -60,13 +66,14 @@ for j = jstart:jlim
   
   
   filen = sprintf('fishsegtest%02d', j);
-  load (filen)
+  filenld = strcat(dir,'/masks/', filen);
+  load (filenld);
  
   s = regionprops(LcFull, 'Centroid');
 
 for i = fmstart:k
     
-    finalmat(i,5:6) = s(finalmat(i,2)).Centroid;
+    finalmat(i,col_no:col_no+1) = s(finalmat(i,2)).Centroid;
    
 end
 

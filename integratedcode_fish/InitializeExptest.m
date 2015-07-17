@@ -13,7 +13,7 @@ p.image.base_name   = 'fish';
 
 %% SEGMENTATION INFORMATION
 p.seg.dir           =  [p.exp.path '/masks/'];   
-p.seg.base_name     =  'fishsegtest';
+p.seg.base_name     =  'fishseg';
 
 %% SAMPLES INFORMATION
 % image numbers
