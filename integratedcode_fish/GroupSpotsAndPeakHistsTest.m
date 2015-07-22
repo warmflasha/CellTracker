@@ -82,7 +82,7 @@ NegPeakThreshold = max(NegPeakThreshold(1:floor((neg_perct/100)*length(NegPeakTh
 df1             = sprintf('/spots_quantify_t7ntch%d/data/', nch);
 data_folder     = [ip.exp.path df1];
         
-N = [200 200 200 200] ; % number of bins for each sample
+N = [200 200 200] ; % number of bins for each sample
 %N = [500 500];
 
 figure('Units','normalized','Position',[0.1 0.1 0.7 0.3],...
@@ -93,7 +93,7 @@ for n_sample = ip.exp.sampleList
     
     if ~isempty(spotlist_new{n_sample})
         
-        subplot(2,max(ip.exp.sampleList)/2,iplot,'XScale','log','FontSize',8) ;
+        subplot(2,ceil(max(ip.exp.sampleList)/2),iplot,'XScale','log','FontSize',8) ;
         box on ; 
         hold all ;
         

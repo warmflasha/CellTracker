@@ -31,7 +31,10 @@ if sr.seg.multiz_mask
         T_LcFull = Thicken_Mask(LcFull, sr.seg.thicken_radius);
     end
 else
+    
     z_range = sr.image.zrange;
+    
+   
     
     LcFull      = uint16(LcFull);    
     T_LcFull    = uint16(zeros(size(LcFull)));

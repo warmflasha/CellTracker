@@ -37,7 +37,7 @@ for n_sample = ip.exp.sampleList
         fprintf(1,progress_) ;
         
         % run spatzcells and save output data
-        sr       = InitializeSpotRecognitionParameterstest(ip,n_frame,channel,spot_folder, z1);
+        sr       = InitializeSpotRecognitionParameterstest(ip,n_frame,channel,spot_folder, z1, pos);
         peakdata = spatzcellstest(sr);
         save([sr.output 'peakdata' num2str(n_frame,'%03d') '.mat'],'peakdata');
         

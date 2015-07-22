@@ -4,7 +4,7 @@
 
 clear all;
 
-dir1 = '/Volumes/data/spatzcells_quant/m7d14Sapna';
+dir1 = '/Users/sapnac18/Desktop/150712fishmp/imagess1';
 
 allSubFolders = genpath(dir1);
 
@@ -49,6 +49,7 @@ for j = 2:numberOfFolders
      for i = st:l
         
      LcFull=mask60XCT(ff,i);
+     %LcFull = mask60Xall(ff,i);
      
      file = sprintf('fishseg%02d.mat', m);
      fn = strcat(dir1, '/masks/', file); 
@@ -64,7 +65,7 @@ end
 % Channel for calculating mRNA 
 
  
- c=[3]; % Channel no. to be analyzed
+ c=[1 2 3]; % Channel no. to be analyzed
 
  for im = 1:length(c)
  imf =sprintf('images%02d', c(im)); 
@@ -104,32 +105,33 @@ end
 % run.
 % 
 %Spatzcell code begins!
-%dir1 = '/Users/sapnac18/Desktop/CellTracker/cell_images/fish2/moreimages';
-%z1 = [7,7,7,7];
-%pos = [11,15,15,11];
+dir1 = '/Users/sapnac18/Desktop/150712fishmp/imagess1';
+z1 = [11,11,11];
+pos = [2,3,7];
 
-% for i = 1:4
-%     fn = sprintf('fishsc%01d', i);
-%     sname{i} = fn;
-% end
-% sn = 4;
-nch = 3; %channel to be analysed
-TestSpotThreshold(dir1, z1, pos, sn, nch, sname); %Run this file to check
-%the intensity threshold. 
-%RunSpotRecognitiontest(dir1, z1, pos, sn, nch, sname);
-%%
-dir1 = '/Users/sapnac18/Desktop/Images_BC_6_29/extractedimages/imagesforanalyses';
-
-z1 = [5,5,5,5];
-pos = [5,3,1,2];
-for i = 1:4
+for i = 1:3
     fn = sprintf('fishsc%01d', i);
     sname{i} = fn;
 end
-sn = 4;
-nch = 3; 
-negsamp = 3;%%% Removing False Positives, nch = Specify the negative sample number
-negperc = 90;
+sn = 3;
+nch = 2; %channel to be analysed
+%TestSpotThreshold(dir1, z1, pos, sn, nch, sname); 
+%Run this file to check
+%the intensity threshold. 
+RunSpotRecognitiontest(dir1, z1, pos, sn, nch, sname);
+%%
+dir1 = '/Users/sapnac18/Desktop/150712fishmp/imagess1';
+
+z1 = [11, 11, 11];
+pos = [2,3,7];
+for i = 1:3
+    fn = sprintf('fishsc%01d', i);
+    sname{i} = fn;
+end
+sn = 3;
+nch = 2; 
+negsamp = 1;%%% Removing False Positives, nch = Specify the negative sample number
+negperc = 92;
 GroupSpotsAndPeakHistsTest(dir1, z1, pos, sn, nch, negsamp, sname, negperc);
 %% 
 %Spot Intensity Histograms, before and after removing false positives.
@@ -143,7 +145,7 @@ GroupCellSpotsTest(dir1, z1, pos, sn, nch, sname);
 
 %%
 
-dir1 = '/Users/sapnac18/Desktop/CellTracker/cell_images/fish2/moreimages';
-n_ch = [1,2]; % Channels to be analysed
-sn = 4; % No. of samples
+dir1 = '/Users/sapnac18/Desktop/150712fishmp/imagess1';
+n_ch = [1 2 3]; % Channels to be analysed
+sn = 3; % No. of samples
 tabulatemRNAposfish(dir1, sn, n_ch);

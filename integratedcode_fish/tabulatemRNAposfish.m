@@ -1,4 +1,4 @@
-function tabulatemRNAposfish (dir1, sn, ch)ee
+function tabulatemRNAposfish (dir1, sn, ch)
 %sn: no. of samples
 %n_ch = Channels to be analysed
 
@@ -23,7 +23,7 @@ for sno = 1:sn
 clear finalmat csi_ch csi_f;   
 
 for nch= 1:length(ch)
-csi_ch{nch} = csi{ch(nch)};
+csi_ch{nch} = csi{nch};
 csi_f{nch} = csi_ch{nch}(sno);
 end
 
@@ -65,7 +65,7 @@ for j = jstart:jlim
   end
   
   
-  filen = sprintf('fishsegtest%02d', j);
+  filen = sprintf('fishseg%02d', j);
   filenld = strcat(dir,'/masks/', filen);
   load (filenld);
  

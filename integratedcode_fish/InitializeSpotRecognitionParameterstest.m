@@ -1,4 +1,4 @@
-function varargout = InitializeSpotRecognitionParameterstest(p,n_frame,channel,spot_folder, z1)
+function varargout = InitializeSpotRecognitionParameterstest(p,n_frame,channel,spot_folder, z1, pos)
 % initialize spot recogntion parameters. 
 % usage example:
 %   sr = InitializeSpotRecognitionParameters(p,n_frame,channel,outputfolder)
@@ -32,6 +32,8 @@ img_name = sprintf('/images%02d/', channel);
 sr.image.fullname            = [p.exp.path img_name p.image.base_name ...
                                 num2str(p.exp.frm2spl(n_frame),'%01d') ...
                                '_f' num2str(p.exp.frm2img(n_frame),'%04d')];
+
+
 sr.image.zrange              = 0:z;                                  % number of Z-stacks in the image
 sr.image.channel             = channel;                              % channel number of the image to analyze
 sr.image.frame               = n_frame;
@@ -48,7 +50,7 @@ sr.seg.multiz_mask           = false;                                % whether e
 sr.spotrec.gf.size           = 3;                                    % strel size used to apply gaussian low pass filter
 sr.spotrec.gf.sigma          = 1;                                    % sigma of gaussian ditribution (pixels)
 sr.spotrec.peak.connectivity = 8;                                    % local conectivity used to assess peaks
-sr.spotrec.peak.threshold    = 700;                                  % threshold to consider something a peak
+sr.spotrec.peak.threshold    = 800;                                  % threshold to consider something a peak
 sr.spotrec.discard_spots     = true;                                 % use or not spots from outside cells
 sr.spotrec.output            = [ outputfolder '/spotrec/'];
 

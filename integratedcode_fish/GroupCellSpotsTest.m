@@ -50,10 +50,10 @@ for n_sample = ip.exp.sampleList
             cells_in_group = [cells_in_group ; [n_cell n_frame zeros(1,4)]] ;
             
             % Number of spots recognized in the cell.
-            cells_in_group(end,3) = sum(peakdata(:,12)==n_cell) ;
+            cells_in_group(end,3) = nansum(peakdata(:,12)==n_cell) ;
             
             % Total spots intensity of the cell.
-            cells_in_group(end,4) = sum(peakdata(peakdata(:,12)==n_cell,14)) ;
+            cells_in_group(end,4) = nansum(peakdata(peakdata(:,12)==n_cell,14)) ;
             
             % Cell length in microns
             cells_in_group(end,5) = CellStats(n_cell).MajorAxisLength*pixelsize;
@@ -81,7 +81,7 @@ load([data_folder 'FISH_spots_data_new.mat'],'enlistcell_new','One_mRNA');
 
 % initialize plot parameters
 max_cell_length = 30;
-x_lim           = [6 200 10 100];
+%x_lim           = [2000 2000 2000];
 
 figure('Units','normalized','Position',[0.2 0.2 0.7 0.3],...
     'Name','mRNA copy number histograms','NumberTitle','off') ;
@@ -108,7 +108,7 @@ for n_sample = ip.exp.sampleList
     plot(x,y/sum(y),'ko'); 
     xlabel('mRNA per cell', 'fontsize', 12);
     ylabel('Probability', 'fontsize', 12)
-    xlim([0 x_lim(n_sample)]);
+    %xlim([0 x_lim(n_sample)]);
     
     lh = legend(p1,['\langlen\rangle = ' num2str(mean(RNA),'%2.1f') ', \sigma = ' num2str(std(RNA),'%2.1f')]);
     set(lh,'fontsize', 12);

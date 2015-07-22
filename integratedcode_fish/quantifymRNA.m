@@ -31,15 +31,45 @@ load FISH_spots_data_new.mat;
    
   %%
    
-   for i = 1:4
+  clear all
+  
+   for i = 1:3
+   all = 1 ;   
+  
+   file = sprintf('sample%dresults.mat', i);
+   load(file);
+   nel = size(finalmat,1);
+   ch1a(all:nel) = finalmat(:,3);
+   m = 1;
+   chm{m}(i) = mean(finalmat(:,3));
+    m = m+1;
+   
+   ch2a(all:nel) = finalmat(:,4);
+   chm{m}(i) = mean(finalmat(:,4));
+   
+   m = m+1;
+   ch3a(all:nel) = finalmat(:,5);
+   chm{m}(i) = mean(finalmat(:,5));
+   all = nel+1;
+   end
+   
+   %%
+   figure;
+   for i = 1:3
        
-   subplot(2,2,i);
-   cl = cellsampleinfo{i}(:,1);
-   cls = size(cl,1);
-   plot(1:cls, cellsampleinfo{i}(:,3));
-   xlabel(Labels(i));
+   subplot(1,3,i);
+   
+   bar(chm{i});
+   xlab = {'NC', 'MP1', 'MP2'};
+   set(gca, 'XTickLabel', xlab, 'XTick', 1:numel(xlab));
+   
+   tit = sprintf('ch%d', i);
+   
+   title(tit, 'FontSize', 14, 'FontWeight', 'bold');
    
    end
+   
+   
    
    
    
