@@ -3,7 +3,7 @@ function filename = getAndorFileName(files,pos,time,z,w)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % returns file name from a image from the Andor iQ software
 % inputs: -files: file structure returned by readAndorDirectory
-%         -pos: position number
+%         -pos: position (or montage) number
 %         -time: time number
 %         -z: z-stack number
 %         -w: channel number
@@ -27,6 +27,8 @@ for ii=1:length(files.ordering)
             num = int2str(z);
         case 'w'
             num = int2str(w);
+        case 'm'
+            num = int2str(pos);
     end
     
     while length(num) < 4
