@@ -1,9 +1,11 @@
-function [colonies peaks]=peaksToColonies(matfile,mm)
+function [colonies, peaks]=peaksToColonies(matfile,mm)
 
 pp=load(matfile,'peaks','acoords','imgfiles','dims','userParam'); % AN
 peaks=pp.peaks;
 ac=pp.acoords;
 dims=pp.dims;
+
+if exist('userParam','var')
 param = pp.userParam;
 
 if ~isfield(param,'coltype')
@@ -12,7 +14,9 @@ if ~isfield(param,'coltype')
 end
 
 coltype=param.coltype; % AN
-
+else
+    coltype = 0;
+end
 if ~exist('mm','var')
     mm=1;
 end
