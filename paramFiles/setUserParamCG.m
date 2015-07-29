@@ -110,3 +110,6 @@ userParam.cyto2NucArea  = 5;%8;
 userParam.verboseEdgeThreshCyto = 0;% to suppress printed output 
 
 userParam.sclCytoStd = 1;
+
+userParam.alphavol = 75;
+userParam.umtopxl = 1.5;

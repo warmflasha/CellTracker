@@ -294,7 +294,7 @@ classdef colony
             
         end
         
-        function [rA, cellsinbin]=radialAverage(obj,column,ncolumn,binsize,compfrom)
+        function [rA, cellsinbin, dmax]=radialAverage(obj,column,ncolumn,binsize,compfrom)
             %computes the radial average of one column of data.
             %
             %[rA cellsinbin]=radialAverage(obj,column,ncolumn,binsize)
@@ -332,7 +332,11 @@ classdef colony
             end
             
             
-            dmax=max(dists);
+            
+            
+                dmax=max(dists);
+            
+            
             cellsinbin=zeros(ceil(dmax/binsize),1); rA=cellsinbin;
             q=1;
             for jj=0:binsize:dmax

@@ -76,7 +76,7 @@ if  coltype == 1    %analysis for the single cell data
 end
 if  coltype == 0  % analysis for the circular colonies data; 
     disp('Running the alphavol-based colony grouping');
-    [~, S]=alphavol(pts,100);
+    [~, S]=alphavol(pts,pp.userParam.alphavol);
     groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
     
     allinds=assignCellsToColonies(pts,groups);
