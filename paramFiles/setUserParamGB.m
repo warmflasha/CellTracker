@@ -1,4 +1,4 @@
-function setUserParamAN20X
+function setUserParamGB
 %
 %
 % Contains master set of comments on how to adjust parameters and other
@@ -16,24 +16,24 @@ userParam.newFigure = 0;
 
 %for single cells vs circular colonies:coltype=1 (uses distance-based colonies
 %grouping) coltype=0 uses alphavolume to group circular colonies
-userParam.coltype = 1;
+userParam.coltype = 0;
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
 % image smoothing parameters
-userParam.gaussRadius=7;% 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=1; % 3
+userParam.gaussRadius=8;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
+userParam.gaussSigma=3; % 3(gaussThreshSigma is defined below)
 
 %%%%Background parameters
-userParam.backgroundSmoothRad=50;
-userParam.backgroundSmoothSig=10;  % all three were not in the SetUserParamAN file explicitly
-userParam.backgroundOpenRad = 50;
+userParam.backgroundSmoothRad=100;
+userParam.backgroundSmoothSig=20;  % all three were not in the SetUserParamAN file explicitly
+userParam.backgroundOpenRad = 100;
 
 userParam.presubNucBackground=0;%
 userParam.presubSmadBackground=0;
-userParam.backdiskrad = 200; 
+userParam.backdiskrad = 400; 
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Filtering of nuclei done in three steps: 
@@ -52,18 +52,18 @@ userParam.backdiskrad = 200;
 % the image. The nuclei after first and second selection shown in different
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
-userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 25; %22
-userParam.radiusMax = 39; %37
-userParam.minNucSep = 10;%10
-userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   =200;  % 
+userParam.dontFilterNuc=1; % set to 1 to skip filtering step
+userParam.radiusMin = 10; %22
+userParam.radiusMax = 12;%32
+userParam.minNucSep = 10;
+userParam.nucIntensityRange = 5;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc   = 100;  % 290 510
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =370; % measure the actual values and decide on this parameter
-userParam.nucAreaHi = 4500;  % not too big
+userParam.nucAreaLo =100; % measure the actual values and decide on this parameter
+userParam.nucAreaHi = 10000;  % not too big
 
 
 %%%%%PARAMETER BELOW HERE TYPICALLY DO NOT NEED TO BE MODIFIED%%%%%%%%%%%
@@ -82,8 +82,8 @@ userParam.minPtsCytoplasm = 5;%5
 % *Sigma * STD(of model fit, ie ignoring points far in + tail). There is
 % buried 'verbose' parameter in this routine. Its assumed images are
 % integer valued, ie not scaled to [0,1]
-userParam.gaussThreshExcess = 7;%6 
-userParam.gaussThreshSigma  = 1;%3
+userParam.gaussThreshExcess = 7;%6 in AN file,5 bf
+userParam.gaussThreshSigma  = 5;%3
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
 

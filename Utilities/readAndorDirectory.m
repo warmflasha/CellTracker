@@ -24,6 +24,7 @@ for ii=1:nImages
         currPrefixNum=nprefix;
         p{nprefix}=[]; t{nprefix}=[];
         z{nprefix}=[]; w{nprefix}=[];
+        m{nprefix}=[];
     end
     
     ind = strfind(nm,'_f');
@@ -57,9 +58,26 @@ for ii=1:nImages
     else
         inds(4) = 0;
     end
+    
+    ind = strfind(nm,'_m');
+    if ~isempty(ind)
+        inds(5) = ind;
+        m{currPrefixNum} = [m{currPrefixNum} str2num(nm((inds(5)+2):(inds(5)+5)))];
+    else
+        inds(5) = 0;
+    end
+    
 end
 
-ordering = 'ftzw';
+inds_nonzero=inds(inds>0);
+
+first_ind=min(inds_nonzero);
+if nprefix==1
+    prefixes{1}=allfiles(1).name(1:(first_ind-1));
+end
+
+
+ordering = 'ftzwm';
 drop = inds == 0;
 ordering(drop) =[];
 inds(drop) =[];
@@ -75,4 +93,5 @@ for ii=1:nprefix
     files(ii).t=sort(unique(t{ii}));
     files(ii).z=sort(unique(z{ii}));
     files(ii).w=sort(unique(w{ii}));
+    files(ii).m=sort(unique(m{ii}));
 end    

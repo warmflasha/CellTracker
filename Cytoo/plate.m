@@ -110,7 +110,7 @@ classdef plate
             end
         end
         
-        function [rA rAerr]=radialAverageOverColonies(obj,colinds,column,ncolumn,binsize,compfrom)
+        function [rA, rAerr]=radialAverageOverColonies(obj,colinds,column,ncolumn,binsize,compfrom)
             
             if ~exist('compfrom','var')
                 compfrom=0;

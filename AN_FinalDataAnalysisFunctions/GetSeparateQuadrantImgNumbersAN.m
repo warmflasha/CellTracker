@@ -4,11 +4,18 @@
 % filename is a single outall file obtained after executing runfulltileMM
 % see also: MeansFromQuadrantsOfFullChip
 
-function [toplot,peaks] = GetSeparateQuadrantImgNumbersAN(Nplot,filename,midcoord,fincoord)
+function [toplot,peaks] = GetSeparateQuadrantImgNumbersAN(nms2,peaks,dims,midcoord,fincoord)
  
 %filename = ['.' filesep  nms{k} '.mat'];
-        
-load(filename,'peaks','dims');
+
+% load(filename,'peaks','dims');
+% disp([filename]);
+
+if isempty(midcoord) && isempty(fincoord)
+    midcoord = [round(dims(1)/2); round(dims(2)/2)];
+    fincoord = [dims(1)-1; dims(2)-1];
+end
+
 
 xx=0:midcoord(1);
 yy=0:midcoord(2);
@@ -31,13 +38,13 @@ xx=0:midcoord(1);
 allpairs=[I(:) J(:)];
 toplot{3} = sub2ind(dims,allpairs(:,1)+1,allpairs(:,2)+1);
 
-for j=1:Nplot
+for j=1:size(nms2,2)
     toplot{j}=toplot{j}(toplot{j} < length(peaks));
  end
 
 %to determine the image numbers used for each quadrant ( inverse of the code above)
 
-for t=1:Nplot           
+for t=1:size(nms2,2)           
 for z=1:length(toplot{t})
    
    [x1, y1]=ind2sub(dims,toplot{t}(z));
