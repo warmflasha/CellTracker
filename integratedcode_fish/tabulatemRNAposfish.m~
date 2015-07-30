@@ -113,10 +113,7 @@ end
      
      peaks = newmat{j};
      
-     imgfiles.compressNucMask = Nucmask{imno};
-     imgfiles.errorstr = errorstr{imno};
-     imgfiles.nucfile = nucfile{imno};
-     imgfiles.smadfile = smadfile{imno};
+     Imgfiles.compressNucMask = Nucmask{imno, errorstr, nucfile, smadfile;
      
      
      
