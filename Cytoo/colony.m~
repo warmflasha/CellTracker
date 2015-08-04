@@ -40,10 +40,8 @@ classdef colony
             
             if ~exist('si','var') || isempty(si)
                 if mm
-                    si=[2048 2048];%1024 1344
-                else
-                    si=[1024 1024];
-                end
+                    
+                si=[2048 2048];%1024 1344
             end
             
             if isempty(data) %|| size(data,1) < 4
@@ -338,7 +336,7 @@ classdef colony
             
             
             
-            dmax=max(dists);
+                dmax=max(dists);
             
             
             cellsinbin=zeros(ceil(dmax/binsize),1); rA=cellsinbin;
@@ -544,7 +542,7 @@ firstcolumn= firstimage:dims(1):(firstimage+dims(1)*100);
 endfirstcolumn = firstcolumn(find(ismember(firstcolumn,imnums),1,'last'));
 coord2 = (endfirstcolumn-firstimage)/dims(1)+1;
 coord1 = length(imnums)/coord2;
-ac=obj.imagecoords;
+ac=obj.imagecoords; 
 nucpixall = [];
 for ii=1:length(imnums)
     
