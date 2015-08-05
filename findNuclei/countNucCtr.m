@@ -101,7 +101,7 @@ if(userParam.verboseCountNuc)
             figure
         end
         showImgEdgePts(im2, [], pts );
-        title('countNucCtr(): all local max red, local max passing tests green');
+        title('countNucCtr(): all local max red, local max passing tests green'); drawnow;
     end
 end
 

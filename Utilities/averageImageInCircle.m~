@@ -1,0 +1,12 @@
+function avg=averageImageInCircle(img,cen,r)
+
+x=floor(cen(1));
+y=size(img,1)-floor(cen(2)
+
+mask=zeros(size(img));
+mask(cen(1),cen(2))=1;
+mask=bwdist(mask);
+mask = mask < r; 
+avg=mean(img(mask));
+img(~mask)=0;
+end

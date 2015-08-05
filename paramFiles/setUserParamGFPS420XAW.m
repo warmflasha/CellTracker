@@ -1,5 +1,5 @@
-function setUserParamCCC10xBS110607_GFPsmad4(img)
-%
+function setUserParamJoseph
+
 %   based on setUserParamsCCC10x(img)
 %
 % Contains master set of comments on how to adjust parameters and other

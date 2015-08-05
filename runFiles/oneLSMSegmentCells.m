@@ -13,7 +13,7 @@ else
         fimg(:,:,ii-1)=tt(chan(ii)).data;
     end
 end
-[maskC, statsN]=segmentCells(nuc,fimg);
+[maskC, statsN]=segmentCells2(nuc,fimg);
 [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
 outdat=outputData4AWTracker(statsN,nuc,length(chan)-1);
 % for jj=3:length(chan)

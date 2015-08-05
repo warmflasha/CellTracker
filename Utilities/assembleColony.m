@@ -3,8 +3,8 @@ function fullIm=assembleColony(direc,imKeyWord,matfile,colnum,crop)
 if ~exist('crop','var')
     crop=0;
 end
-
-si=[1024 1344];
+si=[2048 2048];
+%si=[1024 1344];
 
 
 cc=load(matfile,'acoords','colonies','dims');

@@ -1,6 +1,8 @@
 function setTrackParamEDS
 global userParam;
 
+userParam.sizeImg = [1024 1024];
+
 %Parameters for tracking
 userParam.L = 30; % this is the max distance (in pixels) objects in successive
                   %frames can be separated by and still match

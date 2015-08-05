@@ -1,4 +1,4 @@
-function setUserParamJoseph
+function setUserParamNew
 %
 %
 % Contains master set of comments on how to adjust parameters and other
@@ -15,25 +15,25 @@ fprintf(1, '%s called to define params\n',mfilename);
 userParam.newFigure = 0;
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-userParam.verboseSegmentCells = 0;
+userParam.verboseSegmentCells = 1;
 
 
 % image smoothing parameters
-userParam.gaussRadius=5;
-userParam.gaussSigma=1;
+userParam.gaussRadius=6;
+userParam.gaussSigma=2;
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
 userParam.backgroundSmoothSig=10;
 userParam.backgroundOpenRad = 50;
 
-userParam.presubNucBackground=1;
+userParam.presubNucBackground=0;
 userParam.presubSmadBackground=0;
-userParam.backdiskrad = 100;
+userParam.backdiskrad = 200;
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Filtering of nuclei done in three steps: 
-% 1. An optional threshold on allowed min intensity at max.
+% 1. An optional threshold on 25llowed min intensity at max.
 % 2. A generous test for local max, that should not miss anything and
 % also give not too many false +.  This is done by imreconstruction
 % comparing mask = img + nucIntensityLoc, with dilation of img. Increase
@@ -48,17 +48,18 @@ userParam.backdiskrad = 100;
 % the image. The nuclei after first and second selection shown in different
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
-userParam.dontFilterNuc=1; % set to 1 to skip filtering step
-userParam.radiusMin = 10; 
-userParam.radiusMax = 12;
+userParam.dontFilterNuc=0; % set to 1 to skip filtering step
+userParam.radiusMin = 20; 
+userParam.radiusMax = 22;
 userParam.minNucSep = 8;
-userParam.nucIntensityRange = 2;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 2;
+userParam.nucIntensityRange = 10;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc   = 100;
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
-userParam.nucAreaLo =150; 
-userParam.nucAreaHi = 1500;  % not too big
+%(Area)
+userParam.nucAreaLo =400; 
+userParam.nucAreaHi = 5000;  % not too big
 
 
 %%%%%PARAMETER BELOW HERE TYPICALLY DO NOT NEED TO BE MODIFIED%%%%%%%%%%%
