@@ -232,6 +232,82 @@ classdef colony
             
         end
         
+        function fullImage=assembleColonyAndor(obj,direc,dims,backIm,normIm)
+            %Assemble the image of the colony.
+            %
+            %fullImage=assembleColony(obj,direc,imKeyWord,overlayPoints,backIm)
+            %
+            %Function to take a colony, a directory of images, and a
+            %keyword, and to return an image of that colony.
+            %
+            %backIm is an optional background image to subtract from each
+            %picture before pasting.
+            %Note: imKeyWord is  a cell array of keywords. fullImage is a
+            %cell array of the same length as imKeyword
+            
+            
+            
+            imnums=obj.imagenumbers;
+            
+            
+            firstimage = min(imnums);
+            firstcolumn= firstimage:dims(1):(firstimage+dims(1)*100);
+            endfirstcolumn = firstcolumn(find(ismember(firstcolumn,imnums),1,'last'));
+            coord2 = (endfirstcolumn-firstimage)/dims(1)+1;
+            coord1 = length(imnums)/coord2;
+            ac=obj.imagecoords;
+            nucpixall = [];
+            
+            
+            files = readAndorDirectory(direc);
+            
+            
+            tmp1=andorMaxIntensity(files,0,0,0);
+            si=size(tmp1);
+            
+            
+            for jj=1:length(files.w)
+                %fullImage{jj}=zeros(si(1)*max(coords(:,1)),si(2)*max(coords(:,2)));
+                fullImage{jj}=uint16(zeros(si(1)*coord2,si(2)*coord1));
+                
+                for ii=1:length(imnums)
+                    
+                    
+                    over1=floor((imnums(ii)-firstimage)/dims(1));
+                    
+                    over2=imnums(ii)-firstimage-dims(1)*over1;
+                    
+                    %calculate alignment
+                    currinds=[over1*si(1)+1 over2*si(2)+1];
+                    for kk=1:over1
+                        currinds(1)=currinds(1)-ac(ii-(kk-1)*dims(1)).wabove(1);
+                    end
+                    for mm=1:over2
+                        currinds(2)=currinds(2)-ac(ii-mm+1).wside(1);
+                    end
+                    
+                    currimg=andorMaxIntensity(files,ii-1,0,files.w(jj));
+                    
+                    %background subtraction
+                    if exist('backIm','var')
+                        currimg=imsubtract(currimg,backIm{jj});
+                    end
+                    if exist('normIm','var')
+                        newIm=immultiply(im2double(currimg),normIm{jj});
+                        newIm=uint16(65536*newIm);
+                    else
+                        newIm=currimg;
+                    end
+                    
+                    fullImage{jj}(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=newIm;
+                    
+                end
+                
+            end
+            
+            
+        end
+        
         function fullImage=assembleColonyMM(obj,direc,acoords,si,backIm,normIm)
             %Assemble the image of the colony.
             %
@@ -558,8 +634,6 @@ for ii=1:length(imnums)
     over1=floor((imnums(ii)-firstimage)/dims(1));
     
     over2=imnums(ii)-firstimage-dims(1)*over1;
-    
-    disp([ii over1 over2]);
     
     %calculate alignment
     currinds=[over1*si(1)+1 over2*si(2)+1];
