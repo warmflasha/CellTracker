@@ -570,7 +570,7 @@ for ii=1:length(imnums)
         currinds(2)=currinds(2)-ac(ii-mm+1).wside(1);
     end
     
-    origdata=bsxfun(@plus,origdata,[currinds(1)-1 currinds(2)-1]);
+    origdata=bsxfun(@plus,origdata,[currinds(2)-1 currinds(1)-1]);
     
     if ~isempty(imgfiles(imnums(ii)).compressNucMask)
         nucmask=uncompressBinaryImg(imgfiles(imnums(ii)).compressNucMask);
