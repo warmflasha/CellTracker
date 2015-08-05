@@ -232,7 +232,7 @@ classdef colony
             
         end
         
-        function fullImage=assembleColonyAndor(obj,direc,dims,backIm,normIm)
+        function fullImage=assembleColonyAndor(obj,direc,backIm,normIm)
             %Assemble the image of the colony.
             %
             %fullImage=assembleColony(obj,direc,imKeyWord,overlayPoints,backIm)
@@ -260,33 +260,47 @@ classdef colony
             
             
             files = readAndorDirectory(direc);
-            
+        
             
             tmp1=andorMaxIntensity(files,0,0,0);
             si=size(tmp1);
             
             
-            for jj=1:length(files.w)
+            for jj=1:length(imnums)
                 %fullImage{jj}=zeros(si(1)*max(coords(:,1)),si(2)*max(coords(:,2)));
                 fullImage{jj}=uint16(zeros(si(1)*coord2,si(2)*coord1));
                 
                 for ii=1:length(imnums)
                     
                     
-                    over1=floor((imnums(ii)-firstimage)/dims(1));
+                     over1=floor((imnums(ii)-firstimage)/dims(1));
+    
+    over2=imnums(ii)-firstimage-dims(1)*over1;
+    
+    %calculate alignment
+    currinds=[over1*si(1)+1 over2*si(2)+1];
+    for kk=1:over1
+        currinds(1)=currinds(1)-ac(ii-(kk-1)*dims(1)).wabove(1);
+    end
+    for mm=1:over2
+        currinds(2)=currinds(2)-ac(ii-mm+1).wside(1);
+    end
                     
-                    over2=imnums(ii)-firstimage-dims(1)*over1;
-                    
-                    %calculate alignment
-                    currinds=[over1*si(1)+1 over2*si(2)+1];
-                    for kk=1:over1
-                        currinds(1)=currinds(1)-ac(ii-(kk-1)*dims(1)).wabove(1);
+                    if jj==1
+                        imname=imFiles(imnums(ii)).name;
+                    else
+                        imname=strrep(imFiles(imnums(ii)).name,imKeyWord{1},imKeyWord{jj});
                     end
-                    for mm=1:over2
-                        currinds(2)=currinds(2)-ac(ii-mm+1).wside(1);
+                    
+                    %If file doesn't exist, return empty array for this
+                    %keyword.
+                    if ~exist([direc filesep imname],'file')
+                        disp(['Warning: file ' imname ' not found. Skipping this keyword.']);
+                        fullImage{jj}=[];
+                        break;
                     end
                     
-                    currimg=andorMaxIntensity(files,ii-1,0,files.w(jj));
+                    currimg=imread([direc filesep imname]);
                     
                     %background subtraction
                     if exist('backIm','var')
