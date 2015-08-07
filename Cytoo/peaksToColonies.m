@@ -1,4 +1,4 @@
-function [colonies, peaks]=peaksToColonies(matfile,mm)
+function [colonies, peaks]=peaksToColonies(matfile,mm,ts)
 
 pp=load(matfile,'peaks','acoords','imgfiles','dims','userParam'); % AN
 peaks=pp.peaks;
@@ -21,7 +21,13 @@ if ~exist('mm','var')
     mm=1;
 end
 
+if any(dims > 1)
 peaks=removeDuplicateCells(peaks,ac);
+end
+
+if exist('ts','var')
+    peaks=peaks(ts);
+end
 
 k1=num2cell(ones(1,length(peaks)));
 lens=cellfun(@size,peaks,k1);
