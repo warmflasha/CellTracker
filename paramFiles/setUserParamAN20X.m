@@ -22,13 +22,13 @@ userParam.coltype = 1;
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
-% image smoothing parameters
-userParam.gaussRadius=7;% 4 is good for 10x images;6 is ok for 20X
+% image smoothing parameters 
+userParam.gaussRadius=10;% 4 is good for 10x images;6 is ok for 20X
 userParam.gaussSigma=1; % 3
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
-userParam.backgroundSmoothSig=10;  % all three were not in the SetUserParamAN file explicitly
+userParam.backgroundSmoothSig=10;  
 userParam.backgroundOpenRad = 50;
 
 userParam.presubNucBackground=0;%
@@ -57,7 +57,7 @@ userParam.radiusMin = 25; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   =200;  % 
+userParam.nucIntensityLoc  = 830;  % 590
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
@@ -82,8 +82,8 @@ userParam.minPtsCytoplasm = 5;%5
 % *Sigma * STD(of model fit, ie ignoring points far in + tail). There is
 % buried 'verbose' parameter in this routine. Its assumed images are
 % integer valued, ie not scaled to [0,1]
-userParam.gaussThreshExcess = 7;%6 
-userParam.gaussThreshSigma  = 1;%3
+userParam.gaussThreshExcess = 6;%6 
+userParam.gaussThreshSigma  = 3;%3
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
 

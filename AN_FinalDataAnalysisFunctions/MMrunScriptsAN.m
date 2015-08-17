@@ -72,11 +72,14 @@
   %nms2 = {'Sox2','pSmad1','Eomes','Gata6'};
   %nms2 = {'Oct4','Smad2','Cdx2','Cdx2'};
   %nms2 = {'Bra','Bra','Sox17','Sox17'};
-% nms = { 'esi017noqdratall_control(2)','esi017noqdratall_control(cdx2)','esi017noqdratall_1ngmlBMP','esi017noqdratall_10ngmlBMP'};    % from
+ %nms = { 'esi017noqdratall_control(2)','esi017noqdratall_control(cdx2)','esi017noqdratall_1ngmlBMP','esi017noqdratall_10ngmlBMP'};    % from
  %nms = { 'esi017noQd_C(2)_Repeat','esi017noQd_C(1)_Repeat','esi017noQd_1ng_Repeat','esi017noQd_10ng_Repeat'};
+ %nms = { 'esi017noQd_C2_repeat(nonIms)','esi017noQd_C1_repeat(nonIms)','esi017noQd_1_repeat(nonIms)','esi017noQd_10_repeat(nonIms)'};
  
- nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
+ %nms = {'esi017noQd_1hr003ng','esi017noQd_1hr03ng','esi017noQd_1hr3ng'};
+% nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
  
+ %nms = {'esi017noQd_(C)sign20hr','esi017noQd_03ngSign20hr','esi017noQd_3ngSign20hr'};
  %nms = {'Q4_1ng42hr','Q2_10ng42hr','Q3gitUpdated','Q1_10ng53hr'}; 
  %nms = {'esi017_30hr_1ng_repeat','esi017_42hr_1ng_repeat','esi017_30hr_10ng_repeat','esi017_42hr_10ng_repeat'};
  %nms = {'Venus_outall_001_NEW','Venus_outall_01_NEW','Venus_outall_1_NEW','Venus_outall_10_NEW'}; 
@@ -88,28 +91,83 @@
  % nms2 = {'control ','10 ng/ml'};  
  %nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};  
  %nms2 = {'control'};
- nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'}; 
-% nms2 = {'control(2)','control(1) ','1 ng/ml ','10 ng/ml'};    
+  %nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'}; 
+ 
+ %nms2 = {'control(20hr)','0.3 nm/ml(20hr)','3 ng/ml(20hr)',};
+ %nms2 = {'0.03(1hr)','0.3 nm/ml(1hr)','3 ng/ml(1hr)',};
+%nms2 = {'control(2)','control(1) ','1 ng/ml ','10 ng/ml'};    
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q31ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q3updatedcode1ng/ml(53 hr)','10ng/ml(53 hr)'};
  %nms2 = {'esi017(30 hr 1 ng/ml)','esi017(42 hr 1 ng/ml)','esi017(30 hr 10 ng/ml)','esi017(42 hr 10 ng/ml)'};  
  %nms2 = {'h2bSignControl','h2bSign 0.1 ng/ml','h2bsign 1 ng/ml','h2bsign 10 ng/ml'};
- dir = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2015-06-16-FinerBMP4Concentrations/Outall_FinerConcentrations(2)';
-    
-   [cdx2,a,~,~,b]= plotallanalysisAN(0.2,nms,nms2,dir,[],[],[6],[6 8],'cdx2','Sox2',0,1);
-    % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
+ 
+%  nms = {'esi017noQd_1hr003ng','esi017noQd_1hr03ng','esi017noQd_1hr3ng','esi017noQd_(C)sign20hr','esi017noQd_03ngSign20hr','esi017noQd_3ngSign20hr'};
+%  nms2 = {'0.03(1hr)','0.3 nm/ml(1hr)','3 ng/ml(1hr)','control(20hr)','0.3 nm/ml(20hr)','3 ng/ml(20hr)'};
+ %dir = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-06-30-Signaling(pSmad1Smad2Nanog)';
+%nms = {'esi017noQd_ControlsignR20hr','esi017noQd_03ngsignR1hr','esi017noQd_3ngsignR1hr','esi017noQd_03ngsignR20hr','esi017noQd_3ngsignR20hr'};
 
+%nms2 = { 'Control(20hrs)','03ng/ml(1hr)','3ng/ml(1hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
+nms = {'(C)inhibitors_area1','BMPinh_area1','WNTinh_area1'}; 
+nms2 = { 'Control','BMPi','WNTi'};
+
+
+ dir = '.';
+    
+   [dapi,a,r1,r2,b]= plotallanalysisAN(0.6,nms,nms2,dir,[],[],[5],[10 8],'Bra','Sox2',0,1);
+   figure(6)
+   for k=1:3
+       subplot(1,3,k)
+      ylim([0 1])
+      xlim([0 10])
+   end
+   figure(2)
+   for k=1:3
+       subplot(1,3,k)
+      ylim([0 3])
+      xlim([0 8])
+   end
+   figure(5)
+   for k=1:3
+       subplot(1,3,k)
+       xlim([0 10])
+       ylim([0 3500])
+   end
+    % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
+%[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
  % [a, b] =   findcolonyAN(dir,2,[1 3],nms,1,[10 5],3,1,15,0);
 %%
 % script to optimize the segmentation parameters. Can look at a chse image
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N = 3;
+ N =208;
 
- ANrunOneMM('01Chip_1',N,bIms,nIms,'setUserParamAN20X','DAPI',0);
-%
+ ANrunOneMM('sign3_1hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ %imcontrast
+
 %%
+% to plot the signaling repeat data (imaging4)
+  
+ 
+ nms = {'(C)SignalingR_1hr(Imging4)','(03ngml)SignalingR_1hr(Imging4)','(3ngml)SignalingR_1hr(Imging4)'};
+
+ nms2 = {'Control(1hr)','03ng/ml(1hr)','3ng/ml(1hr)'};
+ 
+ dir = '.';
+    
+   [s2,a,r1,r2,b]= plotallanalysisAN(0.6,nms,nms2,dir,[],[],[6 5],[6 10],'smad2','nanog',0,1);
+   
+   
+  nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
+   nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
+   dir = '.';
+    
+   [n,a,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[10 6],'Nanog','smad2',0,1);
+   
+   
+   
+%%
+
 %to run the full set of images (obtained from the MM software)
 %note: peaks to colonies is now the only function used: the choice between
 %single cell and circular large colonies is done within the peakstocolonies
@@ -156,5 +214,79 @@ runFullTileMM('2015-27-05-FullChipControl(Sox2)_1','esi017noQd_C2_(nonIms).mat',
 runFullTileMM('2015-28-05-FullChip1ngml(Cdx2etc)_1','esi017noQd_1_(nonIms).mat','setUserParamAN20X');
 
 runFullTileMM('2015-28-05-FullChip10ngml(Cdx2etc)_1','esi017noQd_10_(nonIms).mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% script to run the signaling experiment data:
+
+runFullTileMM('Esi017_Control20hr_1','esi017noQd_(C)sign20hr.mat','setUserParamAN20X');
+
+runFullTileMM('Esi017_03ng20hr_1','esi017noQd_03ngSign20hr.mat','setUserParamAN20X');
+
+runFullTileMM('Esi017_3ng20hr_1','esi017noQd_3ngSign20hr.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+%%
+% script to run the REPEATED Signaling Experiment data (pSmad1 is very
+% good)
+runFullTileMM('Control20hr_1','e017noQd_C_signR20hr_Imging2.mat','setUserParamAN20X');
+
+runFullTileMM('03ngml_20hr_1','e017noQd_03ngml_signR20hr_Imging2.mat','setUserParamAN20X');
+%%
+
+runFullTileMM('3ngml_20hr_1','e017noQd_3ngml_signR20hr_Imging2(paramfilecorrect).mat','setUserParamAN20X'); % corrected
+
+disp('Successfully ran all files');
+
+
+%%
+
+runFullTileMM('03ngml_1hrRSign_2','e017noQd_03ngml_signR1hrImg2.mat','setUserParamAN20X');
+
+runFullTileMM('3ngml_1hrRSign_1','e017noQd_3ngml_signR1hrImg2.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+%%
+
+
+direc = 'Pos0';
+[outdat, nuc, fimg]=runOneMMDirec(direc,'setUserParamAN20X','DAPI');
+imshow(nuc,[]);
+hold on;
+plot(outdat(:,1),outdat(:,2),'r*');
+%%
+superdir  = '03ngml20hr(manualJul21)_1';
+outdat = runMultipleMMDirec(superdir,'setUserParamAN20X','DAPI');
+save 03ngml20hrMAN(2).mat outdat;
+%%
+
+runFullTileMM('Control_1','(C)inhibitors_area1.mat','setUserParamAN20X');
+runFullTileMM('Control(area2)_1','(C)inhibitors_area2.mat','setUserParamAN20X');
+runFullTileMM('Control(area3)_1','(C)inhibitors_area3.mat','setUserParamAN20X');
+runFullTileMM('BMPinhibitor(area1)_1','BMPinh_area1.mat','setUserParamAN20X');
+runFullTileMM('BMPinhibitor(area2)_1','BMPinh_area2.mat','setUserParamAN20X');
+runFullTileMM('BMPinhibitor(area3)_1','BMPinh_area3.mat','setUserParamAN20X');
+runFullTileMM('WNTinhibitor(area1)_1','WNTinh_area1.mat','setUserParamAN20X');
+runFullTileMM('WNTinhibitor(area_2)_1','WNTinh_area2.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+%
+%% run the new Imaging4 signaling(repeat) experiment
+
+runFullTileMM('signControl_1hr_1','(C)SignalingR_1hr(Imging4).mat','setUserParamAN20X');
+
+runFullTileMM('signControl_20hr_1','(C)SignalingR_20hr(Imging4).mat','setUserParamAN20X');
+
+runFullTileMM('sign03_1hr_1','(03ngml)SignalingR_1hr(Imging4).mat','setUserParamAN20X');
+
+runFullTileMM('sign3_1hr_1','(3ngml)SignalingR_1hr(Imging4).mat','setUserParamAN20X');
+
+runFullTileMM('sign03_20hr_1','(03ngml)SignalingR_20hr(Imging4).mat','setUserParamAN20X');
+
+runFullTileMM('sign3_20hr_1','(3ngml)SignalingR_20hr(Imging4).mat','setUserParamAN20X');
+
 
 disp('Successfully ran all files');
