@@ -1,4 +1,4 @@
-function colonyColorPointPlot(col,dcols,ps,climits,newfig,rescale_fac,centerpos)
+function colonyColorPointPlot(col,dcols,ps,climits,rescale_fac,centerpos)
 %function colonyColorPointPlot(col,dcols)
 %---------------------------------------
 %Colony scatter plot with points colored by data
@@ -9,6 +9,8 @@ function colonyColorPointPlot(col,dcols,ps,climits,newfig,rescale_fac,centerpos)
 
 xdat=col.data(:,1);
 ydat=col.data(:,2);
+center = col.center; 
+rad = col.radius;
 
 if length(dcols)==1
     coldat=col.data(:,dcols);
@@ -30,7 +32,7 @@ if ~exist('newfig','var')
 end
 
 if ~exist('rescale_fac','var')
-    rescale_fac=1/3.0; %conversion from pixels to microns
+    rescale_fac=0.66; %conversion from pixels to microns
 end
 
 if ~exist('centerpos','var')

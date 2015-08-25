@@ -1,4 +1,4 @@
-function setUserParamCG
+function setUserParamAN20X
 %
 %
 % Contains master set of comments on how to adjust parameters and other
@@ -16,15 +16,15 @@ userParam.newFigure = 0;
 
 %for single cells vs circular colonies:coltype=1 (uses distance-based colonies
 %grouping) coltype=0 uses alphavolume to group circular colonies
-userParam.coltype = 0;
+userParam.coltype = 1;
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
 % image smoothing parameters
-userParam.gaussRadius=3;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=1; % 3(gaussThreshSigma is defined below)
+userParam.gaussRadius=8;% 4 is good for 10x images;6 is ok for 20X
+userParam.gaussSigma=2; % 3
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -53,17 +53,17 @@ userParam.backdiskrad = 200;
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 22; %22
-userParam.radiusMax = 37;%32
-userParam.minNucSep = 5;%10
-userParam.nucIntensityRange = 10;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   = 100;  % 290 510
+userParam.radiusMin = 8; %22
+userParam.radiusMax = 10; %37
+userParam.minNucSep = 6;%10
+userParam.nucIntensityRange = 12;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc   =100;  % 
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
 userParam.nucAreaLo =50; % measure the actual values and decide on this parameter
-userParam.nucAreaHi = 800;  % not too big
+userParam.nucAreaHi = 1000;  % not too big
 
 
 %%%%%PARAMETER BELOW HERE TYPICALLY DO NOT NEED TO BE MODIFIED%%%%%%%%%%%
@@ -82,8 +82,8 @@ userParam.minPtsCytoplasm = 5;%5
 % *Sigma * STD(of model fit, ie ignoring points far in + tail). There is
 % buried 'verbose' parameter in this routine. Its assumed images are
 % integer valued, ie not scaled to [0,1]
-userParam.gaussThreshExcess = 7;%6 in AN file,5 bf
-userParam.gaussThreshSigma  = 5;%3
+userParam.gaussThreshExcess = 7;%6 
+userParam.gaussThreshSigma  = 1;%3
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
 
@@ -110,6 +110,3 @@ userParam.cyto2NucArea  = 5;%8;
 userParam.verboseEdgeThreshCyto = 0;% to suppress printed output 
 
 userParam.sclCytoStd = 1;
-
-userParam.alphavol = 75;
-userParam.umtopxl = 1.5;

@@ -1,9 +1,11 @@
-function [colonies peaks]=peaksToColonies(matfile,mm)
+function [colonies, peaks]=peaksToColonies(matfile,mm,ts)
 
 pp=load(matfile,'peaks','acoords','imgfiles','dims','userParam'); % AN
 peaks=pp.peaks;
 ac=pp.acoords;
 dims=pp.dims;
+
+if exist('userParam','var')
 param = pp.userParam;
 
 if ~isfield(param,'coltype')
@@ -12,12 +14,20 @@ if ~isfield(param,'coltype')
 end
 
 coltype=param.coltype; % AN
-
+else
+    coltype = 0;
+end
 if ~exist('mm','var')
     mm=1;
 end
 
+if any(dims > 1)
 peaks=removeDuplicateCells(peaks,ac);
+end
+
+if exist('ts','var')
+    peaks=peaks(ts);
+end
 
 k1=num2cell(ones(1,length(peaks)));
 lens=cellfun(@size,peaks,k1);
@@ -72,7 +82,7 @@ if  coltype == 1    %analysis for the single cell data
 end
 if  coltype == 0  % analysis for the circular colonies data; 
     disp('Running the alphavol-based colony grouping');
-    [~, S]=alphavol(pts,100);
+    [~, S]=alphavol(pts,pp.userParam.alphavol);
     groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
     
     allinds=assignCellsToColonies(pts,groups);

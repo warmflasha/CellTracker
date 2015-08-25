@@ -39,7 +39,11 @@ classdef colony
             
             
             if ~exist('si','var') || isempty(si)
-                si=[2048 2048];%1024 1344
+                if mm
+                    si=[2048 2048];%1024 1344
+                else
+                    si=[1024 1024];
+                end
             end
             
             if isempty(data) %|| size(data,1) < 4
@@ -89,7 +93,7 @@ classdef colony
                     
                     %put coordinates in image coordinates
                     %of colony image, not plate coordinates
-                    [newdata, mask]=realignPoints(obj,si,imgfiles);
+                    [newdata, mask]=realignPointsAndor(obj,si,dims,imgfiles);
                     
                 else
                     imnums=unique(data(:,end-1));
@@ -228,6 +232,82 @@ classdef colony
             
         end
         
+        function fullImage=assembleColonyAndor(obj,direc,dims,backIm,normIm)
+            %Assemble the image of the colony.
+            %
+            %fullImage=assembleColony(obj,direc,imKeyWord,overlayPoints,backIm)
+            %
+            %Function to take a colony, a directory of images, and a
+            %keyword, and to return an image of that colony.
+            %
+            %backIm is an optional background image to subtract from each
+            %picture before pasting.
+            %Note: imKeyWord is  a cell array of keywords. fullImage is a
+            %cell array of the same length as imKeyword
+            
+            
+            
+            imnums=obj.imagenumbers;
+            
+            
+            firstimage = min(imnums);
+            firstcolumn= firstimage:dims(1):(firstimage+dims(1)*100);
+            endfirstcolumn = firstcolumn(find(ismember(firstcolumn,imnums),1,'last'));
+            coord2 = (endfirstcolumn-firstimage)/dims(1)+1;
+            coord1 = length(imnums)/coord2;
+            ac=obj.imagecoords;
+            nucpixall = [];
+            
+            
+            files = readAndorDirectory(direc);
+            
+            
+            tmp1=andorMaxIntensity(files,0,0,0);
+            si=size(tmp1);
+            
+            
+            for jj=1:length(files.w)
+                %fullImage{jj}=zeros(si(1)*max(coords(:,1)),si(2)*max(coords(:,2)));
+                fullImage{jj}=uint16(zeros(si(1)*coord2,si(2)*coord1));
+                
+                for ii=1:length(imnums)
+                    
+                    
+                    over1=floor((imnums(ii)-firstimage)/dims(1));
+                    
+                    over2=imnums(ii)-firstimage-dims(1)*over1;
+                    
+                    %calculate alignment
+                    currinds=[over1*si(1)+1 over2*si(2)+1];
+                    for kk=1:over1
+                        currinds(1)=currinds(1)-ac(ii-(kk-1)*dims(1)).wabove(1);
+                    end
+                    for mm=1:over2
+                        currinds(2)=currinds(2)-ac(ii-mm+1).wside(1);
+                    end
+                    
+                    currimg=andorMaxIntensity(files,ii-1,0,files.w(jj));
+                    
+                    %background subtraction
+                    if exist('backIm','var')
+                        currimg=imsubtract(currimg,backIm{jj});
+                    end
+                    if exist('normIm','var')
+                        newIm=immultiply(im2double(currimg),normIm{jj});
+                        newIm=uint16(65536*newIm);
+                    else
+                        newIm=currimg;
+                    end
+                    
+                    fullImage{jj}(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=newIm;
+                    
+                end
+                
+            end
+            
+            
+        end
+        
         function fullImage=assembleColonyMM(obj,direc,acoords,si,backIm,normIm)
             %Assemble the image of the colony.
             %
@@ -294,7 +374,7 @@ classdef colony
             
         end
         
-        function [rA, cellsinbin]=radialAverage(obj,column,ncolumn,binsize,compfrom)
+        function [rA, cellsinbin, dmax]=radialAverage(obj,column,ncolumn,binsize,compfrom)
             %computes the radial average of one column of data.
             %
             %[rA cellsinbin]=radialAverage(obj,column,ncolumn,binsize)
@@ -332,7 +412,11 @@ classdef colony
             end
             
             
+            
+            
             dmax=max(dists);
+            
+            
             cellsinbin=zeros(ceil(dmax/binsize),1); rA=cellsinbin;
             q=1;
             for jj=0:binsize:dmax
@@ -523,4 +607,64 @@ end
 total1 = max(ximg)-min(ximg)+1;
 total2 = max(yimg)-min(yimg)+1;
 compressednuc=compressBinaryImg(sub2ind([total2*si(1) total1*si(2)],nucpixall(:,1),nucpixall(:,2)),[total1*si(1) total2*si(2)]);
+end
+
+function [newdata, compressednuc]=realignPointsAndor(obj,si,dims,imgfiles)
+
+imnums=obj.imagenumbers;
+
+newdata=obj.data(:,1:2);
+
+firstimage = min(imnums);
+firstcolumn= firstimage:dims(1):(firstimage+dims(1)*100);
+endfirstcolumn = firstcolumn(find(ismember(firstcolumn,imnums),1,'last'));
+coord2 = (endfirstcolumn-firstimage)/dims(1)+1;
+coord1 = length(imnums)/coord2;
+ac=obj.imagecoords;
+nucpixall = [];
+for ii=1:length(imnums)
+    
+    %get the data from current image
+    currimgcells=obj.data(:,end-1)==imnums(ii);
+    origdata=obj.data(currimgcells,1:2);
+    
+    %back to image coords (not plate coords)
+    origdata=bsxfun(@minus,origdata,[ac(ii).absinds(2) ac(ii).absinds(1)]);
+    
+    over1=floor((imnums(ii)-firstimage)/dims(1));
+    
+    over2=imnums(ii)-firstimage-dims(1)*over1;
+    
+    %calculate alignment
+    currinds=[over1*si(1)+1 over2*si(2)+1];
+    for kk=1:over1
+        currinds(1)=currinds(1)-ac(ii-(kk-1)*dims(1)).wabove(1);
+    end
+    for mm=1:over2
+        currinds(2)=currinds(2)-ac(ii-mm+1).wside(1);
+    end
+    
+    origdata=bsxfun(@plus,origdata,[currinds(2)-1 currinds(1)-1]);
+    
+    if ~isempty(imgfiles(imnums(ii)).compressNucMask)
+        nucmask=uncompressBinaryImg(imgfiles(imnums(ii)).compressNucMask);
+        [nucpix_x, nucpix_y]=ind2sub(size(nucmask),find(nucmask));
+        
+        badinds1=nucpix_x < ac(ii).wabove(1);
+        badinds2=nucpix_y < ac(ii).wside(1);
+        
+        badinds=badinds1 | badinds2;
+        
+        nucpix_x(badinds)=[]; nucpix_y(badinds)=[];
+        
+        nucpix=bsxfun(@plus,[nucpix_x nucpix_y],[currinds(1)-1 currinds(2)-1]);
+        
+        nucpixall=[nucpixall; nucpix];
+    end
+    
+    newdata(currimgcells,:)=origdata;
+    
+end
+
+compressednuc=compressBinaryImg(sub2ind([coord2*si(1) coord1*si(2)],nucpixall(:,1),nucpixall(:,2)),[coord2*si(1) coord1*si(2)]);
 end
