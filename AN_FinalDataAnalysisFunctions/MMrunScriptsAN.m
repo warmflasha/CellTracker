@@ -113,11 +113,11 @@ nms2 = { 'Control','BMPi','WNTi'};
 
  dir = '.';
     
-   [dapi,a,r1,r2,b]= plotallanalysisAN(0.6,nms,nms2,dir,[],[],[5],[10 8],'Bra','Sox2',0,1);
+   [dapi,a,r1,r2,b]= plotallanalysisAN(4,nms,nms2,dir,[],[],[8 5],[8 6],'Sox2','Cdx2',0,1);
    figure(6)
    for k=1:3
        subplot(1,3,k)
-      ylim([0 1])
+      ylim([0 6])
       xlim([0 10])
    end
    figure(2)

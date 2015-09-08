@@ -71,7 +71,7 @@ y=y-1;
 disp([x,y]);disp(si);
 figure(j),subplot(1,2,1), imshow(fi{chan(1)},[]);
 hold on;  plot(colonies{dataset}(A(j)).data(:,1),colonies{dataset}(A(j)).data(:,2),'r*');
-text(colonies{dataset}(A(j)).data(:,1)+5,colonies{dataset}(A(j)).data(:,2),num2str(im),'Color','y');
+%text(colonies{dataset}(A(j)).data(:,1)+5,colonies{dataset}(A(j)).data(:,2),num2str(im),'Color','y');
 title('dapi');
 
 figure(j),subplot(1,2,2),imshow(fi{chan(2)},[]);
