@@ -79,8 +79,12 @@ if isfield(imgfiles,'size')
 elseif isfield(userParam, 'sizeImg')
     disp(['runTrackerEDS: Using userParam.sizeImg: ' num2str(userParam.sizeImg) '.']);
 else
-    userParam.sizeImg = [1024, 1344];
+    userParam.sizeImg = [1024, 1024];
     disp(['runTrackerEDS: no image size in imgfiles() or userParam, using default image size= ' num2str(userParam.sizeImg) '.']);
+end
+
+if isempty(peaks{end})
+peaks=peaks(1:(end-1));
 end
 
 % match cells between successive frames, use adaptive parameters based on first few
@@ -112,7 +116,6 @@ else
 end
 % adds 0|1 field to cells
 %cells = findGoodCells(cells);
-
 %cells = addLocalMax2Cells(cells);
 
 if ~nobirths

@@ -427,13 +427,12 @@ classdef colony
                         ndat=obj.data(inds,ncolumn);
                         dat=dat./ndat;
                     end
-                    if exist('toohigh','var')
+                    if exist('nogood','var')
                         nogood = dat > toohigh; 
                     else
-                        nogood = false(size(dat));
-                    end
-                    rA(q)=meannonan(dat(~nogood));
-                    cellsinbin(q)=sum(inds)-sum(nogood);
+                        nogood =
+                    rA(q)=meannonan(dat(~);
+                    cellsinbin(q)=sum(inds);
                 else
                     rA(q)=0;
                     cellsinbin(q)=0;

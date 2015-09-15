@@ -29,7 +29,7 @@ for ii=1:nImages
     
     ind = strfind(nm,'_f');
     if length(ind) > 1 
-        toremove = false(length(ind),1);
+        toremove = zeros(length(ind),1);
         for ii=1:length(ind)
             if isempty(str2num(nm(ind(ii)+2)))
                 toremove(ii)=1;
