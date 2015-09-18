@@ -65,7 +65,7 @@ if plottype == 0
       %  [b,c,ncell] = mkVectorsForScatterAN(peaks,col,index2); % don't forget to change the arguments of this function above (for plottype = 0)
         
       figure(2),  subplot(1,size(nms2,2),k);
-      colors = colorcube(12);
+      colors = cool(12);% colorcube;cool;autumn
       
         for ii=1:length(col)
             

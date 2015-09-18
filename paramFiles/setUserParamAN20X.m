@@ -7,7 +7,11 @@ function setUserParamAN20X
 global userParam
 
 fprintf(1, '%s called to define params\n',mfilename);
+% this parameter is needed for the watershed segmentation , when running
+% the runSegmentCellsZStack60X function.  if not specified, the default is
+% provided in the function
 
+userParam.StructuringElement = 5;
 % When verbose=1 set, image of field of cells produced with diagnostics. If
 % newFigure=1 these will pile up for successive times and eventually crash MATLAB 
 % because of memory limitations. Either run in debug mode and kill by hand or set
@@ -57,7 +61,7 @@ userParam.radiusMin = 25; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  = 830;  % 590
+userParam.nucIntensityLoc  = 860;  % 860
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW

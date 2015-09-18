@@ -123,14 +123,14 @@ nms2 = { 'Control','BMPi','WNTi'};
    figure(2)
    for k=1:3
        subplot(1,3,k)
-      ylim([0 3])
-      xlim([0 8])
+      ylim([0 6])
+      xlim([0 5])
    end
-   figure(5)
+   figure(6)
    for k=1:3
        subplot(1,3,k)
        xlim([0 10])
-       ylim([0 3500])
+       ylim([0 2.3])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
@@ -140,29 +140,30 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =208;
+ N =30;
 
- ANrunOneMM('sign3_1hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('2015-09-11-Signaling(R2)_3ngml20hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
  %imcontrast
 
 %%
-% to plot the signaling repeat data (imaging4)
+% to plot the signaling repeat data (R2, september repeat experiment data)
   
- 
- nms = {'(C)SignalingR_1hr(Imging4)','(03ngml)SignalingR_1hr(Imging4)','(3ngml)SignalingR_1hr(Imging4)'};
+ %nms = {'(Control)SignalingR2_20hr','(03ngml)SignalingR2_20hr','(3ngml)SignalingR2_20hr'};
 
- nms2 = {'Control(1hr)','03ng/ml(1hr)','3ng/ml(1hr)'};
+ nms = {'(Rerun_Control)SignalingR2_1hr','(03ngml)SignalingR2_1hr','(3ngml)SignalingR2_1hr','(Control)SignalingR2_20hr','(03ngml)SignalingR2_20hr','(3ngml)SignalingR2_20hr'};
+
+ nms2 = {'Control(1hr)','03ng/ml(1hr)','3ng/ml(1hr)','Control(20hr)','03ng/ml(20hr)','3ng/ml(20hr)'};
  
  dir = '.';
     
-   [s2,a,r1,r2,b]= plotallanalysisAN(0.6,nms,nms2,dir,[],[],[6 5],[6 10],'smad2','nanog',0,1);
+   [s1,totalcells,r1,r2,b]= plotallanalysisAN(0.4,nms,nms2,dir,[],[],[5],[8 6],'Smad2','Smad2',0,1);
+  
    
-   
-  nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
-   nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
-   dir = '.';
-    
-   [n,a,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[10 6],'Nanog','smad2',0,1);
+%    nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
+%    nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
+%    dir = '.';
+%     
+%    [n,a,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[10 6],'Nanog','smad2',0,1);
    
    
    
@@ -290,3 +291,39 @@ runFullTileMM('sign3_20hr_1','(3ngml)SignalingR_20hr(Imging4).mat','setUserParam
 
 
 disp('Successfully ran all files');
+%% run the new signaling(repeat2,R2) experiment
+% the september repeat, clean( 1 hour dataset)
+runFullTileMM('2015-09-14-Signaling(R2)_3ngml_1hr_1','(3ngml)SignalingR2_1hr.mat','setUserParamAN20X');
+
+runFullTileMM('2015-09-14-Signaling(R2)_03ngml_1hr_2','(03ngml)SignalingR2_1hr.mat','setUserParamAN20X');
+
+runFullTileMM('2015-09-14-Signaling(R2)_control_1hr_1','(Control)SignalingR2_1hr.mat','setUserParamAN20X');% out of focus, need to rerun
+
+runFullTileMM('2015-09-18-Signaling(R2)_control_1hr_1','(Rerun_Control)SignalingR2_1hr.mat','setUserParamAN20X');% rerun of this chip, better AF
+
+disp('Successfully ran all files');
+
+%% run the Lili experiment 1 (dynamic ligand presentation)
+% 
+runFullTileMM('ControlOff_1','ControlOff(Lili1).mat','setUserParamAN20X');
+
+runFullTileMM('ControlON_1','ControlON(Lili1).mat','setUserParamAN20X');
+
+runFullTileMM('Decreasing_t0_2ngml_1','DecreasingBMP4(Lili1).mat','setUserParamAN20X');
+
+runFullTileMM('Increasing_t0_05ngml_1','IncreasingBMP4(Lili1).mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% to plot Lili first experiment data% 647 - CDX2; 488 - Sox2; 555 - Bra
+  
+ 
+ nms = {'ControlOff(Lili1)','ControlON(Lili1)','DecreasingBMP4(Lili1)','IncreasingBMP4(Lili1)'};
+
+ nms2 = {'ControlOff','ControlON','Decreasing from 2 ng/ml','Increasing from 0.5 ng/ml'};
+ 
+ dir = '.';
+    
+   [s1,totalcells,r1,r2,b]= plotallanalysisAN(0.4,nms,nms2,dir,[],[],[10 5],[10 8],'Bra','Sox2',0,1);
+
