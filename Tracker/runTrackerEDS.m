@@ -87,6 +87,13 @@ if isempty(peaks{end})
 peaks=peaks(1:(end-1));
 end
 
+if any(cellfun(@isempty,peaks))
+    disp('Frames missing; skipping.');
+    return;
+end
+
+
+
 % match cells between successive frames, use adaptive parameters based on first few
 % frames to define cost function
 peaks=matchFramesEDS(peaks);
