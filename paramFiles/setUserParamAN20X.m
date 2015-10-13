@@ -7,7 +7,11 @@ function setUserParamAN20X
 global userParam
 
 fprintf(1, '%s called to define params\n',mfilename);
+% this parameter is needed for the watershed segmentation , when running
+% the runSegmentCellsZStack60X function.  if not specified, the default is
+% provided in the function
 
+userParam.StructuringElement = 5;
 % When verbose=1 set, image of field of cells produced with diagnostics. If
 % newFigure=1 these will pile up for successive times and eventually crash MATLAB 
 % because of memory limitations. Either run in debug mode and kill by hand or set
@@ -22,13 +26,13 @@ userParam.coltype = 1;
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
-% image smoothing parameters
-userParam.gaussRadius=7;% 4 is good for 10x images;6 is ok for 20X
+% image smoothing parameters 
+userParam.gaussRadius=10;% 4 is good for 10x images;6 is ok for 20X
 userParam.gaussSigma=1; % 3
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
-userParam.backgroundSmoothSig=10;  % all three were not in the SetUserParamAN file explicitly
+userParam.backgroundSmoothSig=10;  
 userParam.backgroundOpenRad = 50;
 
 userParam.presubNucBackground=0;%
@@ -57,12 +61,12 @@ userParam.radiusMin = 25; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc   =200;  % 
+userParam.nucIntensityLoc  = 800;  % 860
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =370; % measure the actual values and decide on this parameter
+userParam.nucAreaLo =370; %370 measure the actual values and decide on this parameter
 userParam.nucAreaHi = 4500;  % not too big
 
 
@@ -82,8 +86,8 @@ userParam.minPtsCytoplasm = 5;%5
 % *Sigma * STD(of model fit, ie ignoring points far in + tail). There is
 % buried 'verbose' parameter in this routine. Its assumed images are
 % integer valued, ie not scaled to [0,1]
-userParam.gaussThreshExcess = 7;%6 
-userParam.gaussThreshSigma  = 1;%3
+userParam.gaussThreshExcess = 6;%6 
+userParam.gaussThreshSigma  = 3;%3
 
 userParam.verboseCountNuc = 0;  % to print statistics and an image
 
