@@ -1,5 +1,5 @@
 %% code to use watershead marker-based segmentation to separate the nucleus from cytoplasm
-function [Lnuc,stats] = Watershedsegm(I,se)
+function [Lnuc] = Watershedsegm(I,se)
 % se = 8 wprks best for the 60X data on signaling
 % I2 = imread('SingleCellSignalingAN_t0000_f0019_z0003_w0001.tif');% gfp channel (gfp-smad4 cells)
 % I = imread('SingleCellSignalingAN_t0000_f0019_z0003_w0000.tif');% nuc chan
@@ -28,7 +28,7 @@ normed_img(isnan(normed_img))=0;
 
 
 % threshold and find objects
-thresh = 0.04; arealo = 1500; % have this as a parameter in the paramFile
+thresh = 0.04; arealo = 2000; %2000 have this as a parameter in the paramFile
 
 nthresh = normed_img > thresh;
 
@@ -61,7 +61,7 @@ plot(xx,yy,'r*');
  
 %------------------------------------------
  fgm = imregionalmax(Inew);%
- % figure,imshow(fgm); title('foreground');
+ %figure,imshow(fgm); title('foreground');
   
 h = fspecial('sobel');
 Ix  = imfilter(double(normed_img),h,'replicate'); % f3 if the other algothithm is used
@@ -85,17 +85,25 @@ gradmag2 = imimposemin(gradmag,bgm|fgm);     % modify the image so that it only 
 ...at foreground and background locations
 L = watershed(gradmag2); % final watershed segmentation
 %L == 0; % this is where object boundaries are located
-Lrgb = label2rgb(L, 'jet', 'k', 'shuffle');
+% Lrgb = label2rgb(L, 'jet', 'k', 'shuffle');
 %figure,imshow(I,[]);hold on
 %h = imshow(Lrgb);
 %h.AlphaData = 0.3;  % overlap the segmentation with the original image using transparency option of the image object 
 
 Lnuc = L >1;
-cc =bwconncomp(Lnuc);
+%cc =bwconncomp(Lnuc);
 
-stats = regionprops(cc,'Area','Centroid','PixelIdxList');
-%imshow(Lnuc);  % still need to remove here the low area stuff
+%stats = regionprops(cc,I,'Area','Centroid','MeanIntensity');
+% imshow(I,[]); hold on
+% aa = [stats.Centroid];
+% xx = aa(1:2:end);
+% yy = aa(2:2:end);
+% zz = [stats.MeanIntensity];
+% 
+% plot(xx,yy,'r*');
+
+imshow(Lnuc); 
 
 end
-%-------AN
+
 

@@ -114,23 +114,23 @@ nms2 = { 'Control','BMPi','WNTi'};
  dir = '.';
     
    [dapi,a,r1,r2,b]= plotallanalysisAN(4,nms,nms2,dir,[],[],[8 5],[8 6],'Sox2','Cdx2',0,1);
+   figure(5)
+   for k=1:3
+       subplot(1,3,k)
+      ylim([0 2200])
+      xlim([0 12])
+   end
    figure(6)
    for k=1:3
        subplot(1,3,k)
-      ylim([0 6])
+      ylim([0 4])
       xlim([0 10])
    end
    figure(2)
-   for k=1:3
-       subplot(1,3,k)
-      ylim([0 6])
-      xlim([0 5])
-   end
-   figure(6)
-   for k=1:3
-       subplot(1,3,k)
-       xlim([0 10])
-       ylim([0 2.3])
+   for k=1:4
+       subplot(1,4,k)
+       xlim([0 1.5])
+       ylim([0 5])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
@@ -140,25 +140,29 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =30;
+ N =297;
 
- ANrunOneMM('2015-09-11-Signaling(R2)_3ngml20hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
- %imcontrast
+ ANrunOneMM('2015-09-10-CHIRR02uM(2)_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+% imcontrast
 
 %%
-% to plot the signaling repeat data (R2, september repeat experiment data)
+% PLOT STUFF
   
- %nms = {'(Control)SignalingR2_20hr','(03ngml)SignalingR2_20hr','(3ngml)SignalingR2_20hr'};
+%    nms = {'(Control)SignalingR2_20hr','(03ngml)SignalingR2_20hr','(3ngml)SignalingR2_20hr'};
+%    nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
+%  488 - Sox2; 647 - Cdx2: 555 - Nanog;
 
- nms = {'(Rerun_Control)SignalingR2_1hr','(03ngml)SignalingR2_1hr','(3ngml)SignalingR2_1hr','(Control)SignalingR2_20hr','(03ngml)SignalingR2_20hr','(3ngml)SignalingR2_20hr'};
-
- nms2 = {'Control(1hr)','03ng/ml(1hr)','3ng/ml(1hr)','Control(20hr)','03ng/ml(20hr)','3ng/ml(20hr)'};
+%   nms = {'WntAct_control_notwellpatterned','WntAct_CHIRR02uM_notwellpatterned'};
+%   nms2 = {'control','CHIRR at 0.2 uM'};
+  
+  nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_actCHIRR','WntAct_control_notwellpatterned','WntAct_CHIRR02uM_notwellpatterned'};
+  nms2 = {'control','CHIRR at 0.5 uM','control','CHIRR at 0.2 uM' };
  
  dir = '.';
     
-   [s1,totalcells,r1,r2,b]= plotallanalysisAN(0.4,nms,nms2,dir,[],[],[5],[8 6],'Smad2','Smad2',0,1);
+   [sox2,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[8 5],[8 10],'Sox2','Nanog',0,1);
   
-   
+   %nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
 %    nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
 %    nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
 %    dir = '.';
@@ -299,11 +303,15 @@ runFullTileMM('2015-09-14-Signaling(R2)_03ngml_1hr_2','(03ngml)SignalingR2_1hr.m
 
 runFullTileMM('2015-09-14-Signaling(R2)_control_1hr_1','(Control)SignalingR2_1hr.mat','setUserParamAN20X');% out of focus, need to rerun
 
-runFullTileMM('2015-09-18-Signaling(R2)_control_1hr_1','(Rerun_Control)SignalingR2_1hr.mat','setUserParamAN20X');% rerun of this chip, better AF
+
+runFullTileMM('2015-09-18-Signaling(R2)_control_1hr_1','(Rerun_Control)SignalingR2_1hr_analysis2.mat','setUserParamAN20X');% rerun of this chip, better AF
 
 disp('Successfully ran all files');
 
-%% run the Lili experiment 1 (dynamic ligand presentation)
+%% run the Lili experiment 1 (dynamic ligand presentation)Initial volume in the dishes is 2 ml and changing to calculated 8 ml
+% which was impossible to fit at the last time point. Final volume was 6
+% ml. Concentrations of BMP4 changed from 0.5 ng/ml to 2 ng/ml The control
+% off had no BMP4
 % 
 runFullTileMM('ControlOff_1','ControlOff(Lili1).mat','setUserParamAN20X');
 
@@ -315,15 +323,105 @@ runFullTileMM('Increasing_t0_05ngml_1','IncreasingBMP4(Lili1).mat','setUserParam
 
 disp('Successfully ran all files');
 
+%% run the Lili experiment 2 (dynamic ligand presentation, the initial volume in all dizhes is 1 ml and changing up to 4 ml)
+% concentrations change from 0.5 ng/ml to 2 ng/ml
+% 
+runFullTileMM('ControlOFF_1','ControlOFF(Lili_experiment2).mat','setUserParamAN20X');
+
+runFullTileMM('ControlON_1','ControlON(Lili_experiment2).mat','setUserParamAN20X');
+
+runFullTileMM('DEcreasing_1','DecreasingBMP4(Lili_experiment2).mat','setUserParamAN20X');
+
+runFullTileMM('INCREASING_2','IncreasingBMP4(Lili_experiment2).mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+%% run the Lili experiment 3 (dynamic ligand presentation, Volume Test, initial volume 1 ml in the dishes where it changes)
+% if the volume does not change, then it started from 4 ml
+% BMP4 concentrations change from 0.5 ng/ml to 2 ng/ml
+% 
+runFullTileMM('ControlOFFVinit4ml_1','C_off_Vinit_4ml.mat','setUserParamAN20X');
+
+runFullTileMM('ControlOFFVinit_1_ml_1','C_off_Vinit_1ml.mat','setUserParamAN20X');
+
+runFullTileMM('IncereasingVinit_1ml_1','Increase_Vinit_1ml.mat','setUserParamAN20X');
+
+runFullTileMM('IncereasingVinit_4ml(2)_2','Increase_Vinit_4ml.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+%%
+% to run the community effect WNT experiment 
+% Septermber 24, 2015
+
+runFullTileMM('2015-09-22-Control(wntexperiment)_1','CommEffWntExperiment_Control.mat','setUserParamAN20X');
+
+runFullTileMM('2015-09-22-WNTactCHIRR_1','CommEffWntExperiment_actCHIRR.mat','setUserParamAN20X');
+
+runFullTileMM('2015-09-22-WNTinhibit(IWP2)_1','CommEffWntExperiment_inhIWP2.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% to run the WNT activation experiment(control and 0.2 uM of CHIRR) 
+% October 12, 2015, experiment done the previous week
+
+runFullTileMM('Control_1','WntAct_control_notwellpatterned.mat','setUserParamAN20X');
+
+runFullTileMM('2015-09-10-CHIRR02uM(2)_1','WntAct_CHIRR02uM_notwellpatterned.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+
 %%
 % to plot Lili first experiment data% 647 - CDX2; 488 - Sox2; 555 - Bra
-  
+  figure(2)
+%   title('Volume Test')
+   for k=1:4
+       subplot(1,4,k)
+       xlim([0 16])
+       ylim([0 6])
+   end
  
- nms = {'ControlOff(Lili1)','ControlON(Lili1)','DecreasingBMP4(Lili1)','IncreasingBMP4(Lili1)'};
+ nms = {'ControlOFF(Lili_experiment2)','ControlON(Lili_experiment2)','DecreasingBMP4(Lili_experiment2)','IncreasingBMP4(Lili_experiment2)'};
 
- nms2 = {'ControlOff','ControlON','Decreasing from 2 ng/ml','Increasing from 0.5 ng/ml'};
+ nms2 = {'ControlOff','ControlON','Decreasing','Increasing'};
  
  dir = '.';
     
-   [s1,totalcells,r1,r2,b]= plotallanalysisAN(0.4,nms,nms2,dir,[],[],[10 5],[10 8],'Bra','Sox2',0,1);
+   [s1,totalcells,r1,r2,b]= plotallanalysisAN(0.4,nms,nms2,dir,[],[],[8 5],[8 10],'Sox2','Bra',0,1);
+%%
+% test the watershed within the runSegmentCellsZstack
+direc = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/9_LiveCllImaging/SingleCellSignalingAN_20150805_123245 PM';
+
+%runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
+
+ff=readAndorDirectory(direc);
+pos = 15;
+chan = ff.w;
+frametouse = ff.t(1);
+se = 5;
+flag = 1;
+
+% filename = getAndorFileName(ff,pos,ff.t(1),ff.z(4),chan(1));
+% nuc = imread(filename);
+nuc=andorMaxIntensity(ff,pos,frametouse,chan(1));
+
+for xx=2:length(chan)
+            fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,frametouse,chan(xx));
+%             non_nucfilename = getAndorFileName(ff,pos,ff.t(1),ff.z(4),chan(xx));
+%             fimg(:,:,xx-1) = imread(non_nucfilename);
+end
+%         
+[statsnuc,statscyto,Lnuc,Lcyto] = WatershedsegmCytoplasm(nuc,fimg,se,flag); 
+% 
+%  try 
+%         [statsnuc,statscyto,Lnuc,Lcyto] = WatershedsegmCytoplasm(nuc,fimg,se,flag);    %AN 
+%         outdat = 
+%         %outdat content: [x, y, nuclear_area, ones(place holder), nuc_marker_avr, nuc_smad_avr, non_nuc_smad_avr]
+%     catch err
+%         disp(['Error with image ' int2str(ii) ' continuing...']);
+%         peaks{ii}=[];
+%         statsArray{ii}=[];
+%         %rethrow(err);
+%         continue;
+%     end
 

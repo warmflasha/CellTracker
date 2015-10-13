@@ -4,16 +4,9 @@
 %see also: GetSeparateQuadrantImgNumbersAN,plotallanalysisAN,mkVectorsForScatterAN
 
 
-function [b,c]=GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype)
+function [b,c,ncell]=GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype)
 colors2 = {'r','g','b','k','m','r','c'};
-% colors = colorcube(12);
-% vect = (1:10:120);
-% vect = vect';
-% vect = vect./120;
-% cmap = zeros(12,3);
-% cmap(:,1)=zeros;
-% cmap(:,2)=zeros;
-% cmap(:,3)=vect;
+
 
 if plottype == 1 % need to separate into quadrants
     for k=1:size(nms,2)
@@ -62,11 +55,22 @@ if plottype == 0
         filename{k} = [dir filesep  nms{k} '.mat'];
         load(filename{k},'peaks','dims','plate1');
         col = plate1.colonies;
-      %  [b,c,ncell] = mkVectorsForScatterAN(peaks,col,index2); % don't forget to change the arguments of this function above (for plottype = 0)
+       [b,c] = mkVectorsForScatterAN(peaks,index2); % don't forget to change the arguments of this function above (for plottype = 0)
         
       figure(2),  subplot(1,size(nms2,2),k);
-      colors = cool(12);% colorcube;cool;autumn
-      
+      %----custom made colormap
+      colorscust=zeros(12,3);
+      colorscust(7:12,1) = 1;  % col 1 red
+      %colorscust(5:12,1) = 0;
+      colorscust(3:6,2) = 1;   % col 2 green
+      %colorscust(8:12,2) = 0;
+      colorscust(1:2,3) = 1;% col 3 blue
+%       colorscust(:,3) = 0.5;
+      colors = cool(12);% colorcube;cool;autumn   instead of the
+      %built-in
+      %--
+     % colors = colorscust;
+      %-----------------------to keep the colony size colorcoding
         for ii=1:length(col)
             
     ncell = size(col(ii).data,1);
@@ -76,9 +80,13 @@ if plottype == 0
     b = col(ii).data(:,index2(1))./col(ii).data(:,5);
     c = col(ii).data(:,index2(2))./col(ii).data(:,5); 
     
-    
-    plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on;
+   
+   plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on;% use scatter
    end
+   %-------------------------------------
+       
+   %scatter(b,c,'r*'); hold on;
+   
        
          legend(nms2{k});
         

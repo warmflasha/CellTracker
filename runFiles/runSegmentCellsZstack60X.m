@@ -1,7 +1,7 @@
 function runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
 %
 %   runSegmentCells(direc,outfile,nframes,nucstring,smadstring,paramfile)
-%
+% direc = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/9_LiveCllImaging/SingleCellSignalingAN_20150805_123245 PM'
 
 
 
@@ -14,6 +14,7 @@ catch
 end
 
 ff=readAndorDirectory(direc);
+length(ff.t) = 20; % for AN trial data, only ~ 30 timepoints are good without any shifts
 if ~exist('nframes','var')
     nframes = length(ff.t);
 end
@@ -25,6 +26,7 @@ else
 end
 
 %main loop over frames
+
 for ii=1:max(min(nframes,length(ff.t)),1)
     
     if ~isempty(ff.t)
@@ -81,10 +83,19 @@ for ii=1:max(min(nframes,length(ff.t)),1)
     %run routines to segment cells, do stats, and get the output matrix
     try 
         %---------
-        outdat = WatershedsegmCytoplasm(cytochannel,nucchan,se);   %AN
+        [statsnuc,statscyto,Lnuc,Lcyto] = WatershedsegmCytoplasm(nucchannel,cytochan,se,flag);   %AN 
+      %  [statsnuc,statscyto,Lnuc,Lcyto]=WatershedsegmCytoplasm(nucchannel,cytochan,se,flag);  
         %stats are obtained from segmentation
+       outdat = 
         %AW: your segmentation goes here
         %format outdat = segment60X(nuc,green);
+        
+%         [maskC, statsN]=segmentCells2(nuc,fimg); %         AN:these lines are in original fn
+%         [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);  
+%         outdat=outputData4AWTracker(statsN,nuc,nImages);
+
+        %outdat content: [x, y, nuclear_area, ones(place holder), nuc_marker_avr, nuc_smad_avr, non_nuc_smad_avr]
+        % 
         %------------
     catch err
         disp(['Error with image ' int2str(ii) ' continuing...']);
@@ -105,7 +116,9 @@ for ii=1:max(min(nframes,length(ff.t)),1)
     
     %FOR AN - replace the below with compressBinaryImg run on your output
     %nuc mask.
-    %imgfiles(ii).compressNucMask = compressBinaryImg([statsN.PixelIdxList], size(nuc) );
+    
+    imgfiles(ii).compressNucMask = compressBinaryImg([statsnuc.PixelIdxList], size(Lnuc) );   %AN  statsnuc and Lnuc are returned by the Watershedcyto
+    
     peaks{ii}=outdat;
     
     %This prevents the resulting mat files from becoming too large.

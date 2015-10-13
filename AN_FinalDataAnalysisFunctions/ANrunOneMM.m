@@ -66,7 +66,7 @@ ymax = max(ff.pos_y)+1;
         [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
        % if ~isempty(statsN)
           data  = stats2xy(statsN);
-            %outdat=outputData4AWTracker(statsN,nuc,ii);
+            %outdat=outputData4AWTracker(statsN,nuc,ii); % AN return
         %end
         figure, imshow(nuc,[]); hold on;                            
         plot(data(:,1),data(:,2),'r.','MarkerSize',10); hold on;
@@ -129,7 +129,7 @@ if flag == 0 || isempty('flag');
         [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
         if ~isempty(statsN)
           data  = stats2xy(statsN);
-          outdat=outputData4AWTracker(statsN,nuc,ii);
+         % outdat=outputData4AWTracker(statsN,nuc,ii);
         end
         %  peaks{ii}=outdat;
          % save(outfile,'peaks','userParam','imgfiles');
