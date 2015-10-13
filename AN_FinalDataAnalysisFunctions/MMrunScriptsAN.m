@@ -127,10 +127,10 @@ nms2 = { 'Control','BMPi','WNTi'};
       xlim([0 10])
    end
    figure(2)
-   for k=1:4
+   for k=3:4
        subplot(1,4,k)
-       xlim([0 1.5])
-       ylim([0 5])
+       xlim([0 0.8])
+       ylim([0 10])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
@@ -140,9 +140,9 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =297;
+ N =10;
 
- ANrunOneMM('2015-09-10-CHIRR02uM(2)_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('GFPSmad4cells20hr10ngml_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
 % imcontrast
 
 %%
@@ -160,7 +160,7 @@ nms2 = { 'Control','BMPi','WNTi'};
  
  dir = '.';
     
-   [sox2,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[8 5],[8 10],'Sox2','Nanog',0,1);
+   [sox2,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[6 5],[6 8],'Cdx2','Sox2',0,1);
   
    %nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
 %    nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
