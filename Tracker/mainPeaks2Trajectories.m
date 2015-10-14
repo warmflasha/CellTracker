@@ -72,15 +72,15 @@ end
 fprintf(1, '\nmainPeaks2Trajectories: ');
 % Use AW routines to match cells between successive frames, and add 4th col to
 % peaks{}(:,4)
-if (size(peaks{1},2)<4) || all(peaks{1}(:,4)<0) 
-    for nt = 2:ntimes
-        peaks = MatchFrames(peaks, nt);
-    end
-    % peaks_out = peaks; %% save peaks for later trials, add to output variables.
-else
+% if (size(peaks{1},2)<4) || all(peaks{1}(:,4)<0) 
+%     for nt = 2:ntimes
+%         peaks = MatchFrames(peaks, nt);
+%     end
+%     % peaks_out = peaks; %% save peaks for later trials, add to output variables.
+% else
     fprintf(1, 'found + entries in peaks{1}(:,4) assume MatchFrames called for all times\n');
     % peaks_out = [];
-end
+% end
 
 trajectory0 = peaks2Trajectories(peaks);
 % add new field to all elements

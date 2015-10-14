@@ -40,7 +40,11 @@ trajectory = [];  verbose = 0;
 for nt = 2:ntimes
     ncells = size(peaks{nt}, 1);
     % cells at time nt that are NOT matched to any cell at nt-1
-    not_matched = setdiff(1:ncells, peaks{nt-1}(:,4)');
+    if isempty(peaks{nt-1})
+        not_matched = 1:ncells;
+    else
+        not_matched = setdiff(1:ncells, peaks{nt-1}(:,4)');
+    end
     
     for tt = 1:ntraj
         cell = active(tt).cells(end);

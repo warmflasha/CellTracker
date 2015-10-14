@@ -60,6 +60,10 @@ for frame = 2:length(peaks)
         dst_dummy = computeDistParam(peaks{frame}(:,[1 2]));
     end
     
+    if isempty(peaks{frame}) || isempty(peaks{frame-1})
+        continue;
+    end
+    
     cost = costMatrixEDS(peaks{frame-1}, peaks{frame}, dst_dummy, min_top); % C(i,j) is cost of associating i with j
     [Ilink, Jlink] = match1Frame(cost);
     peaks{frame-1}(Ilink,4) = Jlink;

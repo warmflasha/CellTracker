@@ -13,6 +13,12 @@ function max_img =andorMaxIntensity(files,pos,time,chan)
 %
 % see also: readAndorDirectory, getAndorFileName
  
+    if isempty(files.z)
+        filename = getAndorFileName(files,pos,time,0,chan);
+        max_img = imread(filename);
+    end
+        
+
     for ii=1:length(files.z)
         filename = getAndorFileName(files,pos,time,files.z(ii),chan);
         img_now = imread(filename);
