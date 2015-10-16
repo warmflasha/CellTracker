@@ -148,27 +148,25 @@ nms2 = { 'Control','BMPi','WNTi'};
 %%
 % PLOT STUFF
   
-%    nms = {'(Control)SignalingR2_20hr','(03ngml)SignalingR2_20hr','(3ngml)SignalingR2_20hr'};
-%    nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
-%  488 - Sox2; 647 - Cdx2: 555 - Nanog;
+%  nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
+%   nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'}; 
+%   nms = {'GFPsmad4RFPh2b_20hr_10ngml'};
+%   nms2 = {'20hr 10 ng/ml bmp4 grpSmad4 cells' };
 
-%   nms = {'WntAct_control_notwellpatterned','WntAct_CHIRR02uM_notwellpatterned'};
-%   nms2 = {'control','CHIRR at 0.2 uM'};
-  
-  nms = {'GFPsmad4RFPh2b_20hr_10ngml'};
-  nms2 = {'20hr 10 ng/ml bmp4 grpSmad4 cells' };
+  nms = {'(Rerun_Control)SignalingR2_1hr','(03ngml)SignalingR2_1hr','(3ngml)SignalingR2_1hr'};
+  nms2 = {'Control 10hrs','03 ng/ml bmp4','3 ng/ml bmp4' }; 
  
  dir = '.';
-    
-   [smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[8 6],'Smad4','pSmad1',0,1);
+   colors = {'k','m','b','g','r','y'};
+   %[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[8 5],[8 6],'Smad1','pSmad1',0,1);
+   for k=1:6
+  [newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'pSmad1',0,k);
+   errorbar(newdata2(:,1),newdata2(:,2),colors{k});hold on
+   set(gca,'Xtick',1:size(nms2,2));
+   set(gca,'Xticklabel',nms2);
+   end
   
-   %nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
-%    nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
-%    nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
-%    dir = '.';
-%     
-%    [n,a,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[10 6],'Nanog','smad2',0,1);
-   
+    
    
    
 %%
