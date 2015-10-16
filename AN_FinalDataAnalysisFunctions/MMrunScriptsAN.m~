@@ -140,7 +140,7 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =367;
+ N =137;
 
  ANrunOneMM('GFPSmad4cells20hr10ngml_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
 % imcontrast
@@ -155,12 +155,12 @@ nms2 = { 'Control','BMPi','WNTi'};
 %   nms = {'WntAct_control_notwellpatterned','WntAct_CHIRR02uM_notwellpatterned'};
 %   nms2 = {'control','CHIRR at 0.2 uM'};
   
-  nms = {'GFPsmad4RFPh2b_20hr_10ngml'};
-  nms2 = {'20hr 10 ng/ml bmp4 grpSmad4 cells' };
+  nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_actCHIRR','WntAct_control_notwellpatterned','WntAct_CHIRR02uM_notwellpatterned'};
+  nms2 = {'control','CHIRR at 0.5 uM','control','CHIRR at 0.2 uM' };
  
  dir = '.';
     
-   [smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[8 6],'Smad4','pSmad1',0,1);
+   [sox2,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[6 5],[6 8],'Cdx2','Sox2',0,1);
   
    %nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
 %    nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
@@ -369,10 +369,8 @@ runFullTileMM('Control_1','WntAct_control_notwellpatterned.mat','setUserParamAN2
 runFullTileMM('2015-09-10-CHIRR02uM(2)_1','WntAct_CHIRR02uM_notwellpatterned.mat','setUserParamAN20X');
 
 disp('Successfully ran all files');
-%%
-runFullTileMM('GFPSmad4cells20hr10ngml_1','GFPsmad4RFPh2b_20hr_10ngml.mat','setUserParamAN20X');
 
-disp('Successfully ran all files');
+
 %%
 % to plot Lili first experiment data% 647 - CDX2; 488 - Sox2; 555 - Bra
   figure(2)
