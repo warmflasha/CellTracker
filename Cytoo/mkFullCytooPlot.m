@@ -44,7 +44,7 @@ for ii=1:length(col)
         txtcolor=cc(mod(ii+10,19)+1,:);
         cen=[col(ii).center(2)+toadd(2) col(ii).center(1)+toadd(1)];
         if printnum  && col(ii).ncells > 200
-            text(cen(1),cen(2),[int2str(ii) '  ' num2str(col(ii).radius) ],'Color','m');
+            text(cen(1),cen(2),[int2str(ii) '   ' num2str(col(ii).radius)] ,'Color','r');
         end
         %disp(int2str(ii));
     end

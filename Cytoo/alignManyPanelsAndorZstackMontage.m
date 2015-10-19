@@ -56,7 +56,7 @@ end
 
 %put it together
 if nargout == 2
-    fullIm=zeros(si(1)*dims(1),si(2)*dims(2));
+    fullIm=zeros(si(1)*dims(2),si(2)*dims(1));
 end
 %currinds=[1 1];
 for ii=0:(tot_imgs-1)

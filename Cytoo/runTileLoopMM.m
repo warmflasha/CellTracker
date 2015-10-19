@@ -1,10 +1,11 @@
 function runTileLoopMM(files,imgsperprocessor,nloop,maxims,bIms,nIms,paramfile)
 
-s=matlabpool('size');
-if s > 0
-    matlabpool close;
-end
-matlabpool('local',nloop);
+%s=matlabpool('size');
+% if s > 0
+%     matlabpool close;
+% end
+% matlabpool('local',nloop);
+parpool(2);
 parfor ii=1:nloop
     n1=(ii-1)*imgsperprocessor+1;
     n2=min(ii*imgsperprocessor,maxims);
