@@ -401,9 +401,9 @@ disp('Successfully ran all files');
 direc = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/9_LiveCllImaging/SingleCellSignalingAN_20150805_123245 PM';
 
 %runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
-framestorun = 5;
+framestorun = 35;
 ff=readAndorDirectory(direc);
-pos = 7;
+pos = 19;
 chan = ff.w;
 ratios = {};
 for i = 1:framestorun
@@ -431,13 +431,13 @@ end
 end
 
 
-vect = (1:framestorun);
-figure(3),plot(vect,meanRa,'r--*','Markersize',10);
-ylim([0 1.7]);
-xlim([0 framestorun+1]);
-xlabel('time, frames');
-ylabel('nuc/cyto mean for cells in the frame');
-title('GFPsmad4RFPh2b cells, 10ng/ml bmp4 added after frame 16');
+% vect = (1:framestorun);
+% figure(3),plot(vect,meanRa,'r--*','Markersize',10);
+% ylim([0 1.7]);
+% xlim([0 framestorun+1]);
+% xlabel('time, frames');
+% ylabel('nuc/cyto mean for cells in the frame');
+% title('GFPsmad4RFPh2b cells, 10ng/ml bmp4 added after frame 16');
 
 
 

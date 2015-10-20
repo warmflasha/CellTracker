@@ -75,8 +75,8 @@ gradmag2 = imimposemin(gradmag,bgm|fgm);
 L = watershed(gradmag2); % final watershed segmentation
 
 Lnuc = L >1;
-arealownuc = 1500;
-areahinuc = 6000;
+arealownuc = 2000;
+areahinuc = 4600;
 Lnuc = bwareafilt(Lnuc,[arealownuc areahinuc]);
 % cytoplasmic channel analsis
 nuc = I2;
@@ -94,8 +94,8 @@ nuc =presubBackground_self(nuc);
 %  Normalize image
 diskrad = 100;
 low_thresh = 200;%300
-arealowcyto = 2400;
-areahicyto = 15000;
+arealowcyto = 3000;
+areahicyto = 9500;
 
 nuc(nuc < low_thresh)=0;
 norm = imdilate(nuc,strel('disk',diskrad));
