@@ -71,21 +71,21 @@ if plottype == 0
       %--
      % colors = colorscust;
       %-----------------------to keep the colony size colorcoding
-        for ii=1:length(col)
-            
-    ncell = size(col(ii).data,1);
-    if ncell > 12
-        ncell = 12;
-    end
-    b = col(ii).data(:,index2(1))./col(ii).data(:,5);
-    c = col(ii).data(:,index2(2))./col(ii).data(:,5); 
-    
-   
-   plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on;% use scatter
-   end
+%         for ii=1:length(col)
+%             
+%     ncell = size(col(ii).data,1);
+%     if ncell > 12
+%         ncell = 12;
+%     end
+%     b = col(ii).data(:,index2(1))./col(ii).data(:,5);
+%     c = col(ii).data(:,index2(2))./col(ii).data(:,5); 
+%     
+%    
+%    plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on;% use scatter
+%    end
    %-------------------------------------
        
-   %scatter(b,c,'r*'); hold on;
+  scatter(b,c,'b*'); hold on;
    
        
          legend(nms2{k});

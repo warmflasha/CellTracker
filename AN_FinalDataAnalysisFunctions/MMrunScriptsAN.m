@@ -147,25 +147,30 @@ nms2 = { 'Control','BMPi','WNTi'};
 
 %%
 % PLOT STUFF
-  
-%  nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
-%   nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'}; 
+
+nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
+nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};
 %   nms = {'GFPsmad4RFPh2b_20hr_10ngml'};
 %   nms2 = {'20hr 10 ng/ml bmp4 grpSmad4 cells' };
 
-  nms = {'(Rerun_Control)SignalingR2_1hr','(03ngml)SignalingR2_1hr','(3ngml)SignalingR2_1hr'};
-  nms2 = {'Control 10hrs','03 ng/ml bmp4','3 ng/ml bmp4' }; 
- 
- dir = '.';
-   colors = {'k','m','b','g','r','y'};
-   %[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[8 5],[8 6],'Smad1','pSmad1',0,1);
-   for k=1:6
-  [newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'pSmad1',0,k);
-   errorbar(newdata2(:,1),newdata2(:,2),colors{k});hold on
-   set(gca,'Xtick',1:size(nms2,2));
-   set(gca,'Xticklabel',nms2);
-   end
-  
+%nms = {'With_RIplus3ngmlBmp4','NO_RIplus3ngmlBmp4'};       % RI experiment: 647 - dcx2, 488 - Sox2, 555- Nanog
+%nms2 = {'With RI and 3 ng/ml BMP4','No RI and 3 ng/ml BMP4' };
+
+dir = '.';
+colors = {'c','c','b','b','g','g','m','m','r','r'};
+%colors = colorcube(10);
+%[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[10 6],'Nanog','Cdx2',0,1);
+cellnumber = {'1','2','3','4','5','6','7','8','9','10'};
+vect = [0 0.1 0.3 1 3 10 30];
+for k=1:10
+    [newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'Sox2',0,k);
+    %errorbar(newdata2(:,1),newdata2(:,2),colors{k});
+    plot(vect,newdata2(:,1),colors{k});hold on
+    %    set(gca,'Xtick',1:size(nms2,2));
+    %    set(gca,'Xticklabel',nms2);
+    
+end
+legend(cellnumber);
     
    
    
@@ -401,12 +406,12 @@ disp('Successfully ran all files');
 direc = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/9_LiveCllImaging/SingleCellSignalingAN_20150805_123245 PM';
 
 %runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
-framestorun = 5;
+framestorun = 10;
 ff=readAndorDirectory(direc);
-pos = 7;
+pos = 12;
 chan = ff.w;
 ratios = {};
-for i = 1:framestorun
+for i = 1:framestorun 
 %frametouse = ff.t(i);
 se = 5;
 flag = 0;
@@ -421,11 +426,13 @@ I2 = imread(filename);
 [Lnuc,Lcyto,nucmeanInt,cytomeanInt] = WatershedsegmCytoplasm_AW(I,I2,se,flag);
 figure(1),subplot(1,framestorun,i),imshow(Lcyto);
 figure(2),subplot(1,framestorun,i),imshow(Lnuc);
-if length(nucmeanInt) == length(cytomeanInt)
+if length(nucmeanInt) == length(cytomeanInt) %&& length(nucmeanIntnorm) == length(cytomeanIntnorm)
 
     ratios{i}(:,1) = nucmeanInt./cytomeanInt;
     ratios{i}(:,2) = i;
+    %ratiosnormed{i}(:,1) = nucmeanIntnorm./cytomeanIntnorm;
     meanRa(i) = mean(ratios{i}(:,1));
+    %meanRanormed(i) = mean(ratiosnormed{i}(:,1));
 end
 
 end
@@ -438,9 +445,17 @@ xlim([0 framestorun+1]);
 xlabel('time, frames');
 ylabel('nuc/cyto mean for cells in the frame');
 title('GFPsmad4RFPh2b cells, 10ng/ml bmp4 added after frame 16');
+hold on
 
-
-
+for k=1:35
+    twocellcol(k) = mean(ratios{k}(2:3,1));
+    onecellcol(k) = ratios{k}(1,1);
+end
+hold on
+plot(vect,twocellcol,'b--*');
+plot(vect,onecellcol, 'm--*');
+ylim([0.7 1.2]);
+legend('all three cells','two-cell colony','one-cell colony') ;
 
 % for xx=2:length(chan)
 %             fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,frametouse,chan(xx));

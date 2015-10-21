@@ -25,7 +25,7 @@ normed_img = im2double(nuc)./im2double(norm);
 normed_img(isnan(normed_img))=0;
 
 % threshold and find objects
-thresh = 0.04; arealo = 2000; 
+thresh = 0.04; arealo = 1000; 
 
 nthresh = normed_img > thresh;
 
@@ -75,8 +75,8 @@ gradmag2 = imimposemin(gradmag,bgm|fgm);
 L = watershed(gradmag2); % final watershed segmentation
 
 Lnuc = L >1;
-arealownuc = 1500;
-areahinuc = 6000;
+arealownuc = 1000;
+areahinuc = 8000;
 Lnuc = bwareafilt(Lnuc,[arealownuc areahinuc]);
 % cytoplasmic channel analsis
 nuc = I2;
@@ -94,8 +94,8 @@ nuc =presubBackground_self(nuc);
 %  Normalize image
 diskrad = 100;
 low_thresh = 200;%300
-arealowcyto = 2400;
-areahicyto = 15000;
+arealowcyto = 2000;
+areahicyto = 20000;
 
 nuc(nuc < low_thresh)=0;
 norm = imdilate(nuc,strel('disk',diskrad));
@@ -141,21 +141,23 @@ statsnuc = regionprops(cc_nuc,I2,'Area','Centroid','PixelIdxList','MeanIntensity
 statsnuc_nuc = regionprops(cc_nuc,I,'Area','Centroid','PixelIdxList','MeanIntensity'); % stats for the nuclear channel
 aa = [statsnuc.Centroid];
 Inucchan  = [statsnuc.MeanIntensity];
-ar = [statsnuc.Area]; % nuclear area in cyto channel
+anuc = [statsnuc.Area]; % nuclear area in cyto channel
 xnuc = aa(1:2:end);
 ynuc = aa(2:2:end);
 
 % get the cytoplasmic mean intensity for each labeled object
 cc_cyto = bwconncomp(Lcyto);
 statscyto = regionprops(cc_cyto,I2,'Area','Centroid','PixelIdxList','MeanIntensity');
-aa = [statscyto.Centroid];
+acyto = [statscyto.Area];
 xcyto = aa(1:2:end);
 ycyto = aa(2:2:end);
 
 %final stats for the ratio; obtained from the same channel; nuc channel
 %here is necessary only the get the boundaries of the nuclei
 nucmeanInt  = [statsnuc.MeanIntensity];
+
 cytomeanInt  = [statscyto.MeanIntensity];
+
 
 %outdat = [xnuc' ynuc' ar'  Inucchan' nucmeanInt' cytomeanInt' ];
 
