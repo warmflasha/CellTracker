@@ -1,4 +1,4 @@
-function mm=meannozero(x,dim)
+function mm=meannonan(x,dim)
 
 si=size(x);
 if length(si)~=2
@@ -36,6 +36,6 @@ else
 end
 
 function mm=meannonan1d(x)
-notin=isnan(x) | isinf(x) | x==0;
+notin=isnan(x) | isinf(x);
 x(notin)=[];
 mm=mean(x);
