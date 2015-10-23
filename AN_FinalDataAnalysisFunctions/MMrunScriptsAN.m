@@ -408,7 +408,7 @@ direc = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/9_LiveCllImagin
 %runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
 framestorun = 10;
 ff=readAndorDirectory(direc);
-pos = 12;
+pos = 19;
 chan = ff.w;
 ratios = {};
 for i = 1:framestorun 
@@ -430,9 +430,8 @@ if length(nucmeanInt) == length(cytomeanInt) %&& length(nucmeanIntnorm) == lengt
 
     ratios{i}(:,1) = nucmeanInt./cytomeanInt;
     ratios{i}(:,2) = i;
-    %ratiosnormed{i}(:,1) = nucmeanIntnorm./cytomeanIntnorm;
     meanRa(i) = mean(ratios{i}(:,1));
-    %meanRanormed(i) = mean(ratiosnormed{i}(:,1));
+   
 end
 
 end
@@ -456,24 +455,7 @@ plot(vect,twocellcol,'b--*');
 plot(vect,onecellcol, 'm--*');
 ylim([0.7 1.2]);
 legend('all three cells','two-cell colony','one-cell colony') ;
+% save('Frame_nuc2cyto_ratios','ratios','meanRa','twocellcol','onecellcol');
+% savefig('Cellraces.fig');
 
-% for xx=2:length(chan)
-%             fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,frametouse,chan(xx));
-% %             non_nucfilename = getAndorFileName(ff,pos,ff.t(1),ff.z(4),chan(xx));
-% %             fimg(:,:,xx-1) = imread(non_nucfilename);
-% end
-%         
-%[statsnuc,statscyto,Lnuc,Lcyto] = WatershedsegmCytoplasm(nuc,fimg,se,flag); 
-   
-%  try 
-%         [statsnuc,statscyto,Lnuc,Lcyto] = WatershedsegmCytoplasm(nuc,fimg,se,flag);    %AN 
-%         outdat = 
-%         %outdat content: [x, y, nuclear_area, ones(place holder), nuc_marker_avr, nuc_smad_avr, non_nuc_smad_avr]
-%     catch err
-%         disp(['Error with image ' int2str(ii) ' continuing...']);
-%         peaks{ii}=[];
-%         statsArray{ii}=[];
-%         %rethrow(err);
-%         continue;
-%     end
 
