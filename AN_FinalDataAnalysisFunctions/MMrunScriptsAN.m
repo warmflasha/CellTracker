@@ -159,7 +159,9 @@ nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/
 dir = '.';
 colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-%[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[10 6],'Nanog','Cdx2',0,1);
+[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[10 6],'Nanog','Cdx2',0,1);
+
+
 cellnumber = {'1','2','3','4','5','6','7','8','9','10'};
 vect = [0 0.1 0.3 1 3 10 30];
 for k=1:10
