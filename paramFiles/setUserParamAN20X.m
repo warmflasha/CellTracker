@@ -37,7 +37,7 @@ userParam.backgroundOpenRad = 50;
 
 userParam.presubNucBackground=0;%
 userParam.presubSmadBackground=0;
-userParam.backdiskrad = 200; 
+userParam.backdiskrad = 100; 
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Filtering of nuclei done in three steps: 
@@ -61,12 +61,12 @@ userParam.radiusMin = 25; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  = 500;  % 860
+userParam.nucIntensityLoc  = 400;  % 860
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =350; %370 measure the actual values and decide on this parameter
+userParam.nucAreaLo =340; %370 measure the actual values and decide on this parameter
 userParam.nucAreaHi = 4500;  % not too big
 
 

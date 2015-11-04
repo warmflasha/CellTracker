@@ -21,7 +21,7 @@ function [groupids]= NewColoniesAW(pts)
 XX=ipdm(pts);
 ncells = size(pts,1);
 groupids=zeros(ncells,1);
-mindist = 80;% 40 for the 10X images
+mindist = 120;% 40 for the 10X images % 80 for 20X images % ~ 120 for 60X images
 currentgroup=1;
 cellsleft = 1:ncells;
 
@@ -59,10 +59,10 @@ end
 
 ngroups = max(groupids);
 
-cc=colorcube(20);
-
-figure; hold on;
-for ii=1:20:ngroups% plot every 20th image
-    inds = groupids == ii;
-    plot(pts(inds,1),pts(inds,2),'.','Color',cc(mod(ii,20)+1,:),'MarkerSize',18);
+cc=colorcube(10);
 end
+% figure; hold on;
+% for ii=1:ngroups% plot 
+%     inds = groupids == ii;
+%     plot(pts(inds,1),pts(inds,2),'*','Color',cc(mod(ii,ngroups)+1,:),'MarkerSize',18);%cc(mod(ii,20)+1,:)
+% end

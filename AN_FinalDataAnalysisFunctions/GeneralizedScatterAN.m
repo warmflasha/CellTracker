@@ -55,7 +55,7 @@ if plottype == 0
         filename{k} = [dir filesep  nms{k} '.mat'];
         load(filename{k},'peaks','dims','plate1');
         col = plate1.colonies;
-       [b,c] = mkVectorsForScatterAN(peaks,index2); % don't forget to change the arguments of this function above (for plottype = 0)
+       %[b,c] = mkVectorsForScatterAN(peaks,index2); % don't forget to change the arguments of this function above (for plottype = 0)
         
       figure(2),  subplot(1,size(nms2,2),k);
       %----custom made colormap
@@ -66,26 +66,29 @@ if plottype == 0
       %colorscust(8:12,2) = 0;
       colorscust(1:2,3) = 1;% col 3 blue
 %       colorscust(:,3) = 0.5;
-      colors = cool(12);% colorcube;cool;autumn   instead of the
+
+      colors = colormap(jet);
+      colors = colors(1:8:end,:);% colorcube;cool;autumn;jet;hsv   instead of the
       %built-in
       %--
      % colors = colorscust;
+     %scatter(b,c,'b*'); hold on;
       %-----------------------to keep the colony size colorcoding
-%         for ii=1:length(col)
-%             
-%     ncell = size(col(ii).data,1);
-%     if ncell > 12
-%         ncell = 12;
-%     end
-%     b = col(ii).data(:,index2(1))./col(ii).data(:,5);
-%     c = col(ii).data(:,index2(2))./col(ii).data(:,5); 
-%     
-%    
-%    plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on;% use scatter
-%    end
+      for ii=1:length(col)
+          
+          ncell = size(col(ii).data,1);
+          if ncell > 8
+              ncell = 8;
+          end
+          b = col(ii).data(:,index2(1))./col(ii).data(:,5);
+          c = col(ii).data(:,index2(2))./col(ii).data(:,5);
+          
+          
+          plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on;% use scatter
+      end
    %-------------------------------------
        
-  scatter(b,c,'b*'); hold on;
+  
    
        
          legend(nms2{k});

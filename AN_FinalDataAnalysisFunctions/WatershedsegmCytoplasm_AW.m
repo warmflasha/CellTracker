@@ -108,13 +108,16 @@ Ix  = imfilter(double(normed_img),h,'replicate');
 Iy  = imfilter(double(normed_img),h','replicate');
 gradmag = sqrt(Ix.^2 + Iy.^2);%
 
-fgm = imdilate(Lnuc,strel('disk',1));
+%fgm = imerode(Lnuc,strel('disk',2));
 
-gradmag2 = imimposemin(gradmag,bgm|fgm);
+fgm = imdilate(Lnuc,strel('disk',1));
+% fgm = imclose(fgm,strel('disk',3));%AN
+
+ gradmag2 = imimposemin(gradmag,bgm|fgm);
 L = watershed(gradmag2); % final watershed segmentation
 
 Lcyto = L > 1 & ~Lnuc;
-cc = bwconncomp(Lcyto,8);
+%cc = bwconncomp(Lcyto,8);
 
 %Lcyto = bwareafilt(Lcyto,[arealowcyto areahicyto]);
 %figure; imshow(Lcyto);

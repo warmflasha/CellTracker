@@ -114,23 +114,23 @@ nms2 = { 'Control','BMPi','WNTi'};
  dir = '.';
     
    [dapi,a,r1,r2,b]= plotallanalysisAN(4,nms,nms2,dir,[],[],[8 5],[8 6],'Sox2','Cdx2',0,1);
-   figure(5)
-   for k=1:3
-       subplot(1,3,k)
-      ylim([0 2200])
-      xlim([0 12])
-   end
-   figure(6)
-   for k=1:3
-       subplot(1,3,k)
-      ylim([0 4])
+   figure(3)
+   for k=1:2
+       subplot(1,2,k)
+      ylim([0.9 1])
       xlim([0 10])
    end
+   figure(6)
+   for k=1:2
+       subplot(1,2,k)
+      ylim([0 6])
+      xlim([0 12])
+   end
    figure(2)
-   for k=3:4
-       subplot(1,4,k)
-       xlim([0 0.8])
-       ylim([0 10])
+   for k=1:2
+       subplot(1,2,k)
+       xlim([0 1])
+       ylim([0 13])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
@@ -140,39 +140,39 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =200;
+ N =252;
 
- ANrunOneMM('WITH_Rhoi_3ngmlBmp4_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('siRNAnodal(pluri)2_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
 % imcontrast
 
 %%
 % PLOT STUFF
 
-nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
-nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};
-%   nms = {'GFPsmad4RFPh2b_20hr_10ngml'};
-%   nms2 = {'20hr 10 ng/ml bmp4 grpSmad4 cells' };
+% nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
+% nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};
+  nms = {'siRNAnodalNegativeC(pluri)','siRNAnodal(pluri)'};
+  nms2 = {'Nodal(negative Control)','siRNS Nodal (~ 15 nM)' };
 
 %nms = {'With_RIplus3ngmlBmp4','NO_RIplus3ngmlBmp4'};       % RI experiment: 647 - dcx2, 488 - Sox2, 555- Nanog
 %nms2 = {'With RI and 3 ng/ml BMP4','No RI and 3 ng/ml BMP4' };
 
 dir = '.';
-colors = {'c','c','b','b','g','g','m','m','r','r'};
+%colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[10 6],'Nanog','Cdx2',0,1);
+[sox2,totalcells,r1,r2,b]= plotallanalysisAN(0.1,nms,nms2,dir,[],[],[6 5],[6 8],'Cdx2','Sox2',0,1);
 
 
-cellnumber = {'1','2','3','4','5','6','7','8','9','10'};
-vect = [0 0.1 0.3 1 3 10 30];
-for k=1:10
-    [newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'Sox2',0,k);
-    %errorbar(newdata2(:,1),newdata2(:,2),colors{k});
-    plot(vect,newdata2(:,1),colors{k});hold on
-    %    set(gca,'Xtick',1:size(nms2,2));
-    %    set(gca,'Xticklabel',nms2);
-    
-end
-legend(cellnumber);
+% cellnumber = {'1','2','3','4','5','6','7','8','9','10'};
+% vect = [0 0.1 0.3 1 3 10 30];
+% for k=1:10
+%     [newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'Sox2',0,k);
+%     %errorbar(newdata2(:,1),newdata2(:,2),colors{k});
+%     plot(vect,newdata2(:,1),colors{k});hold on
+%     %    set(gca,'Xtick',1:size(nms2,2));
+%     %    set(gca,'Xticklabel',nms2);
+%     
+% end
+% legend(cellnumber);
     
    
    
@@ -386,6 +386,13 @@ runFullTileMM('NO_Rhoi_3ngmlBmp4_1','NO_RIplus3ngmlBmp4.mat','setUserParamAN20X'
 
 disp('Successfully ran all files');
 
+
+%%
+% run the siRNA nodal experiment
+runFullTileMM('siRNAnodalNegControl_1','siRNAnodalNegativeC(pluri).mat','setUserParamAN20X');
+runFullTileMM('siRNAnodal(pluri)2_1','siRNAnodal(pluri).mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
 %%
 % to plot Lili first experiment data% 647 - CDX2; 488 - Sox2; 555 - Bra
   figure(2)
