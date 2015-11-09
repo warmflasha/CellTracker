@@ -68,7 +68,7 @@ if plottype == 0
 %       colorscust(:,3) = 0.5;
 
       colors = colormap(jet);
-      colors = colors(1:8:end,:);% colorcube;cool;autumn;jet;hsv   instead of the
+      colors = colors(1:16:end,:);% colorcube;cool;autumn;jet;hsv   instead of the
       %built-in
       %--
      % colors = colorscust;
@@ -77,14 +77,16 @@ if plottype == 0
       for ii=1:length(col)
           
           ncell = size(col(ii).data,1);
-          if ncell > 8
-              ncell = 8;
+          if ncell > 4
+              ncell = 4;
           end
           b = col(ii).data(:,index2(1))./col(ii).data(:,5);
           c = col(ii).data(:,index2(2))./col(ii).data(:,5);
           
-          
-          plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on;% use scatter
+%           colors = colormap(jet);
+%           colors = colors(1:size(b,2),:);
+%           scatter(b,c,[],colors,'MarkerSize',10); hold on;
+          plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on; % use scatter + colorbar
       end
    %-------------------------------------
        

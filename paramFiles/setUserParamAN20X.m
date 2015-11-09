@@ -22,6 +22,11 @@ userParam.newFigure = 0;
 %grouping) coltype=0 uses alphavolume to group circular colonies
 userParam.coltype = 1;
 
+% when groupinf colonies by distance need to supply the parameter to still
+% consider cells within one colony ( 80 works for microcolonies at 20X
+% magnification
+userParam.colonygrouping = 120;
+
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
@@ -66,7 +71,7 @@ userParam.nucIntensityLoc  = 400;  % 860
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =340; %370 measure the actual values and decide on this parameter
+userParam.nucAreaLo =370; %370 measure the actual values and decide on this parameter
 userParam.nucAreaHi = 4500;  % not too big
 
 

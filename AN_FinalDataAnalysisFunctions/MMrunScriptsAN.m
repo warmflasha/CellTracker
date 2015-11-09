@@ -113,24 +113,24 @@ nms2 = { 'Control','BMPi','WNTi'};
 
  dir = '.';
     
-   [dapi,a,r1,r2,b]= plotallanalysisAN(4,nms,nms2,dir,[],[],[8 5],[8 6],'Sox2','Cdx2',0,1);
+   [dapi,a,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[8 10],'Sox2','Bra',0,1);
    figure(3)
-   for k=1:2
+   for k=1:3
        subplot(1,2,k)
-      ylim([0.9 1])
+      ylim([0 1])
       xlim([0 10])
-   end
-   figure(6)
-   for k=1:2
-       subplot(1,2,k)
-      ylim([0 6])
-      xlim([0 12])
    end
    figure(2)
    for k=1:2
        subplot(1,2,k)
-       xlim([0 1])
-       ylim([0 13])
+      ylim([0 12])
+      xlim([0 15])
+   end
+   figure(2)
+   for k=1:2
+       subplot(1,2,k)
+       xlim([0 10])
+       ylim([0 5])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
@@ -140,9 +140,9 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =252;
+ N =141;
 
- ANrunOneMM('siRNAnodal(pluri)2_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('gfpS4_10ngml20hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
 % imcontrast
 
 %%
@@ -150,16 +150,22 @@ nms2 = { 'Control','BMPi','WNTi'};
 
 % nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
 % nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};
-  nms = {'siRNAnodalNegativeC(pluri)','siRNAnodal(pluri)'};
-  nms2 = {'Nodal(negative Control)','siRNS Nodal (~ 15 nM)' };
+  
+% nms = {'siRNAnodalNegativeC(pluri)','siRNAnodal(pluri)'}; % sox2 nanog Cdx2
+% nms2 = {'Nodal(negative Control)','siRNS Nodal (~ 15 nM)' };
 
-%nms = {'With_RIplus3ngmlBmp4','NO_RIplus3ngmlBmp4'};       % RI experiment: 647 - dcx2, 488 - Sox2, 555- Nanog
-%nms2 = {'With RI and 3 ng/ml BMP4','No RI and 3 ng/ml BMP4' };
+% nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_inhIWP2','CommEffWntExperiment_actCHIRR'};%sox2 Oct4 Nanog    
+% nms2 = {'Control','WNTinhibitor','WntAct CHIRR 0.5uM' };
+nms = {'gfpS4_10ngml20hr_1'}; % dapi CY5 GFP order of channels
+nms2 = {'GFP:Smad4 cells 20hr, 10 ng/ml bmp4'};
+
 
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[sox2,totalcells,r1,r2,b]= plotallanalysisAN(0.1,nms,nms2,dir,[],[],[6 5],[6 8],'Cdx2','Sox2',0,1);
+[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.35,nms,nms2,dir,[],[],[8 5],[6 8],'Smad4','Smad4',0,1);
+
+
 
 
 % cellnumber = {'1','2','3','4','5','6','7','8','9','10'};
@@ -391,6 +397,15 @@ disp('Successfully ran all files');
 % run the siRNA nodal experiment
 runFullTileMM('siRNAnodalNegControl_1','siRNAnodalNegativeC(pluri).mat','setUserParamAN20X');
 runFullTileMM('siRNAnodal(pluri)2_1','siRNAnodal(pluri).mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% run the gfpS4 rfpH2b chip (left from live imaging experiment)
+% cdx2 - 647; smad4 - 488; dapi
+
+runFullTileMM('gfpS4_10ngml20hr_1','gfpS4_10ngml20hr_1.mat','setUserParamAN20X');
+
 
 disp('Successfully ran all files');
 %%
