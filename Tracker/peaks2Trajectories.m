@@ -55,7 +55,7 @@ for nt = 2:ntimes
             active(tt).x = [active(tt).x, peaks{nt}(match,1)];  %% CHECK
             active(tt).y = [active(tt).y, peaks{nt}(match,2)];
             active(tt).area = [active(tt).area, peaks{nt}(match,3)];
-            active(tt).data = [active(tt).data, peaks{nt}(match,5:end)'];
+            active(tt).data = [active(tt).data; peaks{nt}(match,5:end)'];
         else
             trajectory = [trajectory, active(tt)];
             active(tt).end = -1;

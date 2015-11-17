@@ -12,6 +12,8 @@ fprintf(1, '%s called to define params\n',mfilename);
 % provided in the function
 
 userParam.StructuringElement = 5;
+
+userParam.sizeImg = [2048,2048];
 % When verbose=1 set, image of field of cells produced with diagnostics. If
 % newFigure=1 these will pile up for successive times and eventually crash MATLAB 
 % because of memory limitations. Either run in debug mode and kill by hand or set
