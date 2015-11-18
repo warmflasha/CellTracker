@@ -37,6 +37,5 @@ end
 
 function mm=meannonan1d(x)
 notin=isnan(x) | isinf(x) | x==0;
-
 x(notin)=[];
 mm=mean(x);
