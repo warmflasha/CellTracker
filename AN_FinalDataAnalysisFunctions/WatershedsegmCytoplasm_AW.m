@@ -1,5 +1,5 @@
 %% code to use watershead marker-based segmentation to separate the nucleus from cytoplasm
-function [Lnuc,Lcyto] = Watershedsegm_Cyto(I,I2,se)
+function [Lnuc,Lcyto] = Watershedsegm_Cyto(I,I2)
 % se = 8 wprks best for the 60X data on signaling
 % I2 = imread('SingleCellSignalingAN_t0000_f0019_z0003_w0001.tif');% gfp channel (gfp-smad4 cells)
 % I = imread('SingleCellSignalingAN_t0000_f0019_z0003_w0000.tif');% nuc chan
@@ -55,7 +55,7 @@ plot(xx,yy,'r*');
  Inew(int32(yy(k)),int32(xx(k))) = 1;
  end
  %figure,imshow(Inew);
- se = strel('disk',se);
+ se = strel('disk',1);
  Inew = imdilate(Inew,se);
  %imshow(Inew);
  
