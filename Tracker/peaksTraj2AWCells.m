@@ -90,7 +90,7 @@ for i = 1:length(traj)
     %data(:,5:ncol_data) = (traj(i).data(1:(ncol_data-4),:))';
     
     cells(i).data = data;
-    cells(i).fdata = (traj(i).data(1:(ncol_data-4),:))';
+    cells(i).fdata = traj(i).data(:,1:(ncol_data-4));
     
     % following check on indexing works if we define for trajectories that
     % merge at equal times (ie 2 centers 1 nucleus) traj.cell = [cell_pre,
