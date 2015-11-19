@@ -76,7 +76,7 @@ for nt = 2:ntimes
         active(ntraj).x = peaks{nt}(cc,1);
         active(ntraj).y = peaks{nt}(cc,2);
         active(ntraj).area = peaks{nt}(cc,3);
-        active(ntraj).data = peaks{nt}(cc,5:end);
+        active(ntraj).data = peaks{nt}(cc,5:end)';
     end
 end
 trajectory = [trajectory, active];
