@@ -9,8 +9,8 @@ if ~exist('intensity_norm','var')
 end
 
 colstouse = [6 8 10];
-%ncolstouse = [5 5 5];
-ncolstouse=[7 5 11];
+ncolstouse = [5 5 5];
+%ncolstouse=[7 5 11];
 
 inds = find([colonies.shape]==shapenum);
 
