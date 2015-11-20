@@ -1,7 +1,20 @@
-function files = olympusToMM(MMdirec,filenames,chan)
-files = mkMMFileStruct(MMdirec,chan);
+function files = olympusToMM(MMdirec,filenames,chan,imsize)
 
-h = iminfo(filenames{1});
+if ~exist('imsize','var')
+    imsize = [2048 2048];
+end
+
+files = mkMMFileStruct(MMdirec,chan);
+h = imfinfo(filenames{1});
+n_width = h.Width/imsize(1);
+n_height = h.Height/imsize(2);
+
+if ~isinteger(n_width)
+    n_width = floor(n_width) + 1;
+end
+if ~isinteger(n_height)
+    n_height = floor(n_height)+1;
+end
 
 
 
