@@ -1,10 +1,10 @@
 function setTrackParamEDS
 global userParam;
 
-userParam.sizeImg = [1024 1024];
+userParam.sizeImg = [2048 2048];%[1024 1024];
 
 %Parameters for tracking
-userParam.L = 30; % this is the max distance (in pixels) objects in successive
+userParam.L = 70; %30 this is the max distance (in pixels) objects in successive
                   %frames can be separated by and still match
 % The time interval over which all traj-ends are pooled to test for cost of
 % merger

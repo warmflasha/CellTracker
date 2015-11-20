@@ -113,23 +113,23 @@ nms2 = { 'Control','BMPi','WNTi'};
 
  dir = '.';
     
-   [dapi,a,r1,r2,b]= plotallanalysisAN(4,nms,nms2,dir,[],[],[8 5],[8 6],'Sox2','Cdx2',0,1);
-   figure(5)
+   [dapi,a,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[8 10],'Sox2','Bra',0,1);
+   figure(3)
    for k=1:3
-       subplot(1,3,k)
-      ylim([0 2200])
-      xlim([0 12])
-   end
-   figure(6)
-   for k=1:3
-       subplot(1,3,k)
-      ylim([0 4])
+       subplot(1,2,k)
+      ylim([0 1])
       xlim([0 10])
    end
    figure(2)
-   for k=1:4
-       subplot(1,4,k)
-       xlim([0 1.5])
+   for k=1:2
+       subplot(1,2,k)
+      ylim([0 12])
+      xlim([0 15])
+   end
+   figure(2)
+   for k=1:2
+       subplot(1,2,k)
+       xlim([0 10])
        ylim([0 5])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
@@ -140,35 +140,46 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =297;
+ N =141;
 
- ANrunOneMM('2015-09-10-CHIRR02uM(2)_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('gfpS4_10ngml20hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
 % imcontrast
 
 %%
 % PLOT STUFF
-  
-%    nms = {'(Control)SignalingR2_20hr','(03ngml)SignalingR2_20hr','(3ngml)SignalingR2_20hr'};
-%    nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
-%  488 - Sox2; 647 - Cdx2: 555 - Nanog;
 
-%   nms = {'WntAct_control_notwellpatterned','WntAct_CHIRR02uM_notwellpatterned'};
-%   nms2 = {'control','CHIRR at 0.2 uM'};
+% nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
+% nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};
   
-  nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_actCHIRR','WntAct_control_notwellpatterned','WntAct_CHIRR02uM_notwellpatterned'};
-  nms2 = {'control','CHIRR at 0.5 uM','control','CHIRR at 0.2 uM' };
- 
- dir = '.';
-    
-   [sox2,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[8 5],[8 10],'Sox2','Nanog',0,1);
-  
-   %nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
-%    nms = { '(C)SignalingR_20hr(Imging4)','(03ngml)SignalingR_20hr(Imging4)','(3ngml)SignalingR_20hr(Imging4)'};
-%    nms2 = {'Control(20hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
-%    dir = '.';
+% nms = {'siRNAnodalNegativeC(pluri)','siRNAnodal(pluri)'}; % sox2 nanog Cdx2
+% nms2 = {'Nodal(negative Control)','siRNS Nodal (~ 15 nM)' };
+
+% nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_inhIWP2','CommEffWntExperiment_actCHIRR'};%sox2 Oct4 Nanog    
+% nms2 = {'Control','WNTinhibitor','WntAct CHIRR 0.5uM' };
+nms = {'gfpS4_10ngml20hr_1'}; % dapi CY5 GFP order of channels
+nms2 = {'GFP:Smad4 cells 20hr, 10 ng/ml bmp4'};
+
+
+dir = '.';
+%colors = {'c','c','b','b','g','g','m','m','r','r'};
+%colors = colorcube(10);
+[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.35,nms,nms2,dir,[],[],[8 5],[6 8],'Smad4','Smad4',0,1);
+
+
+
+
+% cellnumber = {'1','2','3','4','5','6','7','8','9','10'};
+% vect = [0 0.1 0.3 1 3 10 30];
+% for k=1:10
+%     [newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'Sox2',0,k);
+%     %errorbar(newdata2(:,1),newdata2(:,2),colors{k});
+%     plot(vect,newdata2(:,1),colors{k});hold on
+%     %    set(gca,'Xtick',1:size(nms2,2));
+%     %    set(gca,'Xticklabel',nms2);
 %     
-%    [n,a,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[10 6],'Nanog','smad2',0,1);
-   
+% end
+% legend(cellnumber);
+    
    
    
 %%
@@ -369,8 +380,34 @@ runFullTileMM('Control_1','WntAct_control_notwellpatterned.mat','setUserParamAN2
 runFullTileMM('2015-09-10-CHIRR02uM(2)_1','WntAct_CHIRR02uM_notwellpatterned.mat','setUserParamAN20X');
 
 disp('Successfully ran all files');
+%%
+runFullTileMM('GFPSmad4cells20hr10ngml_1','GFPsmad4RFPh2b_20hr_10ngml.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% run the RI experiment
+runFullTileMM('WITH_Rhoi_3ngmlBmp4_1','With_RIplus3ngmlBmp4.mat','setUserParamAN20X');
+runFullTileMM('NO_Rhoi_3ngmlBmp4_1','NO_RIplus3ngmlBmp4.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
 
 
+%%
+% run the siRNA nodal experiment
+runFullTileMM('siRNAnodalNegControl_1','siRNAnodalNegativeC(pluri).mat','setUserParamAN20X');
+runFullTileMM('siRNAnodal(pluri)2_1','siRNAnodal(pluri).mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% run the gfpS4 rfpH2b chip (left from live imaging experiment)
+% cdx2 - 647; smad4 - 488; dapi
+
+runFullTileMM('gfpS4_10ngml20hr_1','gfpS4_10ngml20hr_1.mat','setUserParamAN20X');
+
+
+disp('Successfully ran all files');
 %%
 % to plot Lili first experiment data% 647 - CDX2; 488 - Sox2; 555 - Bra
   figure(2)
@@ -393,35 +430,56 @@ disp('Successfully ran all files');
 direc = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/9_LiveCllImaging/SingleCellSignalingAN_20150805_123245 PM';
 
 %runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
-
+framestorun = 10;
 ff=readAndorDirectory(direc);
-pos = 15;
+pos = 19;
 chan = ff.w;
-frametouse = ff.t(1);
+ratios = {};
+for i = 1:framestorun 
+%frametouse = ff.t(i);
 se = 5;
-flag = 1;
+flag = 0;
 
-% filename = getAndorFileName(ff,pos,ff.t(1),ff.z(4),chan(1));
-% nuc = imread(filename);
-nuc=andorMaxIntensity(ff,pos,frametouse,chan(1));
+filename = getAndorFileName(ff,pos,ff.t(i),ff.z(4),chan(1));
+I = imread(filename);
+filename = getAndorFileName(ff,pos,ff.t(i),ff.z(4),chan(2));
+I2 = imread(filename);
 
-for xx=2:length(chan)
-            fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,frametouse,chan(xx));
-%             non_nucfilename = getAndorFileName(ff,pos,ff.t(1),ff.z(4),chan(xx));
-%             fimg(:,:,xx-1) = imread(non_nucfilename);
+% nuc=andorMaxIntensity(ff,pos,frametouse,chan(1));
+% nuc2=andorMaxIntensity(ff,pos,frametouse,chan(2));
+[Lnuc,Lcyto,nucmeanInt,cytomeanInt] = WatershedsegmCytoplasm_AW(I,I2,se,flag);
+figure(1),subplot(1,framestorun,i),imshow(Lcyto);
+figure(2),subplot(1,framestorun,i),imshow(Lnuc);
+if length(nucmeanInt) == length(cytomeanInt) %&& length(nucmeanIntnorm) == length(cytomeanIntnorm)
+
+    ratios{i}(:,1) = nucmeanInt./cytomeanInt;
+    ratios{i}(:,2) = i;
+    meanRa(i) = mean(ratios{i}(:,1));
+   
 end
-%         
-[statsnuc,statscyto,Lnuc,Lcyto] = WatershedsegmCytoplasm(nuc,fimg,se,flag); 
-% 
-%  try 
-%         [statsnuc,statscyto,Lnuc,Lcyto] = WatershedsegmCytoplasm(nuc,fimg,se,flag);    %AN 
-%         outdat = 
-%         %outdat content: [x, y, nuclear_area, ones(place holder), nuc_marker_avr, nuc_smad_avr, non_nuc_smad_avr]
-%     catch err
-%         disp(['Error with image ' int2str(ii) ' continuing...']);
-%         peaks{ii}=[];
-%         statsArray{ii}=[];
-%         %rethrow(err);
-%         continue;
-%     end
+
+end
+
+
+vect = (1:framestorun);
+figure(3),plot(vect,meanRa,'r--*','Markersize',10);
+ylim([0 1.7]);
+xlim([0 framestorun+1]);
+xlabel('time, frames');
+ylabel('nuc/cyto mean for cells in the frame');
+title('GFPsmad4RFPh2b cells, 10ng/ml bmp4 added after frame 16');
+hold on
+
+for k=1:35
+    twocellcol(k) = mean(ratios{k}(2:3,1));
+    onecellcol(k) = ratios{k}(1,1);
+end
+hold on
+plot(vect,twocellcol,'b--*');
+plot(vect,onecellcol, 'm--*');
+ylim([0.7 1.2]);
+legend('all three cells','two-cell colony','one-cell colony') ;
+% save('Frame_nuc2cyto_ratios','ratios','meanRa','twocellcol','onecellcol');
+% savefig('Cellraces.fig');
+
 

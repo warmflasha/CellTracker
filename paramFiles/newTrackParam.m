@@ -2,7 +2,7 @@ function newTrackParam
 
 global userParam;
 
-userParam.L = 50;
+userParam.L = 70;
 userParam.verboseCellTrackerEDS = 0;
 userParam.minTrajLen = 4;
 userParam.mergeGap = 2;

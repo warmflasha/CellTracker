@@ -37,6 +37,9 @@ classdef colony
             %all data is from a single image.
             %si is the image size. default is 1024x1344.
             
+            if ~exist('mm','var')
+                mm=1;
+            end
             
             if ~exist('si','var') || isempty(si)
                 if mm

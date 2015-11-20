@@ -12,6 +12,8 @@ fprintf(1, '%s called to define params\n',mfilename);
 % provided in the function
 
 userParam.StructuringElement = 5;
+
+userParam.sizeImg = [2048,2048];
 % When verbose=1 set, image of field of cells produced with diagnostics. If
 % newFigure=1 these will pile up for successive times and eventually crash MATLAB 
 % because of memory limitations. Either run in debug mode and kill by hand or set
@@ -22,13 +24,18 @@ userParam.newFigure = 0;
 %grouping) coltype=0 uses alphavolume to group circular colonies
 userParam.coltype = 1;
 
+% when groupinf colonies by distance need to supply the parameter to still
+% consider cells within one colony ( 80 works for microcolonies at 20X
+% magnification
+userParam.colonygrouping = 120;
+
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
 % image smoothing parameters 
-userParam.gaussRadius=10;% 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=1; % 3
+userParam.gaussRadius=6;% 4 is good for 10x images;6 is ok for 20X
+userParam.gaussSigma=3; % 3
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -37,7 +44,7 @@ userParam.backgroundOpenRad = 50;
 
 userParam.presubNucBackground=0;%
 userParam.presubSmadBackground=0;
-userParam.backdiskrad = 200; 
+userParam.backdiskrad = 100; 
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Filtering of nuclei done in three steps: 
@@ -61,7 +68,7 @@ userParam.radiusMin = 25; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  = 800;  % 860
+userParam.nucIntensityLoc  = 400;  % 860
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW

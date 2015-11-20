@@ -1,5 +1,5 @@
 %% code to use watershead marker-based segmentation to separate the nucleus from cytoplasm
-function [Lnuc] = Watershedsegm(I,se)
+function [Lnuc] = Watershedsegm(I,I2,se)
 % se = 8 wprks best for the 60X data on signaling
 % I2 = imread('SingleCellSignalingAN_t0000_f0019_z0003_w0001.tif');% gfp channel (gfp-smad4 cells)
 % I = imread('SingleCellSignalingAN_t0000_f0019_z0003_w0000.tif');% nuc chan
@@ -92,17 +92,41 @@ L = watershed(gradmag2); % final watershed segmentation
 
 Lnuc = L >1;
 %cc =bwconncomp(Lnuc);
-
-%stats = regionprops(cc,I,'Area','Centroid','MeanIntensity');
-% imshow(I,[]); hold on
-% aa = [stats.Centroid];
-% xx = aa(1:2:end);
-% yy = aa(2:2:end);
-% zz = [stats.MeanIntensity];
-% 
-% plot(xx,yy,'r*');
-
 imshow(Lnuc); 
+
+nuc = I2;
+% nuc_o = nuc;
+% preprocess
+global userParam;
+userParam.gaussRadius = 10;
+userParam.gaussSigma = 3;
+userParam.small_rad = 3;
+userParam.presubNucBackground = 1;
+userParam.backdiskrad = 300;
+
+nuc = imopen(nuc,strel('disk',userParam.small_rad)); % remove small bright stuff
+nuc = smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma); %smooth
+nuc =presubBackground_self(nuc);
+%  Normalize image
+diskrad = 100;
+low_thresh = 500;
+
+nuc(nuc < low_thresh)=0;
+norm = imdilate(nuc,strel('disk',diskrad));
+normed_img = im2double(nuc)./im2double(norm);
+normed_img(isnan(normed_img))=0;
+
+h = fspecial('sobel');
+Ix  = imfilter(double(normed_img),h,'replicate'); % f3 if the other algothithm is used
+Iy  = imfilter(double(normed_img),h','replicate');
+gradmag = sqrt(Ix.^2 + Iy.^2);
+
+
+fgm = imdilate(Lnuc,strel('disk',2));%
+gradmag2 = imimposemin(gradmag,bgm|fgm);     
+L = watershed(gradmag2);
+Lcyto = L>1 & ~ Lnuc;
+figure, imshow(Lcyto);
 
 end
 
