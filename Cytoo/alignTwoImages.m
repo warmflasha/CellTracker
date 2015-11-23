@@ -1,4 +1,4 @@
-function [newImage ind ind2 scale_fac]=alignTwoImages(im1,im2,side,parrange,perpsearch,bgIm)
+function [newImage, ind, ind2, scale_fac]=alignTwoImages(im1,im2,side,parrange,perpsearch,bgIm)
 
 
 %   side = 1  im2 below im1

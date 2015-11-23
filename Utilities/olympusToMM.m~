@@ -65,7 +65,7 @@ for ii = 1:n_width
         end
         
         %make accords structure for later use
-        ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);
+        ind = sub2ind([n_width, n_height],pos_x,pos_y);
         acoords(ind).wabove = [0 0];
         acoords(ind).wside = [0 0];
         acoords(ind).absinds =[xmin, ymin];
