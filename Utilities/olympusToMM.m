@@ -17,8 +17,8 @@ end
 
 files = mkMMFileStruct(MMdirec,chan);
 h = imfinfo(filenames{1});
-n_width = h.Width/imsize(1);
-n_height = h.Height/imsize(2);
+n_width = h.Width/imsize(2);
+n_height = h.Height/imsize(1);
 
 if ~isinteger(n_width)
     n_width = floor(n_width) + 1;
@@ -27,15 +27,15 @@ if ~isinteger(n_height)
     n_height = floor(n_height)+1;
 end
 
-for ii = 1:n_width
-    for jj = 1:n_height
+for ii = 1:n_height
+    for jj = 1:n_width
  
         xmin = (ii-1)*imsize(2)+1;
-        xmax = min(ii*imsize(2),h.Width);
+        xmax = min(ii*imsize(2),h.Height);
         ymin = (jj-1)*imsize(1)+1;
-        ymax = min(jj*imsize(1),h.Height);
+        ymax = min(jj*imsize(1),h.Width);
         pos_y = jj - 1;
-        pos_x = n_width - ii; %MM labels img 0,0 as upper right corner
+        pos_x = n_height - ii; %MM labels img 0,0 as upper right corner
         
         spos_x=int2str(pos_x);
         while length(spos_x) < 3
@@ -65,7 +65,7 @@ for ii = 1:n_width
         end
         
         %make accords structure for later use
-        ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);
+        ind = sub2ind([n_height, n_width],pos_x+1,pos_y+1);
         acoords(ind).wabove = [0 0];
         acoords(ind).wside = [0 0];
         acoords(ind).absinds =[xmin, ymin];
