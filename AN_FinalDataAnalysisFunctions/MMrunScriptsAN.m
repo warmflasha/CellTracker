@@ -126,9 +126,9 @@ nms2 = { 'Control','BMPi','WNTi'};
       ylim([0 12])
       xlim([0 15])
    end
-   figure(2)
-   for k=1:2
-       subplot(1,2,k)
+   figure(6)
+   for k=1:5
+       subplot(1,5,k)
        xlim([0 10])
        ylim([0 5])
    end
@@ -140,10 +140,10 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =141;
+ N =200;
 
- ANrunOneMM('gfpS4_10ngml20hr_1',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
-% imcontrast
+ ANrunOneMM('PluriNtwInh_Control',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ %imcontrast
 
 %%
 % PLOT STUFF
@@ -156,24 +156,31 @@ nms2 = { 'Control','BMPi','WNTi'};
 
 % nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_inhIWP2','CommEffWntExperiment_actCHIRR'};%sox2 Oct4 Nanog    
 % nms2 = {'Control','WNTinhibitor','WntAct CHIRR 0.5uM' };
-nms = {'gfpS4_10ngml20hr_1'}; % dapi CY5 GFP order of channels
-nms2 = {'GFP:Smad4 cells 20hr, 10 ng/ml bmp4'};
+% nms = {'gfpS4_10ngml20hr_1'}; % dapi CY5 GFP order of channels
+% nms2 = {'GFP:Smad4 cells 20hr, 10 ng/ml bmp4'};
 
-
+%  nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited','PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_PI3Kinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
+%  nms2 = {'Control','FGF inhibited','Furin(nodal production inhibited)','PI3K inhibited' };
+ 
+ nms = {'Dynamics_control','Dynamics_20hr5gnml','Dynamics_27hr5gnml','Dynamics_33hr5gnml','Dynamics_42hr5gnml'}; % Dynamics Sox2 Bra Cdx2
+ nms2 = {'control(no bmp4),0hrs','20hrs','27hrs','33hrs','42hrs' };%
+ title('Dynamics, 5 ng/ml bmp4');
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[smad4,totalcells,r1,r2,b]= plotallanalysisAN(0.35,nms,nms2,dir,[],[],[8 5],[6 8],'Smad4','Smad4',0,1);
+[cdx2,totalcells,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[6 8],'Bra','Sox2',0,1);
 
 
 
 
-% cellnumber = {'1','2','3','4','5','6','7','8','9','10'};
+% cellnumber = {'1','2','3','4'};
 % vect = [0 0.1 0.3 1 3 10 30];
-% for k=1:10
+% vect = [0 1 2 3];
+% colors = {'b','c','m','r'};
+% for k=1:4
 %     [newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'Sox2',0,k);
 %     %errorbar(newdata2(:,1),newdata2(:,2),colors{k});
-%     plot(vect,newdata2(:,1),colors{k});hold on
+%     plot(vect,newdata2(:,1),colors{k},'-*');hold on
 %     %    set(gca,'Xtick',1:size(nms2,2));
 %     %    set(gca,'Xticklabel',nms2);
 %     
@@ -426,60 +433,37 @@ disp('Successfully ran all files');
     
    [s1,totalcells,r1,r2,b]= plotallanalysisAN(0.4,nms,nms2,dir,[],[],[8 5],[8 10],'Sox2','Bra',0,1);
 %%
-% test the watershed within the runSegmentCellsZstack
-direc = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/9_LiveCllImaging/SingleCellSignalingAN_20150805_123245 PM';
+% running dynamics data (ran on Monday, November 30, 2015
+% all data sets were obtained with 5% overlap
+cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/Control_tifs');
+runFullTileMM('Dynamics_control_splitTIF','Dynamics_control.mat','setUserParamAN20X');
 
-%runSegmentCellsZstack(direc,pos,chan,paramfile,outfile,nframes)
-framestorun = 10;
-ff=readAndorDirectory(direc);
-pos = 19;
-chan = ff.w;
-ratios = {};
-for i = 1:framestorun 
-%frametouse = ff.t(i);
-se = 5;
-flag = 0;
+cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/20hr_tifs');
+runFullTileMM('Dynamics20hr5gnml_splitTIF','Dynamics_20hr5gnml.mat','setUserParamAN20X');
 
-filename = getAndorFileName(ff,pos,ff.t(i),ff.z(4),chan(1));
-I = imread(filename);
-filename = getAndorFileName(ff,pos,ff.t(i),ff.z(4),chan(2));
-I2 = imread(filename);
+cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/27hr_tifs');
+runFullTileMM('Dynamics27hr5gnml_splitTIF','Dynamics_27hr5gnml.mat','setUserParamAN20X');
 
-% nuc=andorMaxIntensity(ff,pos,frametouse,chan(1));
-% nuc2=andorMaxIntensity(ff,pos,frametouse,chan(2));
-[Lnuc,Lcyto,nucmeanInt,cytomeanInt] = WatershedsegmCytoplasm_AW(I,I2,se,flag);
-figure(1),subplot(1,framestorun,i),imshow(Lcyto);
-figure(2),subplot(1,framestorun,i),imshow(Lnuc);
-if length(nucmeanInt) == length(cytomeanInt) %&& length(nucmeanIntnorm) == length(cytomeanIntnorm)
+cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/33hr_tifs');
+runFullTileMM('Dynamics33hr5gnml_splitTIF','Dynamics_33hr5gnml.mat','setUserParamAN20X');
 
-    ratios{i}(:,1) = nucmeanInt./cytomeanInt;
-    ratios{i}(:,2) = i;
-    meanRa(i) = mean(ratios{i}(:,1));
-   
-end
+cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/42hr_tifs');
+runFullTileMM('Dynamics42hr5gnml_splitTIF','Dynamics_42hr5gnml.mat','setUserParamAN20X');
 
-end
+disp('Successfully ran all files');
 
+%%
+% running the Pluri Network Inhibition experiments (ran December 1, 2015)
+% last two sets were obtained with 0% overlap (first two - with 5% overlap
+% in the case of 0% overlap the bIms look much better and uniform
+runFullTileMM('PluriNtwInh_Control','PluriNtwInh_Control.mat','setUserParamAN20X');
 
-vect = (1:framestorun);
-figure(3),plot(vect,meanRa,'r--*','Markersize',10);
-ylim([0 1.7]);
-xlim([0 framestorun+1]);
-xlabel('time, frames');
-ylabel('nuc/cyto mean for cells in the frame');
-title('GFPsmad4RFPh2b cells, 10ng/ml bmp4 added after frame 16');
-hold on
+runFullTileMM('PluriNtwInh_FGFinhibited','PluriNtwInh_FGFinhibited.mat','setUserParamAN20X');
 
-for k=1:35
-    twocellcol(k) = mean(ratios{k}(2:3,1));
-    onecellcol(k) = ratios{k}(1,1);
-end
-hold on
-plot(vect,twocellcol,'b--*');
-plot(vect,onecellcol, 'm--*');
-ylim([0.7 1.2]);
-legend('all three cells','two-cell colony','one-cell colony') ;
-% save('Frame_nuc2cyto_ratios','ratios','meanRa','twocellcol','onecellcol');
-% savefig('Cellraces.fig');
+runFullTileMM('PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_Furin(nodal_Inh).mat','setUserParamAN20X');
+
+runFullTileMM('PluriNtwInh_PI3Kinhibited','PluriNtwInh_PI3Kinhibited.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
 
 

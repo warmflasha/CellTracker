@@ -118,7 +118,7 @@ for ii = 1:length(idx0)
     next.y = mergeTimeHistory(t0, t1, next.y, merge2.y, 'numeric');
     next.area = mergeTimeHistory(t0, t1, next.area, merge2.area, 'numeric');
     next.cells = mergeTimeHistory(t0, t1, next.cells, merge2.cells, 'cell');
-    next.data = mergeTimeHistory(t0, t1, next.data', merge2.data', 'numeric')' ;  %with multi dims, time==row 
+    next.data = mergeTimeHistory(t0, t1, next.data, merge2.data, 'numeric')' ;  %with multi dims, time==row 
     next.end  = merge2.end;
     % alternative way of defining merger...NB rest of data not included
 %     if t0 < t1

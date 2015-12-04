@@ -88,10 +88,10 @@ if isempty(peaks{end})
 end
 
 
-% if any(cellfun(@isempty,peaks))
-%     disp('Frames missing; skipping.');
-%     return;
-% end
+if any(cellfun(@isempty,peaks))
+    disp('Frames missing; skipping.');
+    return;
+end
 
 
 % match cells between successive frames, use adaptive parameters based on first few
