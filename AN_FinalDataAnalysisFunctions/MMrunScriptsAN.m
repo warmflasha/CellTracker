@@ -121,10 +121,10 @@ nms2 = { 'Control','BMPi','WNTi'};
       xlim([0 10])
    end
    figure(2)
-   for k=1:2
-       subplot(1,2,k)
-      ylim([0 12])
-      xlim([0 15])
+   for k=1:5
+       subplot(1,5,k)
+      ylim([0 5])
+      xlim([0 9])
    end
    figure(6)
    for k=1:5
@@ -140,9 +140,9 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMMdirectory function here)
- N =200;
+ N =300;
 
- ANrunOneMM('PluriNtwInh_Control',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('Dynamics_C',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
  %imcontrast
 
 %%
@@ -162,13 +162,13 @@ nms2 = { 'Control','BMPi','WNTi'};
 %  nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited','PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_PI3Kinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
 %  nms2 = {'Control','FGF inhibited','Furin(nodal production inhibited)','PI3K inhibited' };
  
- nms = {'Dynamics_control','Dynamics_20hr5gnml','Dynamics_27hr5gnml','Dynamics_33hr5gnml','Dynamics_42hr5gnml'}; % Dynamics Sox2 Bra Cdx2
+ nms = {'Dynamics_C(R)','Dynamics_20hr5gnml(R)','Dynamics_27hr5gnml(R)','Dynamics_33hr5gnml(R)','Dynamics_42hr5gnml(R)'}; % Dynamics Sox2 Bra Cdx2
  nms2 = {'control(no bmp4),0hrs','20hrs','27hrs','33hrs','42hrs' };%
  title('Dynamics, 5 ng/ml bmp4');
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[cdx2,totalcells,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[6 8],'Bra','Sox2',0,1);
+[cdx2,totalcells,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[8],[8 6],'DAPI','Cdx2',0,1);
 
 
 
@@ -435,20 +435,20 @@ disp('Successfully ran all files');
 %%
 % running dynamics data (ran on Monday, November 30, 2015
 % all data sets were obtained with 5% overlap
-cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/Control_tifs');
-runFullTileMM('Dynamics_control_splitTIF','Dynamics_control.mat','setUserParamAN20X');
+%cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/Control_tifs');
+runFullTileMM('Dynamics_C','Dynamics_C(R).mat','setUserParamAN20X');
 
-cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/20hr_tifs');
-runFullTileMM('Dynamics20hr5gnml_splitTIF','Dynamics_20hr5gnml.mat','setUserParamAN20X');
+%cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/20hr_tifs');
+runFullTileMM('Dynamics_20hr(R)','Dynamics_20hr5gnml(R).mat','setUserParamAN20X');
 
-cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/27hr_tifs');
-runFullTileMM('Dynamics27hr5gnml_splitTIF','Dynamics_27hr5gnml.mat','setUserParamAN20X');
+%cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/27hr_tifs');
+runFullTileMM('Dynamics_27hr(R)','Dynamics_27hr5gnml(R).mat','setUserParamAN20X');
 
-cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/33hr_tifs');
-runFullTileMM('Dynamics33hr5gnml_splitTIF','Dynamics_33hr5gnml.mat','setUserParamAN20X');
+%cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/33hr_tifs');
+runFullTileMM('Dynamics_33hr(R)','Dynamics_33hr5gnml(R).mat','setUserParamAN20X');
 
-cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/42hr_tifs');
-runFullTileMM('Dynamics42hr5gnml_splitTIF','Dynamics_42hr5gnml.mat','setUserParamAN20X');
+%cd('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-11-13-CellSense/Dynamics/42hr_tifs');
+runFullTileMM('Dynamics_42hr(R)','Dynamics_42hr5gnml(R).mat','setUserParamAN20X');
 
 disp('Successfully ran all files');
 

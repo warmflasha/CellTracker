@@ -34,7 +34,7 @@ userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on 
 
 
 % image smoothing parameters 
-userParam.gaussRadius=7;% 4 is good for 10x images;6 is ok for 20X
+userParam.gaussRadius=6;% 4 is good for 10x images;6 is ok for 20X
 userParam.gaussSigma=3; % 3
 
 %%%%Background parameters
@@ -64,11 +64,11 @@ userParam.backdiskrad = 200;
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 25; %22
+userParam.radiusMin = 20; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 30;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  = 180;  % 860
+userParam.nucIntensityLoc  = 190;  % 860
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
