@@ -176,23 +176,21 @@ dir = '.';
 nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
 nms2 = {'Control','FGF inhibited'};
 dir = '.';
-thresh = 2.5;
-
 cellnumber = {'1','2','3','4','5'};%,
 % vect = [0 0.1 0.3 1 3 10 30];
 % vect = [0 1 ];
 colors = jet(length(cellnumber));
 
 for k=1:5
-[newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[10],'Sox2',0,k,0);
-figure(4),plot(newdata2(:,3),'*','color',colors(k,:),'markersize',20);
+[newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,[],[],[8 5],'Sox2',0,k);
+plot(newdata2(:,1),'*','color',colors(k,:),'markersize',20);
 
 hold on
-ylim([0 10000]);
+ylim([0 13]);
 xlim([0 6]);
-ylabel('Nanog')
+ylabel('Sox2/dapi')
 
-legend(cellnumber); 
+legend(cellnumber{k}); 
 end    
   set(gca,'Xtick',1:size(nms2,2));
 set(gca,'Xticklabel',nms2);
