@@ -83,11 +83,13 @@ for i = 1:length(traj)
     data(:,1) = traj(i).x';
     data(:,2) = traj(i).y';
     data(:,3) = traj(i).area';
+   % data(:,9) = traj(i).colsize';
     % traj.cells has number of current cell, shift to get next cell, -1 at
     % end to terminate
     data(:,4) = [traj(i).cells(2:end), -1];
     % other real valued data that was interpolated.
     %data(:,5:ncol_data) = (traj(i).data(1:(ncol_data-4),:))';
+    data(:,5) = (traj(i).colszdata)';      %AN
     
     cells(i).data = data;
     cells(i).fdata = traj(i).data(:,1:(ncol_data-4));
