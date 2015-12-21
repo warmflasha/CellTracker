@@ -11,7 +11,7 @@ fprintf(1, '%s called to define params\n',mfilename);
 % the runSegmentCellsZStack60X function.  if not specified, the default is
 % provided in the function
 
-userParam.StructuringElement = 5;
+userParam.softtype = 1;% one for Olympus
 
 userParam.sizeImg = [2048,2048];
 % When verbose=1 set, image of field of cells produced with diagnostics. If
@@ -27,7 +27,7 @@ userParam.coltype = 1;
 % when groupinf colonies by distance need to supply the parameter to still
 % consider cells within one colony ( 80 works for microcolonies at 20X
 % magnification
-userParam.colonygrouping = 120;
+userParam.colonygrouping = 80;% 120 for 60X
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
@@ -44,7 +44,7 @@ userParam.backgroundOpenRad = 50;
 
 userParam.presubNucBackground=0;%
 userParam.presubSmadBackground=0;
-userParam.backdiskrad = 100; 
+userParam.backdiskrad = 200; 
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Filtering of nuclei done in three steps: 
@@ -64,16 +64,16 @@ userParam.backdiskrad = 100;
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 25; %22
+userParam.radiusMin = 20; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
-userParam.nucIntensityRange = 35;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  = 400;  % 860
+userParam.nucIntensityRange = 30;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc  = 190;  % 860
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =370; %370 measure the actual values and decide on this parameter
+userParam.nucAreaLo =400; %370 measure the actual values and decide on this parameter
 userParam.nucAreaHi = 4500;  % not too big
 
 
