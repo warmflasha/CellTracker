@@ -18,7 +18,7 @@ ntimes = length(peaks);
 %   y       ibid
 %   area    nuclear area, copied from peaks
 %   data    peaks col 5:end if exist ie [3, #times] matrix
-%   colszdata 9th column of peaks, has the colony size in it %AN
+%   colszdata 9th column of peaks, has the colony size in it            %AN
 % NB time is column number eg x is row vector
 %
 % copy it to output trajectory struct when traj terminates
