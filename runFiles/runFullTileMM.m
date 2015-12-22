@@ -12,6 +12,7 @@ if ~exist('step','var')
     step=1;
 end
 
+
 %  if ~isfield('userParam','coltype')
 %      userParam.coltype = 1;
 %  end
@@ -21,7 +22,8 @@ dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
 wavenames=ff.chan;
 
 maxims= dims(1)*dims(2);
-nloop=4;
+%nloop=12;
+nloop = 4;
 imgsperprocessor=ceil(maxims/nloop);
 
 %generate background image for each channel
@@ -51,9 +53,16 @@ end
 %stored in accords, can also return fully aligned image, but not
 %recommended for large numbers of files.
 if step < 4
+    % here add the condition that if acoords already exists (as should be
+    % saved from when you split the .tif huge file from Olympus) then just save the
+    % existing acoords
+    if exist('acoords','var')
+        save([direc filesep outfile],'acoords','-append');
+    end
     acoords=alignManyPanelsMM(ff,1:200,maxims);
     save([direc filesep outfile],'acoords','-append');
 end
+
 
 if step < 5
      assembleMatFiles(direc,imgsperprocessor,nloop,outfile);

@@ -14,7 +14,7 @@ if plottype == 1
     for k=1:size(nms,2)                                 % load however many files are in the nms string
         filename{k} = [dir filesep  nms{k} '.mat'];
         load(filename{k},'peaks','dims');
-        disp(['loaded file: ' filename{k}]);
+        %disp(['loaded file: ' filename{k}]);
         
     end
     [toplot,peaks] = GetSeparateQuadrantImgNumbersAN(nms2,peaks,dims,midcoord,fincoord);
@@ -49,7 +49,7 @@ end
 if plottype == 0
     for k=1:size(nms,2)        % load however many files are in the nms string
         filename{k} = [dir filesep  nms{k} '.mat'];
-        load(filename{k},'peaks');
+        load(filename{k},'peaks','plate1');
         disp(['loaded file: ' filename{k}]);
         %
         [avgs, errs, alldat{k}]=Bootstrapping(peaks,100,1000,index1);

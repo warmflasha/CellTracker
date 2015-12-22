@@ -48,7 +48,7 @@ for ii=xrange(end):-1:xrange(1)
         
         disp(tmp{1});
         xy(xy<1)=1;
-        fullImage(xy(2):(xy(2)+si(2)-1),xy(1):(xy(1)+si(1)-1))=img;
+        fullImage(xy(2):(xy(2)+si(2)-1),xy(1):(xy(1)+si(1)-1))=img';
         q=q+1;
     end
 end

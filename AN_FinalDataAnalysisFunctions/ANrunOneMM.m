@@ -6,7 +6,7 @@
 % assigns: prefix-Pos_00x_00y. then the usual functions are used:
 % 'readMMdirectory' and 'mkMMfilename'
 
-function ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
+function [outdat]= ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
 
 global userParam;
 
@@ -66,7 +66,7 @@ ymax = max(ff.pos_y)+1;
         [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
        % if ~isempty(statsN)
           data  = stats2xy(statsN);
-            %outdat=outputData4AWTracker(statsN,nuc,ii);
+            %outdat=outputData4AWTracker(statsN,nuc,ii); % AN return
         %end
         figure, imshow(nuc,[]); hold on;                            
         plot(data(:,1),data(:,2),'r.','MarkerSize',10); hold on;
@@ -95,7 +95,7 @@ if flag == 0 || isempty('flag');
         x = ff.pos_x(ii);
         %[x, y]=ind2sub([xmax ymax],ii);
         ff.prefix = [];
-        f1nm = mkMMfilenameOneCoord(ff,x-1,[],[],1);%posNumberX
+        f1nm = mkMMfilenameOneCoord(ff,x,[],[],1);%posNumberX
 
         disp(['Nuc marker img:' f1nm]);
         imfiles(ii).nucfile=f1nm{1};
@@ -111,7 +111,7 @@ if flag == 0 || isempty('flag');
         
         fimg=zeros(si(1),si(2),1);
         for jj= ii; %2:(1+1)
-            f1nm = mkMMfilenameOneCoord(ff,x-1,[],[],jj);
+            f1nm = mkMMfilenameOneCoord(ff,x,[],[],jj);
             fimgnow=imread(f1nm{1});
             fimgnow = smoothImage(fimgnow,userParam.gaussRadius,userParam.gaussSigma);
             imgfiles(ii).smadfile{jj}=f1nm{1};%
@@ -127,9 +127,12 @@ if flag == 0 || isempty('flag');
         
         [maskC, statsN]=segmentCells2(nuc,fimg);
         [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
-       % if ~isempty(statsN)
+        if ~isempty(statsN)
           data  = stats2xy(statsN);
-            %outdat=outputData4AWTracker(statsN,nuc,ii);
+         % outdat=outputData4AWTracker(statsN,nuc,ii);
+        end
+        %  peaks{ii}=outdat;
+         % save(outfile,'peaks','userParam','imgfiles');
         %end
         figure, imshow(nuc,[]); hold on;                            
         plot(data(:,1),data(:,2),'r.','MarkerSize',10); hold on;

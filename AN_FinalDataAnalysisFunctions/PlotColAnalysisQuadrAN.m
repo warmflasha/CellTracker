@@ -55,7 +55,7 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     
     figure(5),  subplot(1,size(nms2,2),k), plot(totalcolonies,'b*'); legend(nms2{k}); % plot toalcolonies instead
     xlabel('Number of cells in the colony');
-    ylabel('Total cells');
+    ylabel('Total COlonies');
     title ([thresh]);
     xlim([0 15]);
     end

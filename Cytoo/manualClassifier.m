@@ -1,4 +1,4 @@
-function [shapes, rotate]=manualClassifier(matfile,resave,savedmat)
+function categories=classifyTransactions(datafile)
 
 if ~exist('resave','var')
     resave=0;

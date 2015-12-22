@@ -19,8 +19,8 @@ end
 distt=bwdist(img);
 
 %look up dist to boundary for each cell
-d2b=zeros(length(positions),1);
-for ii=1:length(positions)
+d2b=zeros(size(positions,1),1);% length(positions)
+for ii=1:size(positions,1)%length(positions)
     d2b(ii)=distt(positions(ii,1)+1,positions(ii,2)+1);
 end
 

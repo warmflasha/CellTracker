@@ -12,7 +12,9 @@ totcells=sum(ncells);
 outdat=zeros(totcells,size(c2(1).data,2));
 q=1;
 for ii=1:ncol
+    if ~isempty(c2(ii).data)
     outdat(q:q+ncells(ii)-1,:)=c2(ii).data;
     q=q+ncells(ii);
+    end
 end
 
