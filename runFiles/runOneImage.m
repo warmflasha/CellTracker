@@ -1,4 +1,18 @@
 function [outdat, nuc, fimg]=runOneImage(nuc,fimg,paramfile)
+% [outdat, nuc, fimg]=runOneImage(nuc,fimg,paramfile)
+% ----------------------------------------------------
+% run segmentation on one image, already loaded into matlab
+% Inputs: 
+%   -nuc - segmentation image
+%   -fimg - stack of images to quantify relative to segmentation image
+%   -paramfile - parameter file to use
+% Outputs:
+%   -outdat - output of segmentation data in the usual format, one row per
+%   cell
+%   -nuc - nuclear (segmentation) image, postprocessing
+%   -fimg - stack of other images, postprocessing
+%
+
 tic;
 global userParam;
 

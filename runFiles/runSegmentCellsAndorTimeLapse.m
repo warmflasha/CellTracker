@@ -1,8 +1,18 @@
-function runSegmentCellsZstack_try(direc,pos,chan,paramfile,outfile,nframes)
-%
-%   runSegmentCells(direc,outfile,nframes,nucstring,smadstring,paramfile)
-%
-
+function runSegmentCellsAndorTimeLapse(direc,pos,chan,paramfile,outfile,nframes)
+% runSegmentCellsAndorZstack(direc,pos,chan,paramfile,outfile,nframes)
+% ----------------------------------------------------------------------
+% run segmentation for a directory of images produced by andor time lapse
+% will use max-intensity on zstacks. 
+% Inputs:
+%   -direc - directory containing images
+%   - pos - position number
+%   - chan - list of channels (1st for segmentation, others to quantify)
+%   - paramfile - paramter file to use
+%   - outfile - output .mat file
+%   - nframes (optional) number of frames to run. If not supplied will run
+%   all
+% Output data is saved in the output file in peaks variable with image information
+% in imgfiles variable. 
 
 
 global userParam;
@@ -42,7 +52,6 @@ for ii=1:max(min(nframes,length(ff.t)),1)
     else
         nuc=andorMaxIntensity(ff,pos,frametouse,[]);
     end
-    
     
     if isempty(chan) || length(chan) == 1
         fimg = nuc;

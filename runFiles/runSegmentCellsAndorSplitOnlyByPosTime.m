@@ -1,17 +1,26 @@
 function runSegmentCellsZstack_bfopen_splitByPos(direc,pos,chan,paramfile,outfile)
-%
-%   runSegmentCells(direc,outfile,nframes,nucstring,smadstring,paramfile)
+% runSegmentCellsZstack_bfopen_splitByPos(direc,pos,chan,paramfile,outfile)
 %__________________________
-% Assumes files are split by position and possible time but with several
-% timepoints in each file.
+% Assumes files are split only by position and possible time but with several
+% timepoints in each file. All z-positions and channels must be in one
+% file.
+% Inputs:
+%   -direc - directory containing images
+%   - pos - position number
+%   - chan - list of channels (1st for segmentation, others to quantify)
+%       NOTE: starts from 1 for consistency with other routines
+%   - paramfile - paramter file to use
+%   - outfile - output .mat file
+%   - nframes (optional) number of frames to run. If not supplied will run
+%   all
+% Output data is saved in the output file in peaks variable with image information
+% in imgfiles variable.
 
 
 
 
 
 global userParam;
-
-usebfopen = 1;
 
 try
     eval(paramfile);

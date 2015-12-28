@@ -1,7 +1,18 @@
 function runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
-%
-%   runSegmentCells(direc,outfile,nframes,nucstring,smadstring,paramfile)
-%
+% runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
+%  ---------------------------------------------------------------------
+% runSegmentation of a multiposition andor directory with a loop over
+% position
+% Inputs:
+%   -direc - directory containing images
+%   - tt - timepoint number
+%   - chan - list of channels (1st for segmentation, others to quantify)
+%   - paramfile - paramter file to use
+%   - outfile - output .mat file
+%   - nframes (optional) number of frames to run. If not supplied will run
+%   all
+% Output data is saved in the output file in peaks variable with image information
+% in imgfiles variable. 
 
 
 
