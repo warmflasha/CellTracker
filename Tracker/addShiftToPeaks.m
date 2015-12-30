@@ -30,7 +30,7 @@ for k=fr_stim+1:length(peaks)
     end
 end
 
-peaks{fr_stim} = []; % zero the point where there was shift (only if there was a shift)
+%peaks{fr_stim} = []; % zero the point where there was shift (only if there was a shift)
 
 save(matfile,'peaks','-append');
 
