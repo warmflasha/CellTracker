@@ -1,6 +1,6 @@
-function runTrackerEDS(inmatfile, paramfile)
+function runTracker(inmatfile, paramfile)
 %
-%% runTrackerEDS(inmatfile,paramfile)
+%% runTracker(inmatfile,paramfile)
 %
 % Function to match nuclei in successive frames and produce single cell
 % trajectories.
@@ -68,7 +68,9 @@ end
 
 
 %use actual image size from segmentCells() if available
-if isfield(imgfiles,'size')
+if ~exist('imgfiles','var')
+    userParam.sizeImg = [1024 1024];
+elseif isfield(imgfiles,'size')
     userParam.sizeImg=imgfiles(1).size;
     disp(['runTrackerEDS: Using img size from imgfiles: ' num2str(userParam.sizeImg) '.']);
 elseif isfield(userParam, 'sizeImg')
