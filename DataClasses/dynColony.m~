@@ -1,0 +1,8 @@
+classdef dynColony %object for storing dynamic colony level data
+    properties
+        cells %array of dynCell objects
+    end
+    methods
+        fobj = dynColony(cells)
+        
+        
