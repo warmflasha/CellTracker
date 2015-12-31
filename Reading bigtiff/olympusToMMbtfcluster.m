@@ -20,9 +20,11 @@ chan = [{'DAPI'}, {'GFP'}, {'RFP'}, {'Cy5'}];
 
 files = mkMMFileStruct(MMdirec,chan);
 
-h = imread(filenames,1);
-n_width = size(h,2)/imsize(1);
-n_height = size(h,1)/imsize(2);
+h = Tiff(filenames);
+fileheight = h.getTag('ImageLength');
+filewidth = h.getTag('ImageWidth');
+n_height = fileheight/imsize(1);
+n_width = filewidth/imsize(2);
 
 if ~isinteger(n_width)
     n_width = floor(n_width) + 1;
@@ -34,9 +36,9 @@ end
 for jj = 1:n_height
     
     xmin = (ii-1)*imsize(2)+1;
-    xmax = min(ii*imsize(2),size(h,2));
+    xmax = min(ii*imsize(2),filewidth);
     ymin = (jj-1)*imsize(1)+1;
-    ymax = min(jj*imsize(1),size(h,1));
+    ymax = min(jj*imsize(1),fileheight);
     pos_y = jj - 1;
     pos_x = n_width - ii; %MM labels img 0,0 as upper right corner
     
@@ -55,8 +57,8 @@ for jj = 1:n_height
         mkdir(direc);
     end
     for kk = 1:4
-        img = imread(filenames,kk);
-        img = img(ymin:ymax, xmin:xmax);
+        %img = imread(filenames,kk);
+        img = imread(filenames, 'Index', kk, 'PixelRegion', {[ymin,ymax], [xmin,xmax]});
         if size(img,1) ~= imsize(1) || size(img,2) ~= imsize(2)
             zz =zeros(imsize,'uint16');
             zz(1:size(img,1),1:size(img,2))=img;
