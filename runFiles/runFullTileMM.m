@@ -1,12 +1,16 @@
 function runFullTileMM(direc,outfile,paramfile,step)
-%runFullTile(direc,outfile,maxims,step)
+%runFullTileMM(direc,outfile,maxims,step)
 %---------------------
-%For a set of tiled images, runs segmentCells (uses parfor for this), runs
-%alignment program for images, outputs in matfile -- peaks -- cell by cells
-%list by image, colonies -- colonies data structure
-%direc -- image directory
-%outfile -- matfile for output
-%step = step to begin at. See code. allows for skipping finding cells etc.
+% For a set of tiled images, runs segmentCells (uses parfor for this), runs
+% alignment program for images, 
+% Inputs:
+%   direc -- image directory, must be in format of micromanager tiling output
+%   outfile -- matfile for output
+%   paramfile - parameter file to use
+%   step = step to begin at. See code. allows for skipping finding cells etc.
+% outputs in matfile:
+%   peaks -- cell by cellslist by image 
+%   plate1 -- plate data structure
 
 if ~exist('step','var')
     step=1;

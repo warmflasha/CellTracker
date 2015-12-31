@@ -35,7 +35,7 @@ for n = 1:ncells
     active(n).y = peaks{1}(n,2);
     active(n).area = peaks{1}(n,3);
     active(n).data = peaks{1}(n,5:end);
-    active(n).colszdata = peaks{1}(n,9);%AN
+    %active(n).colszdata = peaks{1}(n,9);%AN
 end
 
 trajectory = [];  verbose = 0;
@@ -58,7 +58,7 @@ for nt = 2:ntimes
             active(tt).y = [active(tt).y, peaks{nt}(match,2)];
             active(tt).area = [active(tt).area, peaks{nt}(match,3)];
             active(tt).data = [active(tt).data; peaks{nt}(match,5:end)];
-            active(tt).colszdata = [active(tt).colszdata; peaks{nt}(match,9)];%AN
+            %active(tt).colszdata = [active(tt).colszdata; peaks{nt}(match,9)];%AN
         else
             trajectory = [trajectory, active(tt)];
             active(tt).end = -1;
@@ -80,7 +80,7 @@ for nt = 2:ntimes
         active(ntraj).y = peaks{nt}(cc,2);
         active(ntraj).area = peaks{nt}(cc,3);
         active(ntraj).data = peaks{nt}(cc,5:end);
-        active(ntraj).colszdata = peaks{nt}(cc,9);%AN
+        %active(ntraj).colszdata = peaks{nt}(cc,9);%AN
     end
 end
 trajectory = [trajectory, active];

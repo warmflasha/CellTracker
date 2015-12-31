@@ -1,11 +1,12 @@
-function runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
-% runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
-%  ---------------------------------------------------------------------
-% runSegmentation of a multiposition andor directory with a loop over
-% position
+function runSegmentCellsAndorSplitExceptTime(direc,pos,chan,paramfile,outfile,nframes)
+% runSegmentCellsZstack_bfopen(direc,pos,chan,paramfile,outfile,nframes)
+% -----------------------------------------------------------------------
+% runs andor movie directory where files are separated by position, z, and
+% channel but not by time so that each file is a timestack. Will take max
+% intensity over z. 
 % Inputs:
 %   -direc - directory containing images
-%   - tt - timepoint number
+%   - pos - position number
 %   - chan - list of channels (1st for segmentation, others to quantify)
 %   - paramfile - paramter file to use
 %   - outfile - output .mat file
@@ -25,42 +26,41 @@ catch
 end
 
 ff=readAndorDirectory(direc);
-if ~exist('nframes','var')
-    nframes = length(ff.p);
-end
 
 if length(chan) < 2
     nImages = 1;
 else
     nImages=length(chan)-1;
+end    
+
+for ww=1:length(ff.w)
+    for zz=1:length(ff.z)
+        filename = getAndorFileName(ff,pos,0,ff.z(zz),ff.w(ww));
+        tmpimg = bfopen(filename);
+        imgs{ww,zz}=tmpimg{1};
+    end
+end
+
+ntimes = size(imgs{1,1},1);
+if ~exist('nframes','var')
+    nframes = ntimes;
 end
 
 %main loop over frames
-for ii=1:max(min(nframes,length(ff.p)),1)
+for ii=1:min(ntimes,nframes)
     
-    if ~isempty(ff.p)
-        frametouse = ff.p(ii);
-    else
-        frametouse = [];
-    end
     tic;
-    disp(['frame ' int2str(frametouse)]);
+    disp(['frame ' int2str(ii)]);
     % setup string to hold all the error messages for this frame number
     userParam.errorStr = sprintf('frame= %d\n', ii);
     
-    if ~isempty(chan)
-        nuc=andorMaxIntensity(ff,frametouse,tt,chan(1));
-    else
-        nuc=andorMaxIntensity(ff,frametouse,tt,[]);
+    nuc=imgs{1,1}{ii,1};
+    fimg(:,:,1)=imgs{2,1}{ii,1};
+    for zz=2:length(ff.z)
+        nuc=max(nuc,imgs{1,zz}{ii,1});
+        fimg(:,:,1)=max(fimg(:,:,1),imgs{2,zz}{ii,1});
     end
     
-    if isempty(chan) || length(chan) == 1
-        fimg = nuc;
-    else
-        for xx=2:length(chan)
-            fimg(:,:,xx-1)=andorMaxIntensity(ff,frametouse,tt,chan(xx));
-        end
-    end
     
     nuc = smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
     for xx=1:size(fimg,3)
@@ -79,6 +79,7 @@ for ii=1:max(min(nframes,length(ff.p)),1)
     
     %record some info about image file.
     imgfiles(ii).filestruct=ff;
+    imgfiles(ii).pos = pos;
     imgfiles(ii).w = chan;
     
     %run routines to segment cells, do stats, and get the output matrix

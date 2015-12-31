@@ -2,8 +2,13 @@ function newTrackParam
 
 global userParam;
 
-userParam.L = 80;
-userParam.sizeImg = [2048, 2048];
+% <<<<<<< HEAD
+% userParam.L = 80;
+% userParam.sizeImg = [2048, 2048];
+% =======
+userParam.L = 70;
+userParam.sizeImg = [1024, 1024];
+
 userParam.verboseCellTrackerEDS = 0;
 userParam.minTrajLen = 4;
 userParam.mergeGap = 2;

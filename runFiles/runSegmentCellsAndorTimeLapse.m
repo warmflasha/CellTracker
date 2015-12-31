@@ -1,11 +1,11 @@
-function runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
-% runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
-%  ---------------------------------------------------------------------
-% runSegmentation of a multiposition andor directory with a loop over
-% position
+function runSegmentCellsAndorTimeLapse(direc,pos,chan,paramfile,outfile,nframes)
+% runSegmentCellsAndorZstack(direc,pos,chan,paramfile,outfile,nframes)
+% ----------------------------------------------------------------------
+% run segmentation for a directory of images produced by andor time lapse
+% will use max-intensity on zstacks. 
 % Inputs:
 %   -direc - directory containing images
-%   - tt - timepoint number
+%   - pos - position number
 %   - chan - list of channels (1st for segmentation, others to quantify)
 %   - paramfile - paramter file to use
 %   - outfile - output .mat file
@@ -13,7 +13,6 @@ function runSegmentCellsZstackMultiPos(direc,tt,chan,paramfile,outfile,nframes)
 %   all
 % Output data is saved in the output file in peaks variable with image information
 % in imgfiles variable. 
-
 
 
 global userParam;
@@ -26,7 +25,7 @@ end
 
 ff=readAndorDirectory(direc);
 if ~exist('nframes','var')
-    nframes = length(ff.p);
+    nframes = length(ff.t);
 end
 
 if length(chan) < 2
@@ -36,10 +35,10 @@ else
 end
 
 %main loop over frames
-for ii=1:max(min(nframes,length(ff.p)),1)
+for ii=1:max(min(nframes,length(ff.t)),1)
     
-    if ~isempty(ff.p)
-        frametouse = ff.p(ii);
+    if ~isempty(ff.t)
+        frametouse = ff.t(ii);
     else
         frametouse = [];
     end
@@ -49,16 +48,16 @@ for ii=1:max(min(nframes,length(ff.p)),1)
     userParam.errorStr = sprintf('frame= %d\n', ii);
     
     if ~isempty(chan)
-        nuc=andorMaxIntensity(ff,frametouse,tt,chan(1));
+        nuc=andorMaxIntensity(ff,pos,frametouse,chan(1));
     else
-        nuc=andorMaxIntensity(ff,frametouse,tt,[]);
+        nuc=andorMaxIntensity(ff,pos,frametouse,[]);
     end
     
     if isempty(chan) || length(chan) == 1
         fimg = nuc;
     else
         for xx=2:length(chan)
-            fimg(:,:,xx-1)=andorMaxIntensity(ff,frametouse,tt,chan(xx));
+            fimg(:,:,xx-1)=andorMaxIntensity(ff,pos,frametouse,chan(xx));
         end
     end
     
@@ -79,6 +78,7 @@ for ii=1:max(min(nframes,length(ff.p)),1)
     
     %record some info about image file.
     imgfiles(ii).filestruct=ff;
+    imgfiles(ii).pos = pos;
     imgfiles(ii).w = chan;
     
     %run routines to segment cells, do stats, and get the output matrix

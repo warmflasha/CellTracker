@@ -7,15 +7,16 @@
 
 % i = position
 
-clear all;
+%clear all;
 
-ff = readAndorDirectory('.');
+ff = readAndorDirectorymont('.');
 st = ff.p(1);
 l = length (ff.p)-1; %% l: reference to the last position 
 
   
 
-%%
+
+%i = 2;
 for i = st:l
 nuc = andorMaxIntensity(ff,i,0,0);
 nuc_o = nuc;
@@ -30,7 +31,7 @@ userParam.backdiskrad = 300;
 
 nuc = imopen(nuc,strel('disk',userParam.small_rad)); % remove small bright stuff
 nuc = smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma); %smooth
-nuc =presubBackground_self(nuc);
+nuc = presubBackground_self(nuc);
 
 %%  Normalize image
 diskrad = 100;
