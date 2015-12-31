@@ -55,9 +55,9 @@ for ii = 1:n_width
             mkdir(direc);
         end
         for kk = 1:4
-            img = imread(filenames,kk);
+            img = imread(filenames,'Index',kk,'PixelRegion',{[ymin,ymax],[xmin, xmax]});
             %img = img(xmin:xmax, ymin:ymax);
-            img = img(ymin:ymax, xmin:xmax);
+            %img = img(ymin:ymax, xmin:xmax);
             if size(img,1) ~= imsize(1) || size(img,2) ~= imsize(2)
                 zz =zeros(imsize,'uint16');
                 zz(1:size(img,1),1:size(img,2))=img;
