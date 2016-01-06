@@ -38,7 +38,8 @@ end
 for ii = 1:n_width
     %for jj = n_height
     for jj = 1:n_height
- 
+        
+        disp(['Image ' int2str(jj+n_height*(ii-1)) ' of ' int2str(n_width*n_height)]);
         xmin = (ii-1)*imsize(2)+1;
         xmax = min(ii*imsize(2),filewidth);
         ymin = (jj-1)*imsize(1)+1;

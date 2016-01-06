@@ -1,4 +1,6 @@
-function getNuclearMaskNoIlastik(red)
+function [maskN, statsN] = getNuclearMaskNoIlastik(red)
+
+global userParam;
 
 bckgnd = findBackgnd(red, 1);
 
@@ -34,29 +36,6 @@ info_msg = [info_msg, sprintf('%d nuc after edge_thresh\n\n', length(statsN)) ];
 
 userParam.errorStr = [userParam.errorStr, sprintf( '%s', info_msg)];
 
-%end
-
-function [img, stats] = restrict2roi(img, stats)
-% for a set of xy positions retain only those pts in img that are within
-% radius of any xy point, set others to zero
-global userParam
-
-radius = ceil( sqrt(userParam.nucAreaHi/pi) );
-mask = false(size(img));
-xy = stats2xy(stats);
-for i = 1:length(xy)
-    mask(xy(i,2), xy(i,1)) = 1;
-end
-dst = bwdist(mask);
-mask = dst > radius;
-img(mask) = 0;
-
-% restrict the voronoi pixels within radius-1 of the centers
-mask = ~mask;
-mask = imerode(mask, strel('square',3) );
-for i = 1:length(stats)
-    list = mask(stats(i).VPixelIdxList);
-    stats(i).VPixelIdxList = stats(i).VPixelIdxList(list);
 end
 
 function [img, stats] = restrict2roi(img, stats)
@@ -81,10 +60,7 @@ for i = 1:length(stats)
     list = mask(stats(i).VPixelIdxList);
     stats(i).VPixelIdxList = stats(i).VPixelIdxList(list);
 end
-
-return
-
-
+end
 
 function [mask, stats] = edge_thresh_nuc(img, stats, bckgnd)
 % given an image, stats of nuclear centers, stats of voronoi polygon and
@@ -200,4 +176,5 @@ if(userParam.verboseSegmentCells)
         nuc_in, length(stats), avr_area, too_small, nuc_bad_shape ) ];
 end
 return
+end
 

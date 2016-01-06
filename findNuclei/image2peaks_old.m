@@ -1,4 +1,4 @@
-function [outdat, maskC, statsN] = image2peaks(red, gr, maskN)
+function [outdat, maskC, statsN] = image2peaks_old(red, gr)
 %
 % [maskC, statsN] = segmentCells(red0, gr0)
 %
@@ -23,11 +23,7 @@ end
 
 [red, gr] =preprocessImages(red,gr);
 
-if ~exist('maskN','var')
-    [maskN, statsN]=getNuclearMaskNoIlastik(red);
-else
-    statsN =ilastikMaskToStats(maskN);
-end
+[maskN, statsN]=getNuclearMaskNoIlastik(red);
 
 % look at each V-polygon and use either grad(gr) or fraction of max to
 % define cyto for each cell. MaskC = mask for cells == cyto + nuclei. Redefine
