@@ -1,4 +1,4 @@
-function runSegmentCellsAndorSplitOnlyByPosTime(direc,pos,chan,paramfile,outfile)
+function runSegmentCellsZstack_bfopen_splitByPos(direc,pos,chan,paramfile,outfile)
 % runSegmentCellsZstack_bfopen_splitByPos(direc,pos,chan,paramfile,outfile)
 %__________________________
 % Assumes files are split only by position and possible time but with several
@@ -53,13 +53,9 @@ for ii=1:ntimefiles
     
     nT = reader.getSizeT;
     
-    h5file = geth5name(filename);
-    
     if exist(h5file,'file')
         usemask = 1;
         masks = readIlastikFile(h5file);
-    else
-        usemask = 0;
     end
     
     for jj = 1:nT
@@ -71,7 +67,7 @@ for ii=1:ntimefiles
         
         disp(['frame ' int2str(nimg)]);
         % setup string to hold all the error messages for this frame number
-        userParam.errorStr = sprintf('frame= %d\n', nimg);
+        userParam.errorStr = sprintf('frame= %d\n', ii);
         
         [nuc, fimg] = preprocessImages(nuc,fimg);
         
@@ -80,18 +76,15 @@ for ii=1:ntimefiles
         imgfiles(nimg).pos = pos;
         imgfiles(nimg).w = chan;
         
+        h5file = geth5name(filename);
         
         
         
         %run routines to segment cells, do stats, and get the output matrix
         try
-            if usemask
-                disp(['Using ilastik mask frame ' int2str(jj)]);
-                [outdat, ~, statsN] = image2peaks(nuc, fimg, masks(:,:,jj));
-            else
-                disp(['Segmenting frame ' int2str(jj)]);
-                [outdat, ~, statsN] = image2peaks(nuc,fimg);
-            end
+            [maskC, statsN]=segmentCells2(nuc,fimg);
+            [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
+            outdat=outputData4AWTracker(statsN,nuc,nImages);
         catch err
             disp(['Error with image ' int2str(ii) ' continuing...']);
             
