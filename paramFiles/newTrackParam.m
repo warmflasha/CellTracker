@@ -10,8 +10,8 @@ userParam.L = 70;
 userParam.sizeImg = [1024, 1024];
 
 userParam.verboseCellTrackerEDS = 0;
-userParam.minTrajLen = 4;
-userParam.mergeGap = 2;
+userParam.minTrajLen = 10;%4
+userParam.mergeGap = 10;%2
 userParam.sclDstCost = [1 2];
 userParam.minlength = 20;
 userParam.mincyto = 0;
