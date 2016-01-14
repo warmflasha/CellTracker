@@ -1,4 +1,4 @@
-function mkMaxIntensity(fileIn,fileOut,splitByChan)
+function mkMaxIntensity(fileIn,fileOut)
 
 reader = bfGetReader(fileIn);
 

@@ -65,8 +65,14 @@ for ii=1:ntimefiles
     for jj = 1:nT
         
         nuc = bfMaxIntensity(reader,jj,chan(1));
+        
+        if length(chan) == 1
+            fimg = nuc;
+        else
+        
         for xx=2:length(chan)
             fimg(:,:,xx-1) = bfMaxIntensity(reader,jj,chan(2));
+        end
         end
         
         disp(['frame ' int2str(nimg)]);
