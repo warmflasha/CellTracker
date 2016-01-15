@@ -10,7 +10,7 @@ function addShiftToPeaks(matfile,fr_stim)
 % outputs: peaks with shifted x,y coordinates. 
 
 load(matfile,'peaks','imgfiles');
-
+sz = size(uncompressBinaryImg(imgfiles(1).compressNucMask));
 %compute the shift
 n1 = uncompressBinaryImg(imgfiles(fr_stim-1).compressNucMask); % this chunck is to calculate the actual shift vector, and need not be performed in the loop
 n2 = uncompressBinaryImg(imgfiles(fr_stim+1).compressNucMask);
@@ -27,6 +27,9 @@ shift = round([diffx,diffy]);
 for k=fr_stim+1:length(peaks)
     if ~isempty(peaks{k})
         peaks{k}(:,1:2)=bsxfun(@plus,peaks{k}(:,1:2),shift);
+        if any(peaks{k}(:,1) > sz(1)) || any(peaks{k}(:,2) > sz(2))% if the shift moves the cellout of the frame
+            peaks{k} = [];
+        end
     end
 end
 
