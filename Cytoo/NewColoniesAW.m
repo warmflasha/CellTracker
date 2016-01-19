@@ -18,10 +18,14 @@
 %data=peaks{65}(:,1:2);
 %% sort into groups -- output is vector groupid
 function [groupids]= NewColoniesAW(pts)
+
+global userParam;
+%userParam.colonygrouping = 120;
+
 XX=ipdm(pts);
 ncells = size(pts,1);
 groupids=zeros(ncells,1);
-mindist = 80;% 40 for the 10X images
+mindist = userParam.colonygrouping;% 40 for the 10X images % 80 for 20X images % ~ 120 for 60X images % need to put in the paramfile!!!!
 currentgroup=1;
 cellsleft = 1:ncells;
 
@@ -59,10 +63,11 @@ end
 
 ngroups = max(groupids);
 
-cc=colorcube(20);
+cc=colorcube(10);
 
-figure; hold on;
-for ii=1:20:ngroups% plot every 20th image
-    inds = groupids == ii;
-    plot(pts(inds,1),pts(inds,2),'.','Color',cc(mod(ii,20)+1,:),'MarkerSize',18);
+% figure; hold on;
+% for ii=1:ngroups% plot 
+%     inds = groupids == ii;
+%     plot(pts(inds,1),pts(inds,2),'*','Color',cc(mod(ii,ngroups)+1,:),'MarkerSize',18);%cc(mod(ii,20)+1,:)
+% end
 end

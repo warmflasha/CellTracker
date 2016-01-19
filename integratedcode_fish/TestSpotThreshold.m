@@ -7,8 +7,9 @@ ip      = InitializeExptest(dir1, z1, pos, sn, sname);
 channel = nch; % fluorescence channel to apply spatzcells
 
 %% 1. Check Spot recognition parameters
+df1             = sprintf('/spots_quantify_t7ntch%d/', nch);
+spot_folder     = [ip.exp.path df1];
 
-spot_folder = [ip.exp.path '/spots_quantify_2t7/'];
 
 tic; 
 

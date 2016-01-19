@@ -4,9 +4,9 @@ pp=load(matfile,'peaks','acoords','imgfiles','dims','userParam'); % AN
 peaks=pp.peaks;
 ac=pp.acoords;
 dims=pp.dims;
-
-if exist('userParam','var')
 param = pp.userParam;
+% if exist('userParam','var')
+% param = pp.userParam;
 
 if ~isfield(param,'coltype')
     disp('Error: coltype must be 1 or 0');
@@ -14,9 +14,10 @@ if ~isfield(param,'coltype')
 end
 
 coltype=param.coltype; % AN
-else
-    coltype = 0;
-end
+%  else
+%      coltype = 0;
+% end
+ 
 if ~exist('mm','var')
     mm=1;
 end
@@ -82,7 +83,7 @@ if  coltype == 1    %analysis for the single cell data
 end
 if  coltype == 0  % analysis for the circular colonies data; 
     disp('Running the alphavol-based colony grouping');
-    [~, S]=alphavol(pts,pp.userParam.alphavol);
+    [~, S]=alphavol(pts,pp.userParam.alphavol);% this line was modified
     groups=getUniqueBounds(S.bnd);   % S.bnd - Boundary facets (Px2 or Px3)
     
     allinds=assignCellsToColonies(pts,groups);

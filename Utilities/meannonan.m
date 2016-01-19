@@ -29,7 +29,7 @@ else
     elseif dim==2 %avg each row
         mm=zeros(si(1),1);
         for ii=1:si(1)
-            mm(ii)=meannonan1d(x(:,ii));
+            mm(ii)=meannonan1d(x(ii,:));
         end
     end     
         

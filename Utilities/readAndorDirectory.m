@@ -28,6 +28,17 @@ for ii=1:nImages
     end
     
     ind = strfind(nm,'_f');
+    if length(ind) > 1 
+        toremove = false(length(ind),1);
+        for ii=1:length(ind)
+            if isempty(str2num(nm(ind(ii)+2)))
+                toremove(ii)=1;
+            end
+        end
+        if sum(toremove) > 0
+            ind(toremove)=[];
+        end
+    end
     if ~isempty(ind)
         inds(1) = ind;
         p{currPrefixNum} = [p{currPrefixNum} str2num(nm((inds(1)+2):(inds(1)+5)))];

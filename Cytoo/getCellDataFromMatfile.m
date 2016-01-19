@@ -6,11 +6,11 @@ switch colsize
     case 1
         inds=pp.plate1.inds1000;
     case 2
-        inds=pp.plate1.inds500;
+        inds=pp.plate1.inds800;
     case 3
-        inds=pp.plate1.inds250;
+        inds=pp.plate1.inds500;
     case 4
-        inds=pp.plate1.indsSm;
+        inds=pp.plate1.inds200;
     otherwise
         inds=pp.plate1.inds1000;
         disp('WARNING: invalid colsize, must be 1-4, defaulting to 1');

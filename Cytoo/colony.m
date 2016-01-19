@@ -37,6 +37,9 @@ classdef colony
             %all data is from a single image.
             %si is the image size. default is 1024x1344.
             
+            if ~exist('mm','var')
+                mm=1;
+            end
             
             if ~exist('si','var') || isempty(si)
                 if mm
@@ -374,7 +377,7 @@ classdef colony
             
         end
         
-        function [rA, cellsinbin, dmax]=radialAverage(obj,column,ncolumn,binsize,compfrom)
+        function [rA, cellsinbin, dmax]=radialAverage(obj,column,ncolumn,binsize,compfrom,toohigh)
             %computes the radial average of one column of data.
             %
             %[rA cellsinbin]=radialAverage(obj,column,ncolumn,binsize)
@@ -427,8 +430,13 @@ classdef colony
                         ndat=obj.data(inds,ncolumn);
                         dat=dat./ndat;
                     end
-                    rA(q)=meannonan(dat);
-                    cellsinbin(q)=sum(inds);
+                    if exist('toohigh','var')
+                        nogood = dat > toohigh; 
+                    else
+                        nogood = false(size(dat));
+                    end
+                    rA(q)=meannonan(dat(~nogood));
+                    cellsinbin(q)=sum(inds)-sum(nogood);
                 else
                     rA(q)=0;
                     cellsinbin(q)=0;
