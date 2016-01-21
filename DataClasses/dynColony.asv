@@ -17,7 +17,7 @@ classdef dynColony %object for storing dynamic colony level data
             alltimes = [obj.cells.onframes];
             ncells = sum(alltimes==time);
         end
-        function smadratio = NucSmadRatio(obj)%all timepoints, traces
+        function smadratio = NucSmadRatio(obj,tr)%all timepoints, traces
              
             Ntr = size(obj.cells,2);
             alltimes = [obj.cells.onframes];
@@ -33,23 +33,33 @@ classdef dynColony %object for storing dynamic colony level data
         function dynsmad = DynNucSmadRatio(obj,tpts,fr_stim,resptime)%
             % tpts = lenth(peaks);
             Ntr = size(obj.cells,2);% how many separate trajectories within this colony
-           
+            
             timepoints = tpts;
             data_perframe = zeros(timepoints,Ntr);    % for before, after and ampl
-           dynsmad = zeros(Ntr,2);
-           for k=1:Ntr
-               
-                           one = (obj.cells(k).fluorData(:,2)./obj.cells(k).fluorData(:,3));
-                           tmp = (obj.cells(k).onframes)';
-                           data_perframe((tmp(1):tmp(end)),k) = one;
-                                   dynsmad(k,1) = mean(nonzeros(data_perframe(1:fr_stim,k)));
-                                   dynsmad(k,2) = mean(nonzeros(data_perframe((fr_stim+4):resptime,k)));
-             
-              
-               
-           end
-        
-        
+            dynsmad = zeros(Ntr,2);
+            if ~isempty(fr_stim)
+            for k=1:Ntr
+                
+                one = (obj.cells(k).fluorData(:,2)./obj.cells(k).fluorData(:,3));
+                tmp = (obj.cells(k).onframes)';
+                data_perframe((tmp(1):tmp(end)),k) = one;
+                dynsmad(k,1) = mean(nonzeros(data_perframe(1:fr_stim,k)));
+                dynsmad(k,2) = mean(nonzeros(data_perframe((fr_stim+4):(fr_stim+4+resptime(2)),k)));
+                
+            end
+            end
+            if isempty(fr_stim)
+            for k=1:Ntr
+                
+                one = (obj.cells(k).fluorData(:,2)./obj.cells(k).fluorData(:,3));
+                tmp = (obj.cells(k).onframes)';
+                data_perframe((tmp(1):tmp(end)),k) = one;
+                dynsmad(k,1) = mean(nonzeros(data_perframe(1:end,k)));
+                
+                
+            end
+            end
+            
         end
     end
 end       
