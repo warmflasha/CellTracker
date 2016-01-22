@@ -30,8 +30,12 @@ classdef dynColony %object for storing dynamic colony level data
             end
             smadratio = smadratio(:,tr);
         end
-        function dynsmad = DynNucSmadRatio(obj,tpts,fr_stim,resptime,range)%
+        function dynsmad = DynNucSmadRatio(obj,tpts,fr_stim,resptime,range,jumptime)%
             % tpts = lenth(peaks);
+            % jumptime - number of frames needed to respod to stimulation
+            if isempty(jumptime)
+                jumptime = 4;
+            end
             Ntr = size(obj.cells,2);% how many separate trajectories within this colony
             
             timepoints = tpts;
@@ -44,7 +48,7 @@ classdef dynColony %object for storing dynamic colony level data
                 tmp = (obj.cells(k).onframes)';
                 data_perframe((tmp(1):tmp(end)),k) = one;
                 dynsmad(k,1) = mean(nonzeros(data_perframe(1:fr_stim,k)));
-                dynsmad(k,2) = mean(nonzeros(data_perframe((fr_stim+4):(fr_stim+4+resptime),k)));
+                dynsmad(k,2) = mean(nonzeros(data_perframe((fr_stim+jumptime):(fr_stim+jumptime+resptime),k)));
                 dynsmad(k,3) = mean(nonzeros(data_perframe(range(1):range(2),k)));
             end
             end
