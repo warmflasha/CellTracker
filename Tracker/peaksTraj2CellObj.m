@@ -37,8 +37,8 @@ for n = 1:length(peaks)
 end
 
 for i = 1:length(traj)
-    for n = (traj(i).beg):(traj(i).end)  % frame number
-        ncell = traj(i).cells(n - traj(i).beg + 1);
+    for n = (traj(i).beg):(traj(i).end)  % frame number 
+        ncell = traj(i).cells(n - traj(i).beg+ 1);
         if ncell > 0
             peaks{n}(ncell, ncol_data+1) = i;
         end

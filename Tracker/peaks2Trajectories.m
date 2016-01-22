@@ -24,22 +24,28 @@ ntimes = length(peaks);
 % copy it to output trajectory struct when traj terminates
 
 % initialize the 'active' trajectories, ie those still growing
-ncells = size(peaks{1}, 1);
+
+for k=1:length(peaks)            % if the first frame is empty, need to add the condition
+    a(k)= (~isempty(peaks{k}));
+end
+b = find(a == 1);
+ncells = size(peaks{b(1)},1) ;
+
 ntraj = ncells;
 active = struct();  % to allow growth in loop with no warnings
 for n = 1:ncells
     active(n).beg = 1;
     active(n).end = 1;
     active(n).cells = n;
-    active(n).x = peaks{1}(n,1);
-    active(n).y = peaks{1}(n,2);
-    active(n).area = peaks{1}(n,3);
-    active(n).data = peaks{1}(n,5:end);
-    %active(n).colszdata = peaks{1}(n,9);%AN
+    active(n).x = peaks{b(1)}(n,1);%AN, was peaks{1} bf
+    active(n).y = peaks{b(1)}(n,2);%AN
+    active(n).area = peaks{b(1)}(n,3);%AN
+    active(n).data = peaks{b(1)}(n,5:end);%AN
+    
 end
 
 trajectory = [];  verbose = 0;
-for nt = 2:ntimes
+for nt = (b(1)+1):ntimes%2   % start one after the first nonempty frame
     ncells = size(peaks{nt}, 1);
     % cells at time nt that are NOT matched to any cell at nt-1
     if isempty(peaks{nt-1})
