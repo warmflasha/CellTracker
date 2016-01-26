@@ -40,7 +40,7 @@ classdef dynColony %object for storing dynamic colony level data
             
             timepoints = tpts;
             data_perframe = zeros(timepoints,Ntr);    % for before, after and ampl
-            dynsmad = zeros(Ntr,3);
+            dynsmad = zeros(Ntr,4);
             if ~isempty(fr_stim)
             for k=1:Ntr
                 
@@ -50,6 +50,7 @@ classdef dynColony %object for storing dynamic colony level data
                 dynsmad(k,1) = mean(nonzeros(data_perframe(1:fr_stim,k)));
                 dynsmad(k,2) = mean(nonzeros(data_perframe((fr_stim+jumptime):(fr_stim+jumptime+resptime),k)));
                 dynsmad(k,3) = mean(nonzeros(data_perframe(range(1):range(2),k)));
+                dynsmad(k,4) = abs(data_perframe(fr_stim+jumptime,k)-data_perframe(fr_stim,k));
             end
             end
             if isempty(fr_stim)
