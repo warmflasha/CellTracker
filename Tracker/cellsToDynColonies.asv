@@ -1,6 +1,7 @@
 function cellsToDynColonies(matfile)
 
 load(matfile,'cells','peaks');
+if 
 nc = length(cells);
 
 pts = zeros(nc,2);
