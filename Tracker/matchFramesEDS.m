@@ -158,7 +158,7 @@ dst_dummy = mean_nn_dist*0.5;
 
 
 %%%%%%%%%%%%%%%% AW routines with global osize nsize omitted
-%
+
 function A=initializeAssociationMatrix(C)
 % A=initializeAssociationMatrix(C)
 %-------------------
@@ -188,24 +188,24 @@ A(osize+1,s < 1) = 1;
 % dummy always corresponds to dummy
 A(osize+1,nsize+1) = 1;
 
-function ch=checkAssociation(A)
-% ch=checkAssociation(A)
-%---------------------------
-% check association matrix for consistency
-
-osize = size(A,1) -1;
-nsize = size(A,2) -1;
-
-ch = 1;
-s = sum(A(:,1:nsize),1);
-if find(s(1:nsize)~=1),
-    disp('Inconsistent initial matrix A. Columns: ');
-    find(s(1:nsize)~=1)
-    ch = 0;
-end;
-s = sum(A(1:osize,:),2);
-if find(s(1:osize)~=1),
-    disp('Inconsistent initial matrix A. Rows:');
-    find(s(1:osize)~=1)
-    ch=0;
-end
+% function ch=checkAssociation(A)
+% % ch=checkAssociation(A)
+% %---------------------------
+% % check association matrix for consistency
+%
+% osize = size(A,1) -1;
+% nsize = size(A,2) -1;
+%
+% ch = 1;
+% s = sum(A(:,1:nsize),1);
+% if find(s(1:nsize)~=1),
+%     disp('Inconsistent initial matrix A. Columns: ');
+%     find(s(1:nsize)~=1)
+%     ch = 0;
+% end;
+% s = sum(A(1:osize,:),2);
+% if find(s(1:osize)~=1),
+%     disp('Inconsistent initial matrix A. Rows:');
+%     find(s(1:osize)~=1)
+%     ch=0;
+% end
