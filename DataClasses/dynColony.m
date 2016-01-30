@@ -47,10 +47,10 @@ classdef dynColony %object for storing dynamic colony level data
                 one = (obj.cells(k).fluorData(:,2)./obj.cells(k).fluorData(:,3));
                 tmp = (obj.cells(k).onframes)';
                 data_perframe((tmp(1):tmp(end)),k) = one;
-                dynsmad(k,1) = mean(nonzeros(data_perframe(1:fr_stim,k)));
-                dynsmad(k,2) = mean(nonzeros(data_perframe((fr_stim+jumptime):(resptime),k)));%fr_stim+jumptime+
+                dynsmad(k,1) = mean(nonzeros(data_perframe(1:fr_stim,k)));% before
+                dynsmad(k,2) = mean(nonzeros(data_perframe((fr_stim+jumptime):(resptime),k)));%after
                 dynsmad(k,3) = mean(nonzeros(data_perframe(range(1):range(2),k)));
-                dynsmad(k,4) = abs(dynsmad(k,1)-mean(nonzeros(data_perframe((fr_stim+jumptime):(fr_stim+jumptime+range(2)),k))));
+                dynsmad(k,4) = abs(dynsmad(k,1)-mean(nonzeros(data_perframe((fr_stim+jumptime):(range(2)),k))));
             end
             end
             if isempty(fr_stim)
