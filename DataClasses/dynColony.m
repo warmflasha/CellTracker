@@ -17,6 +17,16 @@ classdef dynColony %object for storing dynamic colony level data
             alltimes = [obj.cells.onframes];
             ncells = sum(alltimes==time);
         end
+        
+        function plotAllCells(obj)
+            figure; hold on;
+            cc ={'r.-','g.-','b.-','k.-','m.-','c.-','y.-'};
+            for ii = 1:length(obj.cells)
+                of = obj.cells(ii).onframes;
+                rat1 = obj.cells(ii).ratio1;
+                plot(of,rat1',cc{mod(ii,7)+1});
+            end
+        end
         function smadratio = NucSmadRatio(obj,tr)%all timepoints, traces
              
             Ntr = size(obj.cells,2);
