@@ -1,4 +1,4 @@
-function acoords = olympusToMM(MMdirec,filenames,chan,imsize)
+function acoords = olympusToMM2(MMdirec,filenames,chan,imsize)
 % files = olympusToMM(MMdirec,filenames,chan,imsize)
 %------------------------------------------------------
 % Convert from Olympus output large tiled image into a directory with a
@@ -52,7 +52,8 @@ for ii = 1:n_width
             mkdir(direc);
         end
         for kk = 1:length(filenames)
-            img=imread(filenames{kk},'PixelRegion',{[ymin, ymax],[xmin, xmax]});
+
+            img=imread(filenames{kk},'PixelRegion',{[ymin, ymax],[xmin, xmax]});%AN 
             
             if size(img,1) ~= imsize(1) || size(img,2) ~= imsize(2)
                 zz =zeros(imsize,'uint16');
@@ -60,15 +61,15 @@ for ii = 1:n_width
             else
                 zz = img;
             end
-            savename = mkMMfilename(files,pos_x,pos_y,[],[],kk);
+            savename = mkMMfilename(files,pos_x,pos_y,[],[],kk);%
             imwrite(zz,savename{1});
         end
         
         %make accords structure for later use
-        ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);
+        ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);%
         acoords(ind).wabove = [0 0];
         acoords(ind).wside = [0 0];
-        acoords(ind).absinds =[xmin, ymin];
+        acoords(ind).absinds =[ymin,xmin];%AN
         
     end
 end

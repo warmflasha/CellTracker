@@ -1,4 +1,5 @@
 function acoords = olympusToMMbtf(MMdirec,filenames,chan,imsize)
+tic;
 % files = olympusToMM(MMdirec,filenames,chan,imsize)
 %------------------------------------------------------
 % Convert from Olympus output large tiled image into a directory with a
@@ -16,9 +17,15 @@ if ~exist('imsize','var'),
 end
 
 files = mkMMFileStruct(MMdirec,chan);
-h = imread(filenames,1);
-n_width = size(h,2)/imsize(1);
-n_height = size(h,1)/imsize(2);
+% h = imread(filenames,1);
+% n_width = size(h,2)/imsize(1);
+% n_height = size(h,1)/imsize(2);
+
+h = Tiff(filenames);
+fileheight = h.getTag('ImageLength');
+filewidth = h.getTag('ImageWidth');
+n_height = fileheight/imsize(1);
+n_width = filewidth/imsize(2);
 
 if ~isinteger(n_width)
     n_width = floor(n_width) + 1;
@@ -27,13 +34,16 @@ if ~isinteger(n_height)
     n_height = floor(n_height)+1;
 end
 
+%for ii = 2
 for ii = 1:n_width
+    %for jj = n_height
     for jj = 1:n_height
- 
+        
+        disp(['Image ' int2str(jj+n_height*(ii-1)) ' of ' int2str(n_width*n_height)]);
         xmin = (ii-1)*imsize(2)+1;
-        xmax = min(ii*imsize(2),size(h,2));
+        xmax = min(ii*imsize(2),filewidth);
         ymin = (jj-1)*imsize(1)+1;
-        ymax = min(jj*imsize(1),size(h,1));
+        ymax = min(jj*imsize(1),fileheight);
         pos_y = jj - 1;
         pos_x = n_width - ii; %MM labels img 0,0 as upper right corner
         
@@ -52,9 +62,9 @@ for ii = 1:n_width
             mkdir(direc);
         end
         for kk = 1:4
-            img = imread(filenames,kk);
+            img = imread(filenames,'Index',kk,'PixelRegion',{[ymin,ymax],[xmin, xmax]});
             %img = img(xmin:xmax, ymin:ymax);
-            img = img(
+            %img = img(ymin:ymax, xmin:xmax);
             if size(img,1) ~= imsize(1) || size(img,2) ~= imsize(2)
                 zz =zeros(imsize,'uint16');
                 zz(1:size(img,1),1:size(img,2))=img;
@@ -82,4 +92,7 @@ files.direc = direc;
 files.prefix = '1-';
 files.chan = chan;
 files.subprefix = 'img';
+end
 
+toc;
+end

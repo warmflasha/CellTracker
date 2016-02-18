@@ -1,4 +1,4 @@
-function runSegmentCellsZstack_bfopen_splitByPos(direc,pos,chan,paramfile,outfile)
+function runSegmentCellsAndorSplitOnlyByPosTime(direc,pos,chan,paramfile,outfile)
 % runSegmentCellsZstack_bfopen_splitByPos(direc,pos,chan,paramfile,outfile)
 %__________________________
 % Assumes files are split only by position and possible time but with several
@@ -53,44 +53,51 @@ for ii=1:ntimefiles
     
     nT = reader.getSizeT;
     
+    h5file = geth5name(filename);
+    
+    if exist(h5file,'file')
+        usemask = 1;
+        masks = readIlastikFile(h5file);
+    else
+        usemask = 0;
+    end
+    
     for jj = 1:nT
         
         nuc = bfMaxIntensity(reader,jj,chan(1));
+        
+        if length(chan) == 1
+            fimg = nuc;
+        else
+        
         for xx=2:length(chan)
             fimg(:,:,xx-1) = bfMaxIntensity(reader,jj,chan(2));
+        end
         end
         
         disp(['frame ' int2str(nimg)]);
         % setup string to hold all the error messages for this frame number
-        userParam.errorStr = sprintf('frame= %d\n', ii);
+        userParam.errorStr = sprintf('frame= %d\n', nimg);
         
-        
-        
-        nuc = smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
-        for xx=1:size(fimg,3)
-            fimg(:,:,xx) = smoothImage(fimg(:,:,xx),userParam.gaussRadius,userParam.gaussSigma);
-        end
-        
-        if isfield(userParam,'presubNucBackground') && userParam.presubNucBackground
-            nuc =presubBackground_self(nuc);
-        end
-        
-        if isfield(userParam,'presubSmadBackground') && userParam.presubSmadBackground
-            for xx=1:size(fimg,3)
-                fimg(:,:,xx)=presubBackground_self(fimg(:,:,xx));
-            end
-        end
+        [nuc, fimg] = preprocessImages(nuc,fimg);
         
         %record some info about image file.
         imgfiles(nimg).filestruct=ff;
         imgfiles(nimg).pos = pos;
         imgfiles(nimg).w = chan;
         
+        
+        
+        
         %run routines to segment cells, do stats, and get the output matrix
         try
-            [maskC, statsN]=segmentCells2(nuc,fimg);
-            [~, statsN]=addCellAvr2Stats(maskC,fimg,statsN);
-            outdat=outputData4AWTracker(statsN,nuc,nImages);
+            if usemask
+                disp(['Using ilastik mask frame ' int2str(jj)]);
+                [outdat, ~, statsN] = image2peaks(nuc, fimg, masks(:,:,jj));
+            else
+                disp(['Segmenting frame ' int2str(jj)]);
+                [outdat, ~, statsN] = image2peaks(nuc,fimg);
+            end
         catch err
             disp(['Error with image ' int2str(ii) ' continuing...']);
             

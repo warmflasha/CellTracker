@@ -9,6 +9,7 @@ classdef dynCell %object to store dynamic data for a single cell
         daughters % cell number of daughter cells
         mother % number of mother cell 
         dead % flag to mark if cell died at the end of trajcetory
+        
     end
     
     methods
@@ -27,6 +28,7 @@ classdef dynCell %object to store dynamic data for a single cell
             obj.mother =[];
             obj.dead = 0;
         end
+        
         
         function nT=numberOfTimePoints(obj) %number of time points cell was alive for
             nT = length(obj.onframes);
@@ -47,6 +49,8 @@ classdef dynCell %object to store dynamic data for a single cell
             nF = (size(obj.fluorData,2)-1)/2;
         end
             
-        
+        function rat1 = ratio1(obj)
+            rat1 = obj.fluorData(:,2); %./obj.fluorData(:,3);
+        end
     end
 end
