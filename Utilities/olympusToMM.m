@@ -52,7 +52,7 @@ for ii = 1:n_width
             mkdir(direc);
         end
         for kk = 1:length(filenames)
-            img=imread(filenames{kk},'PixelRegion',{[xmin, xmax],[ymin, ymax]});
+            img=imread(filenames{kk},'PixelRegion',{[ymin, ymax],[xmin, xmax]});
             
             if size(img,1) ~= imsize(1) || size(img,2) ~= imsize(2)
                 zz =zeros(imsize,'uint16');
@@ -81,4 +81,3 @@ files.direc = direc;
 files.prefix = '1-';
 files.chan = chan;
 files.subprefix = 'img';
-
