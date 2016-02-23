@@ -12,16 +12,27 @@ ymax = max(files.pos_y)+1;
 
 nIms=xmax*ymax;
 ImRange=randperm(nIms);
-
+disp(xmax); disp(ymax);
 for jj=1:length(ImRange)
+    
     [x, y]=ind2sub([xmax ymax],ImRange(jj));
     
+    if x == 1 || y == 1 || x == xmax || y == ymax
+        continue;
+    end
+    
+    
+  
     imnm = mkMMfilename(files,x-1,y-1,[],[],chan);
     
     if exist('maxIm','var') && q > maxIm
         break;
     end
     imNow=im2double(imread(imnm{1}));
+    
+    if min(min(imNow)) == 0
+        disp(['here ' int2str([x y])]);
+    end
         if q==1
             minIm=imNow;
             meanIm=imNow;
