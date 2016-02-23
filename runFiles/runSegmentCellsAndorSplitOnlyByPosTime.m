@@ -76,7 +76,7 @@ for ii=1:ntimefiles
         else
         
         for xx=2:length(chan)
-            fimg(:,:,xx-1) = bfMaxIntensity(reader,jj,chan(2));
+            fimg(:,:,xx-1) = bfMaxIntensity(reader,jj,chan(xx));
         end
         end
         
