@@ -10,6 +10,8 @@ function runSegmentCellsAndorSplitOnlyByPosTime(direc,pos,chan,paramfile,outfile
 %   - chan - list of channels (1st for segmentation, others to quantify)
 %       NOTE: starts from 1 for consistency with other routines
 %   - paramfile - paramter file to use
+%   - disksize - used to erode mask from ilastik
+%       NOTE: pixel size 10 is reasonable for images acquired at 30x
 %   - outfile - output .mat file
 %   - nframes (optional) number of frames to run. If not supplied will run
 %   all
@@ -58,6 +60,9 @@ for ii=1:ntimefiles
     if exist(h5file,'file')
         usemask = 1;
         masks = readIlastikFile(h5file);
+        if isfield(userParam,'maskDiskSize')
+        masks = imopen(masks,strel('disk',userParam.maskDiskSize));
+        end
     else
         usemask = 0;
     end
@@ -92,6 +97,14 @@ for ii=1:ntimefiles
         %run routines to segment cells, do stats, and get the output matrix
         try
             if usemask
+                if max(max(masks(:,:,jj))) == 0
+                    disp('Empty mask. Continuing...');
+                    peaks{nimg}=[];
+                    statsArray{nimg}=[];
+                    nimg = nimg + 1;
+
+                    continue;
+                end
                 disp(['Using ilastik mask frame ' int2str(jj)]);
                 [outdat, ~, statsN] = image2peaks(nuc, fimg, masks(:,:,jj));
             else
@@ -103,7 +116,9 @@ for ii=1:ntimefiles
             
             peaks{nimg}=[];
             statsArray{nimg}=[];
-            rethrow(err);
+                    nimg = nimg + 1;
+
+            %rethrow(err);
             continue;
         end
         
