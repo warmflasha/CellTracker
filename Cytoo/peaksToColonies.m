@@ -38,9 +38,9 @@ totcells=sum(lens);
 q=1; ncol=0;
 while ncol==0
     if ~isempty(peaks{q})
-    ncol=size(peaks{q},2);
-    q=q+1;
+        ncol=size(peaks{q},2);
     end
+    q=q+1;
 end
 
 % peaks contains segmented cells for each image 
