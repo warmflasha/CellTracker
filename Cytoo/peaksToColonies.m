@@ -37,12 +37,18 @@ totcells=sum(lens);
 %get number of columns from first non-empty image
 q=1; ncol=0;
 while ncol==0
+    if ~isempty(peaks{q})
     ncol=size(peaks{q},2);
     q=q+1;
+    end
 end
 
+% peaks contains segmented cells for each image 
+% combine peaks from all images in one big array
+% allocate array:
 alldat=zeros(totcells,ncol+1);
 
+% combine:
 q=1;
 for ii=1:length(peaks)
     if ~isempty(peaks{ii})
