@@ -22,7 +22,6 @@ if plottype == 1 % need to separate into quadrants
             peaksnew{k} =  peaks{toplot{j}(k)};
         end
         [b,c,ncell] = mkVectorsForScatterAN(peaksnew,col,index2);
-        
         limit1(j) = max(b);  % determinemax value in each vector for each axis
         limit2(j) = max(c);
         
@@ -58,41 +57,27 @@ if plottype == 0
        %[b,c] = mkVectorsForScatterAN(peaks,index2); % don't forget to change the arguments of this function above (for plottype = 0)
         
       figure(2),  subplot(1,size(nms2,2),k);
-      %----custom made colormap
-      colorscust=zeros(12,3);
-      colorscust(7:12,1) = 1;  % col 1 red
-      %colorscust(5:12,1) = 0;
-      colorscust(3:6,2) = 1;   % col 2 green
-      %colorscust(8:12,2) = 0;
-      colorscust(1:2,3) = 1;% col 3 blue
-%       colorscust(:,3) = 0.5;
-
-      colors = colormap(jet);
-      colors = colors(1:16:end,:);% colorcube;cool;autumn;jet;hsv   instead of the
-      %built-in
-      %--
-     % colors = colorscust;
+      
+      colors = colormap(jet);% needed if the coloring is done by colony size
+      colors = colors(1:8:end,:);% colorcube;cool;autumn;jet;hsv   i
+          
      %scatter(b,c,'b*'); hold on;
       %-----------------------to keep the colony size colorcoding
       for ii=1:length(col)
-          
           ncell = size(col(ii).data,1);
-          if ncell > 4
-              ncell = 4;
+          if ncell > 8
+              ncell = 8;
           end
           b = col(ii).data(:,index2(1))./col(ii).data(:,5);
-          c = col(ii).data(:,index2(2))./col(ii).data(:,5);
-          
+          c = col(ii).data(:,index2(2))./col(ii).data(:,5);        
 %           colors = colormap(jet);
 %           colors = colors(1:size(b,2),:);
-%           scatter(b,c,[],colors,'MarkerSize',10); hold on;
+%           scatter(b,c,[],b,'MarkerSize',10); hold on;% to color as values
+%           of b( 4th argument of scatter
           plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on; % use scatter + colorbar
       end
    %-------------------------------------
-       
-  
    
-       
          legend(nms2{k});
         
         limit1(k) = max(b);
