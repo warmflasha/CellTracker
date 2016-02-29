@@ -96,6 +96,7 @@ if  coltype == 0  % analysis for the circular colonies data;
     alldat=[alldat full(allinds)];
     %Make colony structure for the alphavol algorythim
     for ii=1:length(groups)
+        disp(int2str(ii));
         cellstouse=allinds==ii;
         colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[],pp.imgfiles,mm);
     end

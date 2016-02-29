@@ -1,17 +1,20 @@
-function cells=imagesAndMasksToCells(imgdirec,maskdirec,chan)
+function cells=imagesAndMasksToCells(imgdirec,maskdirec,chan,frames)
 
 [~, imgfiles] = folderFilesFromKeyword(imgdirec,'.tif');
-[~, maskfiles] = folderFilesFromKeyword(maskdirec,'Identi');
+[~, maskfiles] = folderFilesFromKeyword(maskdirec,'Tracking');
 
 cells = [];
-for tt = 1:2%length(imgfiles)
+if ~exist('frames','var')
+    frames = 1:length(imgfiles);
+end
+
+for tt = frames
     
-    
+    disp(['Frame: ' int2str(tt)]);
     imgreader = bfGetReader(fullfile(imgdirec, imgfiles(tt).name));
     maskreader = bfGetReader(fullfile(maskdirec,maskfiles(tt).name));
     
-    
-    mask_max = bfMaxIntensity(maskreader,1,1);
+    mask_max = bfMaxIntensity(maskreader,1,1,16);
     
     cellmax = max(max(mask_max));
     
@@ -35,22 +38,25 @@ for tt = 1:2%length(imgfiles)
         
         smadimg(:,:,zz)=bfGetPlane(imgreader,iplane);
     end
-    stats1 = regionprops(mask,nucimg,'Centroid','MeanIntensity');
+    stats1 = regionprops(mask,nucimg,'Area','Centroid','MeanIntensity');
     stats2 = regionprops(mask,smadimg,'MeanIntensity');
+    
+    
+    
     for ii = 1:cellmax
-        cellpix = mask == ii;
-        if sum(sum(sum(cellpix))) > 0
+        %cellpix = mask == ii;
+        if stats1(ii).Area > 0
+            stats1(ii).fluordata = [stats1(ii).MeanIntensity stats2(ii).MeanIntensity 0];
             if length(cells) < ii || isempty(cells(ii))
-                cells(ii).nucval = mean(nucimg(cellpix));
-                cells(ii).smadval = mean(smadimg(cellpix));
-                cells(ii).onframes = tt;
+                if isempty(cells)
+                    cells = dynCell(stats1(ii),tt);
+                else
+                    cells(ii) = dynCell(stats1(ii),tt);
+                end
             else
-                cells(ii).nucval = [cells(ii).nucval mean(nucimg(cellpix))];
-                cells(ii).smadval =[cells(ii).smadval mean(smadimg(cellpix))];
-                cells(ii).onframes =[cells(ii).onframes tt];
+                cells(ii) = cells(ii).addTimeToCell(stats1(ii),tt);
             end
             
         end
-        
     end
 end
