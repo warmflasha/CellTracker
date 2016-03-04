@@ -86,7 +86,7 @@ for ii = 1:n_width
         acoords(ind).wabove = [0 0];
         acoords(ind).wside = [0 0];
         acoords(ind).absinds =[xmin, ymin];
-        
+        disp(['Image: ' int2str(ind)]);
     end
 end
 
