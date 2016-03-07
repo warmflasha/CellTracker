@@ -85,7 +85,7 @@ for ii = 1:n_width
         ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);
         acoords(ind).wabove = [0 0];
         acoords(ind).wside = [0 0];
-        acoords(ind).absinds =[xmin, ymin];
+        acoords(ind).absinds =[ymin, xmin];
         
     end
 end
