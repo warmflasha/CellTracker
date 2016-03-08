@@ -1,4 +1,4 @@
-function acoords = olympusToMM_mod(MMdirec,filenames,chan,imsize)
+function acoords = olympusToMM(MMdirec,filenames,chan,imsize)
 % files = olympusToMM(MMdirec,filenames,chan,imsize)
 %------------------------------------------------------
 % Convert from Olympus output large tiled image into a directory with a
