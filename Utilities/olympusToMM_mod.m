@@ -26,7 +26,7 @@ n_width = filewidth/imsize(2);
 % Check if the input file is in the big tiff format
 if ~ isempty(strfind(filenames{1}, '.btf'))
     bigtiff = 1;
-else 
+else
     bigtiff = 0;
 end
 
@@ -40,7 +40,7 @@ end
 
 for ii = 1:n_width
     for jj = 1:n_height
- 
+        
         xmin = (ii-1)*imsize(2)+1;
         xmax = min(ii*imsize(2),filewidth);
         ymin = (jj-1)*imsize(1)+1;
@@ -85,8 +85,11 @@ for ii = 1:n_width
         ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);
         acoords(ind).wabove = [0 0];
         acoords(ind).wside = [0 0];
-        acoords(ind).absinds =[xmin, ymin];
+        
+        acoords(ind).absinds =[ymin, xmin];
+        
         disp(['Image: ' int2str(ind)]);
+        
     end
 end
 
