@@ -1,4 +1,4 @@
-function setUserParamKMCFP
+function setUserParamKMCFP2
 %
 %
 % Contains master set of comments on how to adjust parameters and other
@@ -72,7 +72,7 @@ userParam.nucAreaHi = 5000;  % not too big
 %parameters for cytoplasm calculation
 userParam.donutRadiusMin = 6;  % must be >=0
 userParam.donutRadiusMax = 10;  % set to zero to skip 
-userParam.forceDonut = 0; 
+userParam.forceDonut = 1; 
 userParam.minPtsCytoplasm = 5;
 
 %%%%%%%%%%%%%%% Params for gaussThresh() %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
