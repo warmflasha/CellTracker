@@ -4,7 +4,7 @@
 %see also: GetSeparateQuadrantImgNumbersAN,plotallanalysisAN,mkVectorsForScatterAN
 
 
-function [b,c,ncell]=GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype)
+function [b,c,ncell,alldata]=GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype)
 colors2 = {'r','g','b','k','m','r','c'};
 
 
@@ -76,6 +76,7 @@ if plottype == 0
 %           of b( 4th argument of scatter
           plot(b,c,'.','Color',colors(ncell,:),'MarkerSize',10); hold on; % use scatter + colorbar
       end
+      
    %-------------------------------------
    
          legend(nms2{k});
@@ -96,6 +97,7 @@ if plottype == 0
         ylabel(param2);
         
     end
+   
     limit1 = max(limit1);
     limit2 = max(limit2);
     for xx=1:size(nms2,2)

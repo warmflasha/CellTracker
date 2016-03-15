@@ -127,10 +127,10 @@ nms2 = { 'Control','BMPi','WNTi'};
       xlim([0 9])
    end
    figure(6)
-   for k=1:5
-       subplot(1,5,k)
+   for k=1:2
+       subplot(1,2,k)
        xlim([0 10])
-       ylim([0 5])
+       ylim([0 1])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
@@ -139,10 +139,10 @@ nms2 = { 'Control','BMPi','WNTi'};
 % script to optimize the segmentation parameters. Can look at a chse image
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
-% the readMMdirectory function here)
- N =300;
+% the readMM2irectory function here)
+ N =470;
 
- ANrunOneMM('Dynamics_C',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('extracted_BMPi',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
  %imcontrast
 
 %%
@@ -162,14 +162,34 @@ nms2 = { 'Control','BMPi','WNTi'};
 %  nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited','PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_PI3Kinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
 %  nms2 = {'Control','FGF inhibited','Furin(nodal production inhibited)','PI3K inhibited' };
  
-%  nms = {'Dynamics_C(R)','Dynamics_20hr5gnml(R)','Dynamics_27hr5gnml(R)','Dynamics_33hr5gnml(R)','Dynamics_42hr5gnml(R)'}; % Dynamics Sox2 Bra Cdx2
-%  nms2 = {'control(no bmp4),0hrs','20hrs','27hrs','33hrs','42hrs' };%
+ nms = {'Control(R)','BMPi'}; %  pERK Nanog Cdx2
+ nms2 = {'control','BMPi(LDN)ad 200 nM' };%
 %  title('Dynamics, 5 ng/ml bmp4');
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[cdx2,totalcells,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[8],[8 6],'DAPI','Cdx2',0,1);
+[cdx2,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[6 8],'Dapi','Cdx2',0,1);
+%%
+% plot the scatter plots colorcoded
+index2 = [8 6];
+toplot = cell(1,size(nms,2));
+for k=1:size(nms,2)
+        filename{k} = [dir filesep  nms{k} '.mat'];
+        load(filename{k},'peaks','dims','plate1');
+        col = plate1.colonies;
+[alldata] = mkVectorsForScatterAN(peaks,col,index2,0);
+ toplot{k} = alldata;
+end
 
+
+for j=1:size(nms,2)
+    figure(7),subplot(1,2,j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
+    legend(nms2{j});
+    ylabel('pERK')
+    xlabel('Cdx2')
+      ylim([0 20]);
+      xlim([0 2]);
+end
 %%
 % plot mean expression or selected colony size, plot for different datasets
 
@@ -415,6 +435,13 @@ runFullTileMM('siRNAnodalNegControl_1','siRNAnodalNegativeC(pluri).mat','setUser
 runFullTileMM('siRNAnodal(pluri)2_1','siRNAnodal(pluri).mat','setUserParamAN20X');
 
 disp('Successfully ran all files');
+
+%%
+runFullTileMM('extracted_Control','Control(R).mat','setUserParamAN20X');
+runFullTileMM('extracted_BMPi','BMPi.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
 
 %%
 % run the gfpS4 rfpH2b chip (left from live imaging experiment)

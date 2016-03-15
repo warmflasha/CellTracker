@@ -41,7 +41,7 @@ if    plottype==1 && size(nms,2) > 1
 end
 
 [newdata] = GeneralizedMeanAN(nms,nms2,dir,midcoord,fincoord,index1,param1,plottype,flag);
-[b,c] =     GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype);
+%[b,c] =     GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype);
 [totalcells,ratios,ratios2,totcol] = GeneralizedColonyAnalysisAN(thresh,dir,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag);
 [rawdata] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1);
 %[newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,midcoord,fincoord,index1,param1,flag,N);
