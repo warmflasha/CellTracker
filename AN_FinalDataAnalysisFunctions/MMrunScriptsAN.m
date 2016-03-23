@@ -127,10 +127,10 @@ nms2 = { 'Control','BMPi','WNTi'};
       xlim([0 9])
    end
    figure(6)
-   for k=1:2
-       subplot(1,2,k)
+   for k=1:3
+       subplot(1,3,k)
        xlim([0 10])
-       ylim([0 1])
+       ylim([0 5])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
@@ -140,9 +140,9 @@ nms2 = { 'Control','BMPi','WNTi'};
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMM2irectory function here)
- N =470;
+ N =560;
 
- ANrunOneMM('extracted_BMPi',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+ ANrunOneMM('extracted_FGFi',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
  %imcontrast
 
 %%
@@ -162,16 +162,20 @@ nms2 = { 'Control','BMPi','WNTi'};
 %  nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited','PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_PI3Kinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
 %  nms2 = {'Control','FGF inhibited','Furin(nodal production inhibited)','PI3K inhibited' };
  
- nms = {'Control(R)','BMPi'}; %  pERK Nanog Cdx2
- nms2 = {'control','BMPi(LDN)ad 200 nM' };%
+ nms = {'Control(R)','BMPi','FGFi'}; %  pERK Nanog Cdx2
+ nms2 = {'control','BMPi(LDN)ad 200 nM','FGFi at 10 uM' };%
+ % AB pERK test
+%  nms = {'control_ABtest','FGFi_ABtest'}; %  pERK Nanog Cdx2
+%  nms2 = {'control','FGFi 10 uM' };%
+ 
 %  title('Dynamics, 5 ng/ml bmp4');
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[cdx2,totalcells,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[6 8],'Dapi','Cdx2',0,1);
+[cdx2,totalcells,ratios,ratios2,totcol]= plotallanalysisAN(0.7,nms,nms2,dir,[],[],[6 5],[6 10],'Cdx2','Nanog',0,1);
 %%
 % plot the scatter plots colorcoded
-index2 = [8 6];
+index2 = [6 10];
 toplot = cell(1,size(nms,2));
 for k=1:size(nms,2)
         filename{k} = [dir filesep  nms{k} '.mat'];
@@ -183,12 +187,12 @@ end
 
 
 for j=1:size(nms,2)
-    figure(7),subplot(1,2,j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
+    figure(7),subplot(1,3,j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
     legend(nms2{j});
-    ylabel('pERK')
-    xlabel('Cdx2')
-      ylim([0 20]);
-      xlim([0 2]);
+    ylabel('Cdx2')
+    xlabel('Nanog')
+      ylim([0 1.5]);
+      xlim([0 20]);
 end
 %%
 % plot mean expression or selected colony size, plot for different datasets
@@ -437,17 +441,26 @@ runFullTileMM('siRNAnodal(pluri)2_1','siRNAnodal(pluri).mat','setUserParamAN20X'
 disp('Successfully ran all files');
 
 %%
+% march 2016 Inhibitors experiment
 runFullTileMM('extracted_Control','Control(R).mat','setUserParamAN20X');
 runFullTileMM('extracted_BMPi','BMPi.mat','setUserParamAN20X');
 
 disp('Successfully ran all files');
 
+%%
+% pERK AB test, 2016-03-21
+runFullTileMM('ABtest_control_extracted','control_ABtest.mat','setUserParamAN20X');
+runFullTileMM('ABtest_FGFi_extracted','FGFi_ABtest.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+
 
 %%
-% run the gfpS4 rfpH2b chip (left from live imaging experiment)
-% cdx2 - 647; smad4 - 488; dapi
+% 
+% Oct4 - 647; 488 - pERK; 555 - Bra
 
-runFullTileMM('gfpS4_10ngml20hr_1','gfpS4_10ngml20hr_1.mat','setUserParamAN20X');
+runFullTileMM('extracted_FGFi','FGFi.mat','setUserParamAN20X');% march 2016 Inhibitors experiment
 
 
 disp('Successfully ran all files');
