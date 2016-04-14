@@ -5,7 +5,7 @@
 % the last vector (d or valuescmap) may be used if the scatter plot needs to
 % be colorcoded by the expression of the index2(3) peaks column.
 
-function [alldata] = mkVectorsForScatterAN(peaks,col,index2,flag)% need to also input the col
+function [alldata] = mkVectorsForScatterAN(peaks,col,index2,flag,flag2)% need to also input the col
 
 if flag == 0   % if flag ==0, generate the third column with the colony size that the cell belongs to; necessary if want to colo the scatter plot with col size
 %  colors = colormap(cool);% needed if the coloring is done by colony size
@@ -17,8 +17,15 @@ if flag == 0   % if flag ==0, generate the third column with the colony size tha
           if ncell > 8
               ncell = 8;
           end
+          
+          if flag2 == 1
           b = col(ii).data(:,index2(1))./col(ii).data(:,5);
           c = col(ii).data(:,index2(2))./col(ii).data(:,5);
+          end
+          if flag2 == 0 || (isempty(flag2)==1)
+          b = col(ii).data(:,index2(1));
+          c = col(ii).data(:,index2(2));
+          end
           
           currb = size(b,1);
           currc = size(c,1);
@@ -40,9 +47,14 @@ if flag == 1      % if flag ==1, generate 2 columns with combined peaks data col
           if ncell > 8
               ncell = 8;
           end
+          if flag2 == 1
           b = col(ii).data(:,index2(1))./col(ii).data(:,5);
           c = col(ii).data(:,index2(2))./col(ii).data(:,5);
-          
+          end
+          if flag2 == 0 || (isempty(flag2)==1)
+          b = col(ii).data(:,index2(1));
+          c = col(ii).data(:,index2(2));
+          end
           currb = size(b,1);
           currc = size(c,1);
           

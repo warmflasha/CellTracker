@@ -129,40 +129,108 @@ nms2 = { 'Control','BMPi','WNTi'};
    figure(6)
    for k=1:4
        subplot(1,4,k)
-       xlim([0 8])
-       ylim([0 1.5])
+       xlim([0 10])
+       ylim([0 1500])
    end
     % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
 %[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
  % [a, b] =   findcolonyAN(dir,2,[1 3],nms,1,[10 5],3,1,15,0);
 %%
+% determine the background images(for all chnnels) for the dataset to run
+ff=readMMdirectory('esiPluri_H2BDiff_extracted');
+dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
+wavenames=ff.chan;
+
+maxims= dims(1)*dims(2);
+
+%generate background image for each channel
+
+    for ii=1:length(wavenames) % get the background image for al channels  
+        [minI, meanI]=mkBackgroundImageMM(ff,ii,min(500,maxims));
+        bIms{ii}=uint16(2^16*minI);
+        nIms{ii}=ones(size(bIms{ii}));
+%         normIm=(meanI-minI);
+%         normIm=normIm.^-1;
+%         normIm=normIm/min(min(normIm));
+%         nIms{ii}=normIm;
+    end
+    
+
+%%
 % script to optimize the segmentation parameters. Can look at a chse image
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
 % the readMM2irectory function here)
- N =500;
-
- ANrunOneMM('3ngmlBMP4withFGFi_extracted',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
+% 
+% MIXED CELLS EXPERIMENT: CUTOFF FOR DAPI : < 5000
+ N =255;% 165
+ 
+   ANrunOneMM('esiPluri_H2BDiff_extracted',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
  %imcontrast
+ %%
+ % test some post- or -mid processing of the nuc image, to get rid of the
+ % small bright stuff
+   close all
+   %nuc=presubBackground_self(nuc);
+   global userParam
+   nucbgi=imopen(nuc,strel('disk',userParam.backdiskrad));
+   meanbg = mean(mean(nucbgi));
+   
+ nucbg1=imopen(nuc,strel('disk',10));
+ nuc1=imsubtract(nuc,nucbg1);
+ %nuc2=imsubtract(nuc,nuc1);
+ %figure, imshow(nucbg1,[]);
+ figure, imshow(nuc,[0 2000]);
+ figure, imshow(nuc1,[0 2000]);
+ 
+ 
+ nuc=presubBackground_self(nuc);
+ 
+%  t = im2bw(nuc1,graythresh(nuc1));
+%  t2 = im2bw(nuc,graythresh(nuc));
+%  a = t2&~t;
+ 
+ t = bwareafilt(t,[0 200]);
+ tt = bwconncomp(t);
+ tt.PixelIdxList; % pixels to be zeroed in the original image
+ for k=1:length(tt.PixelIdxList)
+ nuc(tt.PixelIdxList{k}) = meanbg;
+ end
+ figure, imshow(nuc,[]);
+ 
+  % live cell data processing  
+% I2proc = imopen(I2,strel('disk',userParam.small_rad));         % remove small bright stuff
+% I2proc = smoothImage(I2proc,userParam.gaussRadius,userParam.gaussSigma); %smooth
+% I2proc = presubBackground_self(I2proc);
+ 
 
 %%
 clear all
 % PLOT STUFF
+% nms = {'With_RIplus3ngmlBmp4','NO_RIplus3ngmlBmp4'};
+% nms2 = {'plus RI diff','no RI diff'};
 
 % nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
-% nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};
+% nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};% Sox2, Cdx2, Bra
   
+% nms = {'esi017noQd_(C)sign20hr','esi017noQd_03ngSign20hr','esi017noQd_3ngSign20hr'};
+% nms2 = {'C(0.03 ng/ml) 20 hrs','0.3 ng/ml 20 hr','3 ng/ml 20 hr'};
+
 % nms = {'siRNAnodalNegativeC(pluri)','siRNAnodal(pluri)'}; % sox2 nanog Cdx2
-% nms2 = {'Nodal(negative Control)','siRNS Nodal (~ 15 nM)' };
+% nms2 = {'Nodal(negative Control)','siRNA Nodal (~ 15 nM)' };
 
 % nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_inhIWP2','CommEffWntExperiment_actCHIRR'};%sox2 Oct4 Nanog    
 % nms2 = {'Control','WNTinhibitor','WntAct CHIRR 0.5uM' };
+
 % nms = {'gfpS4_10ngml20hr_1'}; % dapi CY5 GFP order of channels
 % nms2 = {'GFP:Smad4 cells 20hr, 10 ng/ml bmp4'};
 
- nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited','PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_PI3Kinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
- nms2 = {'Control','FGFi','Furin(nodal production inhibited)','PI3Ki' };
- 
+%  nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited','PluriNtwInh_PI3Kinhibited','PluriNtwInh_Furin(nodal_Inh)'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
+%  nms2 = {'Control','FGFi','PI3Ki','Furin'};
+  
+%   nms = {'PluriNtwInh_Control(R)','PluriNtwInh_FGFi(R)'};
+%   nms2 = {'control(R)','FGFi(R)'};
+   
 %  nms = {'FGFinCE_Control','FGFinCE_FGFhigh','FGFinCE_FGFi'}; %  pERK Nanog Cdx2,'FGFi'
 %  nms2 = {'control','FGF high (100 ng/ml)','FGFi (PD98059 @ 10 uM)'};%,'FGFi at 10 uM' 
  % AB pERK test
@@ -170,37 +238,60 @@ clear all
 %  nms = {'Control(R)','BMPi','FGFi'}; 
 %  nms2 = {'C','Bi','Fgfi'};
  
-%  nms = {'C_pluri_fgfindiff','C_diff_fgfindiff','FGFi_BMP4_fgfindiff'};%%  pERK Nanog Cdx2
-%  nms2 = {'control pluri','control diff ( 3ng/ml BMP4)','BMP4 (3 ng/ml) + FGFi (10 uM)'};
+ nms = {'C_pluri_fgfindiff','C_diff_fgfindiff','FGFi_BMP4_fgfindiff'};%%  Sox2 Nanog Cdx2
+ nms2 = {'control pluri','control diff ( 3ng/ml BMP4)','BMP4 (3 ng/ml) + FGFi (10 uM)'};
  
 %  title('Dynamics, 5 ng/ml bmp4');
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[cdx2,totalcells,ratios,ratios2,totcol]= plotallanalysisAN(3,nms,nms2,dir,[],[],[6 5],[8 6],'Sox2','Cdx2',0,1);
+[dapi,totalcells,ratios,ratios2,totcol]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5 3],[5 3],' DAPI * CELL AREA ','area',0,1);
+thresh = 1;
+%[dapi,totalcells,ratios,ratios2,totcol]= plotallanalysisAN(thresh,nms,nms2,dir,[],[],[6],[8 6],'Cdx2','Cdx2',0,1);
 %%
 % plot the scatter plots colorcoded
 index2 = [8 6];
 toplot = cell(1,size(nms,2));
+flag = 0;
+flag2 = 1;% do not normalize to DAPI if flag == 0;
 for k=1:size(nms,2)
         filename{k} = [dir filesep  nms{k} '.mat'];
         load(filename{k},'peaks','dims','plate1');
         col = plate1.colonies;
-[alldata] = mkVectorsForScatterAN(peaks,col,index2,0);
+[alldata] = mkVectorsForScatterAN(peaks,col,index2,flag,flag2);
  toplot{k} = alldata;
 end
 
 
 for j=1:size(nms,2)
-    figure(7),subplot(1,4,j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
+    figure(7),subplot(1,size(nms,2),j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
     legend(nms2{j});
     box on
     ylabel('Sox2')
     xlabel('Cdx2')
-      ylim([0 20]);
-      xlim([0 5]);
+      %ylim([0 5]);
+      %xlim([0 10]);
 end
 %%
+figure(6)
+   for k=1:size(nms,2)
+       subplot(1,size(nms,2),k)
+       h = subplot(1,size(nms,2),k);
+       h.Children.MarkerSize = 15;
+       xlim([0 10])
+       ylim([0 6000000])
+   end
+   %%
+   figure(3)
+   for k=1:size(nms,2)
+        subplot(1,size(nms,2),k)
+       h = subplot(1,size(nms,2),k);
+       h.Children.MarkerSize = 18;
+       xlim([0 8])
+       %ylim([0 5000])
+   end
+   
+   %%
 % plot mean expression or selected colony size, plot for different datasets
 
 nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
@@ -524,5 +615,12 @@ runFullTileMM('PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_Furin(nodal_Inh).mat',
 runFullTileMM('PluriNtwInh_PI3Kinhibited','PluriNtwInh_PI3Kinhibited.mat','setUserParamAN20X');
 
 disp('Successfully ran all files');
+%%
+% April 2016 Mixed Experiment run ( esi+h2b)
 
+runFullTileMM('esiPluri_H2BPluri_extracted','esiPluri_H2Bpluri.mat','setUserParamAN20X');
+
+runFullTileMM('esiPluri_H2BDiff_extracted','esiPluri_H2Bdiff.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
 

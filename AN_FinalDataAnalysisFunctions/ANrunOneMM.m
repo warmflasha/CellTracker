@@ -6,7 +6,7 @@
 % assigns: prefix-Pos_00x_00y. then the usual functions are used:
 % 'readMMdirectory' and 'mkMMfilename'
 
-function [outdat]= ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
+function [data,nuc]= ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
 
 global userParam;
 
@@ -38,6 +38,7 @@ ymax = max(ff.pos_y)+1;
         imfiles(ii).nucfile=f1nm{1};
         nuc=imread(f1nm{1});
         si=size(nuc);
+        
         %apply gaussian smoothing
         nuc=smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
         %subtract precalculated background Image

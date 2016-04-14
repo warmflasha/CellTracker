@@ -6,7 +6,7 @@
 
 
 function [totalcells,ratios,ratios2,totcol]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag)
-
+clear tmp
 
 for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     
@@ -21,7 +21,12 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
             nc = colonies{k}(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
+            if size(index1,2)==1
+            tmp = colonies{k}(ii).data(:,index1(1))> thresh;
+            end
+            if size(index1,2)>1
             tmp = colonies{k}(ii).data(:,index1(1))./colonies{k}(ii).data(:,5) > thresh;
+            end
             genepositive(nc)= genepositive(nc)+sum(tmp);
             geneposcolonies(nc)=geneposcolonies(nc)+any(tmp);
             

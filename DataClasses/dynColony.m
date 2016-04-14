@@ -30,6 +30,19 @@ classdef dynColony %object for storing dynamic colony level data
             end
            
         end
+        function nuconly = NucOnlyData(obj,tr)%all timepoints, traces
+             
+            Ntr = size(obj.cells,2);
+            alltimes = [obj.cells.onframes];
+            timepoints = max(alltimes);
+            nuconly = zeros(timepoints,Ntr);
+            for k=1:Ntr
+                
+            nuconly(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,1);
+           
+            end
+           
+        end
         function dynsmad = DynNucSmadRatio(obj,tpts,fr_stim,resptime,range,jumptime)%
             % tpts = lenth(peaks);
             % jumptime - number of frames needed to respod to stimulation
