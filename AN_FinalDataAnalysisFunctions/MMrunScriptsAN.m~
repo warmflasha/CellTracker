@@ -260,10 +260,6 @@ for j=1:size(nms,2)
 end
 %%
 % MIXED CELLS EXPREIMTN ANALYSIS
-nms = {'esiPluri_H2Bpluri','esiPluri_H2Bdiff'};%% H2B(488), Dapi,Sox2(555),Cdx2(647)
-nms2 = {'pluri+pluri','pluri+diff'};
-
-dir = '.';
 index2 = [8 5];% H2B AND DAPI
 toplot = cell(1,size(nms,2));
 flag = 0;
@@ -278,31 +274,24 @@ for k=1:size(nms,2)
 end
 
 
-% for j=1:size(nms,2)
-%     figure(7),subplot(1,size(nms,2),j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,4),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
-%     legend(nms2{j});
-%     box on
-%     ylabel('H2B')
-%     xlabel('dapi')
-%       %ylim([0 5]);
-%       %xlim([0 10]);
-% end
+for j=1:size(nms,2)
+    figure(7),subplot(1,size(nms,2),j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,4),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
+    legend(nms2{j});
+    box on
+    ylabel('H2B')
+    xlabel('dapi')
+      %ylim([0 5]);
+      %xlim([0 10]);
+end
 %%
 % MIXED CELLS  EXPERIMENT DATA
-clear h2bdapisox2
-clear dataforesicells
-clear dataforeh2b
-clear meansox2
-clear meancdx2
-
-j = 2;
-%toplot{j} = alldata;
-h2bdapisox2 = cat(2,toplot{j}(:,1:3),toplot{j}(:,4:5));
+toplot{2} = alldata;
+h2bdapisox2 = cat(2,toplot{2}(:,1:3),toplot{2}(:,4:5));
 [r3,~] = find(h2bdapisox2(:,2)>5000);% junk
 h2bdapisox2(r3,:) = [];
 
-[r,~] = find(h2bdapisox2(:,1)>2500); % cells that have high levels of H2B
-[r2,~] = find(h2bdapisox2(:,1)<2500);% cells that have background expression in GFP channel (esi cells)
+[r,~] = find(h2bdapisox2(:,1)>3000); % cells that have high levels of H2B
+[r2,~] = find(h2bdapisox2(:,1)<2000);% cells that have background expression in GFP channel (esi cells)
 
 dataforesicells = h2bdapisox2(r2,:);
 dataforeh2b = h2bdapisox2(r,:);
@@ -337,7 +326,6 @@ figure, plot(meansox2,'r*');
 hold on, plot(meancdx2,'b*');
 legend('sox2','cdx2');
 xlim([0 3]);
-ylim([0 1.5]);
 
 
 %%
