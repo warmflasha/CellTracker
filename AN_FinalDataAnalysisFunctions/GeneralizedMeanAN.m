@@ -8,7 +8,7 @@
 % see code and description of the MMrunScriptsAN
 
 
-function [newdata] = GeneralizedMeanAN(nms,nms2,dir,midcoord,fincoord,index1,param1,plottype,flag)
+function [newdata] = GeneralizedMeanAN(nms,nms2,dir,midcoord,fincoord,index1,param1,plottype,flag,dapimax)
 
 if plottype == 1
     for k=1:size(nms,2)                                 % load however many files are in the nms string
@@ -25,7 +25,7 @@ if plottype == 1
             peaksnew{j} =  peaks{toplot{k}(j)};
             
         end
-        [avgs, errs, alldat{k}]=Bootstrapping(peaksnew,100,1000,index1);
+        [avgs, errs, alldat{k}]=Bootstrapping(peaksnew,100,1000,index1,dapimax);
         newdata(k,1)=avgs;
         newdata(k,2)=errs;
     end
@@ -52,7 +52,7 @@ if plottype == 0
         load(filename{k},'peaks','plate1');
         disp(['loaded file: ' filename{k}]);
         %
-        [avgs, errs, alldat{k}]=Bootstrapping(peaks,100,1000,index1);
+        [avgs, errs, alldat{k}]=Bootstrapping(peaks,100,1000,index1,dapimax);
         newdata(k,1)=avgs;
         newdata(k,2)=errs;
     end
