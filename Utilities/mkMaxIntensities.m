@@ -5,8 +5,8 @@ function [ output_args ] = mkMaxIntensities( direc )
 
 mkdir('MaxIntensity');
 imglist = dir(fullfile(direc, '*.tif'));
-for ii = 1:length(imglist)
-mkMaxIntensity(imglist(ii).name,['MaxIntensity' filesep 'MAX' imglist(ii).name])
+parfor ii = 1:length(imglist)
+mkMaxIntensity([direc filesep imglist(ii).name],['MaxIntensity' filesep 'MAX' imglist(ii).name])
 disp(['MaxIntensity' filesep 'MAX' imglist(ii).name ' complete']);
  end
 disp('All Projections complete');
