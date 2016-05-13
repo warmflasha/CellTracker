@@ -8,7 +8,7 @@
 % 
 
 
-function [alldata,alldata2] = SortCellsbyExpressionAN(peaks,col,index2,flag,ind,dapimax)% need to also input the col
+function [alldata,alldata2] = SortCellsbyExpressionAN(peaks,col,index2,flag,ind,dapimax,h2bthresh)% need to also input the col
 
 if flag == 0   % if flag ==0, generate the third column with the colony size that the cell belongs to; necessary if want to colo the scatter plot with col size
 %  colors = colormap(cool);% needed if the coloring is done by colony size
@@ -30,7 +30,7 @@ if flag == 0   % if flag ==0, generate the third column with the colony size tha
           c = col(ii).data(:,index2(2));% dapi in the same colony
           d = col(ii).data(:,ind(1))./col(ii).data(:,5);      
           e = col(ii).data(:,ind(2))./col(ii).data(:,5); 
-          if (any(b<2500)==1) && (any(b>2500)==1) % if the same colony has the h2b and the esi cell
+          if (any(b<h2bthresh)==1) && (any(b>h2bthresh)==1) % if the same colony has the h2b and the esi cell
           
           mixcol4 = col(ii).data(:,ind(1))./col(ii).data(:,5); 
           mixcol5 = col(ii).data(:,ind(2))./col(ii).data(:,5);

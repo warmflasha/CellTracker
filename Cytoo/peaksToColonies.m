@@ -7,7 +7,7 @@ dims=pp.dims;
 param = pp.userParam;
 % if exist('userParam','var')
 % param = pp.userParam;
-
+pp.userParam.alphavol = 100;
 if ~isfield(param,'coltype')
     disp('Error: coltype must be 1 or 0');
     return 
