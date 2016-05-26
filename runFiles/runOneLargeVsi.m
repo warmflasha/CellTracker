@@ -1,6 +1,6 @@
-function [statsAll, maskN]=runOneLargeVsi(vsifile,paramfile,chans)
+function [outdat, statsAll]=runOneLargeVsi(vsifile,paramfile,chans)
 
-global userParam; 
+global userParam;
 eval(paramfile);
 userParam.errorStr = [];
 
@@ -41,8 +41,8 @@ for ii = 1:4
     toc;
     clear fimg;
 end
-    
-    
 
-        
-    
+
+outdat = [cat(1,statsAll.Centroid), cat(1,statsAll.MeanIntensity)];
+
+
