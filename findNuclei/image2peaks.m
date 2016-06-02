@@ -16,6 +16,7 @@ function [outdat, maskC, statsN] = image2peaks(red, gr, maskN)
 
 global userParam;
 
+doCyto = 1;
 %make sure the field userParam.errorstr exists
 if ~isfield(userParam,'errorStr')
     userParam.errorStr=[];
