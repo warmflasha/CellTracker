@@ -16,6 +16,7 @@ function [outdat, maskC, statsN] = image2peaks(red, gr, maskN)
 
 global userParam;
 
+doCyto = 1;
 %make sure the field userParam.errorstr exists
 if ~isfield(userParam,'errorStr')
     userParam.errorStr=[];
@@ -28,7 +29,7 @@ if ~exist('maskN','var')
 else
     statsN =ilastikMaskToStats(maskN);
 end
-
+if doCyto == 1
 % look at each V-polygon and use either grad(gr) or fraction of max to
 % define cyto for each cell. MaskC = mask for cells == cyto + nuclei. Redefine
 % the Vpolygons since nuclei have been eliminated since last call
@@ -49,5 +50,5 @@ maskC=any(maskC,3);
 [~, statsN]=addCellAvr2Stats(maskC,gr,statsN);
 outdat=outputData4AWTracker(statsN,red,nImages);
 return
-
+end
 

@@ -20,14 +20,14 @@ userParam.coltype = 0;
 
 
 userParam.cellsize = 3;
-userParam.minIntensity = 1000;
+userParam.minIntensity = 400;
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
 % image smoothing parameters
-userParam.gaussRadius=5;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=2; % 3(gaussThreshSigma is defined below)
+userParam.gaussRadius=9;% originally named Gauss_Filter_Radius; 4 is good for 10x images;6 is ok for 20X
+userParam.gaussSigma=3; % 3(gaussThreshSigma is defined below)
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=100;
