@@ -1,6 +1,17 @@
-function stats = ilastik2stats3D(h5file,imgfile)
+function stats = ilastik2stats3D(h5file,imgfile,paramfile)
+
+global userParam;
+
+% try
+%     eval(paramfile);
+% catch
+%     error('Could not evaluate paramfile command');
+% end
 
 mask1 = readIlastikFile(h5file);
+        if isfield(userParam,'maskDiskSize3D')
+        mask1 = imopen(mask1,strel('disk',userParam.maskDiskSize));
+        end
 stats = ilastikMaskToStats(mask1);
 
 reader = bfGetReader(imgfile);

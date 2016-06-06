@@ -12,6 +12,12 @@ end
 immask = h5read(filename, '/exported_data');
 immask = squeeze(immask);
 
+% if ndims(immask) == 4
+%     disp('Warning: Mask has an extra dimension');
+%     immask = squeeze(immask(2,:,:,:));
+% end
+
+
 mask = immask > 1;
 if complement
     mask = imcomplement(mask);% if object 1 refers to background, comment this statement.
