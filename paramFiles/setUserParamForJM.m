@@ -70,8 +70,8 @@ userParam.nucAreaHi = 5000;  % not too big
 
 
 %parameters for cytoplasm calculation
-userParam.donutRadiusMin = 6;  % must be >=0
-userParam.donutRadiusMax = 10;  % set to zero to skip 
+userParam.donutRadiusMin = 1;  % must be >=0
+userParam.donutRadiusMax = 3;  % set to zero to skip 
 userParam.forceDonut = 0; 
 userParam.intersectDonutCyto = 1;
 userParam.minPtsCytoplasm = 5;
