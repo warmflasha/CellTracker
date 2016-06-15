@@ -128,6 +128,7 @@ s = StructDlg(s);
 handles.pos = s.position;
 handles.currtime = 0;
 handles.directory = s.directory;
+updateImageView(handles);
 guidata(hObject, handles);
 
 
@@ -140,3 +141,8 @@ function matfilebutton_Callback(hObject, eventdata, handles)
 
 
 function updateImageView(handles)
+ff = readAndorDirectory(handles.directory);
+img = andorMaxIntensity(ff,handles.pos,handles.currtime,0);
+axes(handles.axes1)
+imshow(img,[]);
+
