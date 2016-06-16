@@ -122,7 +122,7 @@ function databutton_Callback(hObject, eventdata, handles)
 % hObject    handle to databutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-s.directory = '';
+s.directory = { {'uigetdir(''.'')'} };
 s.position = 0;
 s = StructDlg(s);
 handles.pos = s.position;
@@ -142,7 +142,8 @@ function matfilebutton_Callback(hObject, eventdata, handles)
 
 function updateImageView(handles)
 ff = readAndorDirectory(handles.directory);
-img = andorMaxIntensity(ff,handles.pos,handles.currtime,0);
+img0 = andorMaxIntensity(ff,handles.pos,handles.currtime,0);
+img1 = andorMaxIntensity(ff,handles.pos,handles.currtime,1);
 axes(handles.axes1)
-imshow(img,[]);
+showImg({img0,img1});
 
