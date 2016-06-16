@@ -22,7 +22,7 @@ function varargout = CellViewer(varargin)
 
 % Edit the above text to modify the response to help CellViewer
 
-% Last Modified by GUIDE v2.5 13-Jun-2016 13:54:24
+% Last Modified by GUIDE v2.5 16-Jun-2016 17:38:42
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,18 +74,20 @@ varargout{1} = handles.output;
 
 
 % --- Executes on slider movement.
-function slider1_Callback(hObject, eventdata, handles)
-% hObject    handle to slider1 (see GCBO)
+function timeslider_Callback(hObject, eventdata, handles)
+% hObject    handle to timeslider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
+handles.currtime = 100*get(hObject,'Value');
+guidata(hObject,handles);
+updateImageView(handles);
 
 % --- Executes during object creation, after setting all properties.
-function slider1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider1 (see GCBO)
+function timeslider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to timeslider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -96,8 +98,8 @@ end
 
 
 % --- Executes on slider movement.
-function slider2_Callback(hObject, eventdata, handles)
-% hObject    handle to slider2 (see GCBO)
+function cellslider_Callback(hObject, eventdata, handles)
+% hObject    handle to cellslider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -106,8 +108,8 @@ function slider2_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function slider2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider2 (see GCBO)
+function cellslider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to cellslider (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -138,12 +140,49 @@ function matfilebutton_Callback(hObject, eventdata, handles)
 % hObject    handle to matfilebutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+s.matfile = { {'uigetfile(''.'')'} };
+handles.matfile = s.matfile;
+load(handles.matfile);
+if exist('peaks','var')
+    handles.peaks = peaks;
+end
+if exist('cells','var')
+    handles.cells = cells;
+end
+guidata(hObject,handles);
 
 function updateImageView(handles)
 ff = readAndorDirectory(handles.directory);
-img0 = andorMaxIntensity(ff,handles.pos,handles.currtime,0);
-img1 = andorMaxIntensity(ff,handles.pos,handles.currtime,1);
+img0 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,0);
+img1 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,1);
 axes(handles.axes1)
-showImg({img0,img1});
+zz = zeros(size(img0));
+img2show = {zz,zz,zz};
+if get(handles.redbox,'Value')
+    img2show{1} = imadjust(img0);
+end
+if get(handles.greenbox,'Value')
+    img2show{2} = imadjust(img1);
+end
+showImg(img2show);
 
+
+% --- Executes on button press in redbox.
+function redbox_Callback(hObject, eventdata, handles)
+% hObject    handle to redbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of redbox
+guidata(hObject,handles);
+updateImageView(handles);
+
+% --- Executes on button press in greenbox.
+function greenbox_Callback(hObject, eventdata, handles)
+% hObject    handle to greenbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of greenbox
+guidata(hObject,handles);
+updateImageView(handles);

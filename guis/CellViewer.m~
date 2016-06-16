@@ -22,7 +22,7 @@ function varargout = CellViewer(varargin)
 
 % Edit the above text to modify the response to help CellViewer
 
-% Last Modified by GUIDE v2.5 13-Jun-2016 13:54:24
+% Last Modified by GUIDE v2.5 16-Jun-2016 17:19:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -122,12 +122,13 @@ function databutton_Callback(hObject, eventdata, handles)
 % hObject    handle to databutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-s.directory = '';
+s.directory = { {'uigetdir(''.'')'} };
 s.position = 0;
 s = StructDlg(s);
 handles.pos = s.position;
 handles.currtime = 0;
-
+handles.directory = s.directory;
+updateImageView(handles);
 guidata(hObject, handles);
 
 
@@ -137,3 +138,40 @@ function matfilebutton_Callback(hObject, eventdata, handles)
 % hObject    handle to matfilebutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+function updateImageView(handles)
+ff = readAndorDirectory(handles.directory);
+img0 = andorMaxIntensity(ff,handles.pos,handles.currtime,0);
+img1 = andorMaxIntensity(ff,handles.pos,handles.currtime,1);
+axes(handles.axes1)
+zz = zeros(size(img0));
+img2show = {zz,zz,zz};
+if get(handles.redbox,'Value')
+    img2show{1} = imajimg0;
+end
+if get(handles.greenbox,'Value')
+    img2show{2} = img1;
+end
+showImg(img2show);
+
+
+% --- Executes on button press in redbox.
+function redbox_Callback(hObject, eventdata, handles)
+% hObject    handle to redbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of redbox
+guidata(hObject,handles);
+updateImageView(handles);
+
+% --- Executes on button press in greenbox.
+function greenbox_Callback(hObject, eventdata, handles)
+% hObject    handle to greenbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of greenbox
+guidata(hObject,handles);
+updateImageView(handles);
