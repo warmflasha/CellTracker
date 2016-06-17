@@ -22,16 +22,16 @@ function varargout = CellViewer(varargin)
 
 % Edit the above text to modify the response to help CellViewer
 
-% Last Modified by GUIDE v2.5 16-Jun-2016 17:38:42
+% Last Modified by GUIDE v2.5 17-Jun-2016 17:15:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @CellViewer_OpeningFcn, ...
-                   'gui_OutputFcn',  @CellViewer_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @CellViewer_OpeningFcn, ...
+    'gui_OutputFcn',  @CellViewer_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -63,7 +63,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = CellViewer_OutputFcn(hObject, eventdata, handles) 
+function varargout = CellViewer_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -106,6 +106,9 @@ function cellslider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
+handles.currcell = 1+(handles.cellslider.Value-1)/handles.cellslider.SliderStep(1);
+guidata(hObject,handles);
+updateDataView(handles);
 
 % --- Executes during object creation, after setting all properties.
 function cellslider_CreateFcn(hObject, eventdata, handles)
@@ -129,6 +132,7 @@ s.position = 0;
 s = StructDlg(s);
 handles.pos = s.position;
 handles.currtime = 0;
+
 handles.directory = s.directory;
 updateImageView(handles);
 guidata(hObject, handles);
@@ -141,6 +145,7 @@ function matfilebutton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 s.matfile = { {'uigetfile(''.'')'} };
+s=StructDlg(s);
 handles.matfile = s.matfile;
 load(handles.matfile);
 if exist('peaks','var')
@@ -148,24 +153,15 @@ if exist('peaks','var')
 end
 if exist('cells','var')
     handles.cells = cells;
+    set(handles.cellslider,'Value',1);
+    set(handles.cellslider,'Min',1);
+    set(handles.cellslider,'Max',length(cells));
+    set(handles.cellslider,'sliderStep',[1/length(cells), 10/length(cells)]);
+    
 end
+set(handles.mattext,'String','.mat file loaded');
+handles.currcell = 1;
 guidata(hObject,handles);
-
-function updateImageView(handles)
-ff = readAndorDirectory(handles.directory);
-img0 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,0);
-img1 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,1);
-axes(handles.axes1)
-zz = zeros(size(img0));
-img2show = {zz,zz,zz};
-if get(handles.redbox,'Value')
-    img2show{1} = imadjust(img0);
-end
-if get(handles.greenbox,'Value')
-    img2show{2} = imadjust(img1);
-end
-showImg(img2show);
-
 
 % --- Executes on button press in redbox.
 function redbox_Callback(hObject, eventdata, handles)
@@ -186,3 +182,29 @@ function greenbox_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of greenbox
 guidata(hObject,handles);
 updateImageView(handles);
+
+
+
+function updateDataView(handles)
+
+axes(handles.axes2);
+if isfield(handles,'cells')
+    cellnum = handles.currcell;
+    cc = handles.cells(cellnum);
+    plot(cc.onframes,cc.fluorData(:,2)./cc.fluorData(:,3),'r.-');
+end
+
+function updateImageView(handles)
+ff = readAndorDirectory(handles.directory);
+img0 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,0);
+img1 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,1);
+axes(handles.axes1)
+zz = zeros(size(img0));
+img2show = {zz,zz,zz};
+if get(handles.redbox,'Value')
+    img2show{1} = imadjust(img0);
+end
+if get(handles.greenbox,'Value')
+    img2show{2} = imadjust(img1);
+end
+showImg(img2show);
