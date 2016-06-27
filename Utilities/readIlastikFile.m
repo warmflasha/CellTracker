@@ -17,6 +17,4 @@ if complement
     mask = imcomplement(mask);% if object 1 refers to background, comment this statement.
 end
 
-for ii = 1:size(mask,3)
-    mask(:,:,ii) = mask(:,:,ii)';
-end
+mask = permute(mask,[2 1 3]); % transpose the x and y dimensions
