@@ -22,7 +22,7 @@ function varargout = CellViewer(varargin)
 
 % Edit the above text to modify the response to help CellViewer
 
-% Last Modified by GUIDE v2.5 17-Jun-2016 17:15:10
+% Last Modified by GUIDE v2.5 24-Jun-2016 16:18:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -84,6 +84,7 @@ function timeslider_Callback(hObject, eventdata, handles)
 handles.currtime = 100*get(hObject,'Value');
 guidata(hObject,handles);
 updateImageView(handles);
+updateDataView(handles);
 
 % --- Executes during object creation, after setting all properties.
 function timeslider_CreateFcn(hObject, eventdata, handles)
@@ -106,9 +107,10 @@ function cellslider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
-handles.currcell = 1+(handles.cellslider.Value-1)/handles.cellslider.SliderStep(1);
+handles.currcell = ceil(hObject.Value);
 guidata(hObject,handles);
 updateDataView(handles);
+updateImageView(handles);
 
 % --- Executes during object creation, after setting all properties.
 function cellslider_CreateFcn(hObject, eventdata, handles)
@@ -156,12 +158,13 @@ if exist('cells','var')
     set(handles.cellslider,'Value',1);
     set(handles.cellslider,'Min',1);
     set(handles.cellslider,'Max',length(cells));
-    set(handles.cellslider,'sliderStep',[1/length(cells), 10/length(cells)]);
+    set(handles.cellslider,'sliderStep',[1/(length(cells)-1), 10/(length(cells)-1)]);
     
 end
 set(handles.mattext,'String','.mat file loaded');
 handles.currcell = 1;
 guidata(hObject,handles);
+updateDataView(handles);
 
 % --- Executes on button press in redbox.
 function redbox_Callback(hObject, eventdata, handles)
@@ -188,10 +191,15 @@ updateImageView(handles);
 function updateDataView(handles)
 
 axes(handles.axes2);
+tt = floor(handles.currtime)+1;
 if isfield(handles,'cells')
     cellnum = handles.currcell;
     cc = handles.cells(cellnum);
-    plot(cc.onframes,cc.fluorData(:,2)./cc.fluorData(:,3),'r.-');
+    plot(cc.onframes,cc.fluorData(:,2)./cc.fluorData(:,3),'r.-'); hold on;
+    ind = find(cc.onframes == tt);
+    if ~isempty(ind)
+    plot(tt,cc.fluorData(ind,2)./cc.fluorData(ind,3),'ks','MarkerSize',20); hold off;
+    end
 end
 
 function updateImageView(handles)
@@ -207,4 +215,32 @@ end
 if get(handles.greenbox,'Value')
     img2show{2} = imadjust(img1);
 end
-showImg(img2show);
+showImg(img2show); hold on;
+if get(handles.celllabelbox,'Value') && isfield(handles,'cells')
+    cc = handles.cells;
+    for ii = 1:length(cc)
+        ind = find(cc(ii).onframes==handles.currtime+1);
+        if ~isempty(ind)
+            plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'c.','MarkerSize',16);
+            text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','c','FontSize',14);
+            
+            if ii == handles.currcell
+                plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'gs','MarkerSize',16);
+                text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','g','FontSize',14);
+                
+            end
+        end
+    end
+end
+
+
+% --- Executes on button press in celllabelbox.
+function celllabelbox_Callback(hObject, eventdata, handles)
+% hObject    handle to celllabelbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of celllabelbox
+guidata(hObject,handles);
+updateImageView(handles);
+
