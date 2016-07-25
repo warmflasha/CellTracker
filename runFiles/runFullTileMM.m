@@ -36,7 +36,8 @@ if step < 2
         [minI, meanI]=mkBackgroundImageMM(ff,ii,min(500,maxims));
         bIms{ii}=uint16(2^16*minI);
         nIms{ii}=ones(size(bIms{ii}));
-%         normIm=(meanI-minI);
+      %-----------------------------comment out lines 40-44 for uCol or
+      %   normIm=(meanI-minI);
 %         normIm=normIm.^-1;
 %         normIm=normIm/min(min(normIm));
 %         nIms{ii}=normIm;
@@ -76,23 +77,16 @@ end
 %the cells based on their proximoty to each other (single cell data) into
 %colonies
 if step < 6
-    
-    
+      
     load([direc filesep outfile],'bIms','nIms');
-    
-    
     [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-    %elseif coltype == 0
-       % [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-%     else
-%         disp('Error: coltype must be 1 or 0');
-%     end
     plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms, outfile);
 
     plate1.mm = 1;
     plate1.si = size(bIms{1});
     save([direc filesep outfile],'plate1','peaks','-append');  
-    
+%   
+%disp('no need to run colony analysis here')
 end
 
 

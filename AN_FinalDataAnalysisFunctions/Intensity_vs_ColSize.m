@@ -32,7 +32,7 @@ for k=1:size(nms,2)
             tmp2(nc) = tmp2(nc) + sum(tmp); % add the elements tmp, corresponding to the same colony size, into the tmp2
             end
             if size(index1,2) >1
-           tmp = col(ii).data(:,index1(1))./col(ii).data(:,5); %assign the value of the normalized intensity in specific channel to tmp;
+           tmp = col(ii).data(:,index1(1))./col(ii).data(:,index1(2)); %assign the value of the normalized intensity in specific channel to tmp;
           %tmp = col(ii).data(:,index1(1)).*col(ii).data(:,index1(2));
             tmp2(nc) = tmp2(nc) + sum(tmp); % add the elements tmp, corresponding to the same colony size, into the tmp2
             end

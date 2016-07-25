@@ -11,17 +11,7 @@
 % exactly column in peaks cell array.
 function [aver, err, alldata]=Bootstrapping(peaks,Niter,nsample,col,dapimax)%
 
-% remove the peaks/cells  where the dapi is very high (junk)
-for ii=1:length(peaks)
-    if~isempty(peaks{ii})
-        a = any(peaks{ii}(:,5))>dapimax; % the number 5000 is specific to dataset, so need to put it as a paramter
-        if a == 1
-            peaks{ii} = [];
-        end
-    end
-end
-
-
+cellstoremove = removebadDAPIcells(peaks, dapimax);% the cellstoremove are the rows that need to be removed since they represent very bright DAPI values
 nlines=zeros(length(peaks),1);
 for ii=1:length(peaks)
     nlines(ii)=size(peaks{ii},1);
@@ -42,19 +32,17 @@ for ii=1:length(peaks)
     end
     
 end
+alldata(cellstoremove) = [];% remove the coresponding cells from the analysis
 dat =zeros(Niter,1);
 
 for j=1:Niter     % AW: the k-loop is not needed; the j loop can be removed too if replaced properly with ...
     for k=1:nsample
         dat(k,1) = alldata(randi(length(alldata))); % populate the sample with randomly chosen elements(with resampling)of the 'initial' vector
-        
     end
     dataver(j)=mean(dat);
     
 end
-
-
 err  = std(dataver);
 aver = mean(dataver);
 
-%disp(['the mean value is',aver,'and the error is',err]);
+end
