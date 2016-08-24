@@ -1,13 +1,20 @@
-function [peaks, stats] = runTimeLapseSingleFile2D(imgfile,chans,maskfile,paramfile)
+function [peaks, stats] = runTimeLapseSingleFile2D(imgfile,chans,maskfile,paramfile,framestoUse)
 
 eval(paramfile);
 
 reader = bfGetReader(imgfile);
 masks = readIlastikFile(maskfile, 0);
 
+
+
 nT = reader.getSizeT;
 
-for ii = 1:nT
+if ~exist('framestoUse','var')
+    framestoUse = 1:nT;
+end
+
+for ii = framestoUse
+    try 
     disp(['Processing frame ' int2str(ii)]);
     iplane = reader.getIndex(0, chans(1)-1, ii - 1) + 1;
     nuc = bfGetPlane(reader,iplane);
@@ -18,4 +25,8 @@ for ii = 1:nT
         fimg(:,:,jj-1) = bfGetPlane(reader,iplane);
     end
     [peaks{ii}, ~, stats{ii}] = image2peaks(nuc,fimg,masks(:,:,ii));
+    catch
+        peaks{ii}=[];
+        stats{ii}=[];
+    end
 end
