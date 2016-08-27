@@ -26,7 +26,7 @@ if plottype == 0
                 
                 if isempty(flag3) || flag3 == 1
                 b{k}(q:(q+szpeaks-1),1) = peaks{ii}(:,index2(1))./peaks{ii}(:,5);
-                c{k}(q:(q+szpeaks-1),1) = peaks{ii}(:,index2(2))./peaks{ii}(:,5);
+                c{k}(q:(q+szpeaks-1),1) = peaks{ii}(:,index2(2))./peaks{ii}(:,9);
                 
                 end
                       q = q+szpeaks;          

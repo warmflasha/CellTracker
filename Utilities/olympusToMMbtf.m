@@ -60,7 +60,7 @@ for ii = 1:n_width
         if ~exist(direc,'dir')
             mkdir(direc);
         end
-        for kk = 1:4
+        for kk = 1:size(chan,2) % size 4 was hard-coded
             img = imread(filenames,'Index',kk,'PixelRegion',{[ymin,ymax],[xmin, xmax]});
             %img = img(xmin:xmax, ymin:ymax);
             %img = img(ymin:ymax, xmin:xmax);

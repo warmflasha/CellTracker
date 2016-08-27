@@ -29,7 +29,7 @@ maxims= dims(1)*dims(2);
 % inhibtors(2)experiment, with FGFRi
 %close all
 %for k=8:5:25
- N  =205;% 165
+ N  =20;% 165
  
    ANrunOneMM('10ngmlBMP4',N,bIms,nIms,'setUserParamAN20X_uCOL','DAPI',1);%setUserParamAN20X_uCOL
 imcontrast

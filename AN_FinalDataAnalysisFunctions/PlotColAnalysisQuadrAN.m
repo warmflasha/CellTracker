@@ -5,7 +5,7 @@
 % M is the maximum colony size from the given colony structure
 
 
-function [totalcells,ratios,ratios2,totcol]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag,dapimax)
+function [totalcells,ratios,ratios2,totcol]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag,dapimax,chanmax,dapimeanall,usemeandapi)
 clear tmp
 
 for k=1:size(nms2,2) % need to loop over the number of experimental conditions
@@ -17,8 +17,9 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     
     
     for ii=1:size(colonies{k},2)
-        a = any(colonies{k}(ii).data(:,5)>dapimax);
-        if ~isempty(colonies{k}(ii).data) && a ==0; % if the colony is not empty and does not contain junk in DAPI ( 5000 maust be a parameter for each dataset)
+        a = any(colonies{k}(ii).data(:,index1(2))>dapimax);
+        b = any(colonies{k}(ii).data(:,index1(1))>chanmax);
+        if ~isempty(colonies{k}(ii).data) && a ==0 && b == 0; % if the colony is not empty and does not contain junk in DAPI and junk in the channel index(2)
             nc = colonies{k}(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
@@ -27,7 +28,9 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
             end
             if size(index1,2)>1
             tmp = colonies{k}(ii).data(:,index1(1))./colonies{k}(ii).data(:,5) > thresh;
-            
+            end
+            if usemeandapi ==1
+                tmp = colonies{k}(ii).data(:,index1(1))./dapimeanall > thresh;
             end
             genepositive(nc)= genepositive(nc)+sum(tmp);
             geneposcolonies(nc)=geneposcolonies(nc)+any(tmp);

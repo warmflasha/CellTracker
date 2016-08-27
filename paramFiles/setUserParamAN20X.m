@@ -68,7 +68,7 @@ userParam.radiusMin = 20; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 30;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  = 1250;  % 270
+userParam.nucIntensityLoc  = 980;  % 270
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW

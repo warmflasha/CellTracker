@@ -25,7 +25,7 @@
 % flag = specifies whether to display the plots of the colony-wise
 % annalysis
 
-function [newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag,dapimax)
+function [newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag,dapimax,chanmax,usemeandapi)
 
 if   ~exist('plottype','var') 
     disp('Error: specify whether to devide the outall file into the quadrants (plottype var)') %error
@@ -40,13 +40,14 @@ if    plottype==1 && size(nms,2) > 1
     
 end
 
-[newdata] = GeneralizedMeanAN(nms,nms2,dir,midcoord,fincoord,index1,param1,plottype,flag,dapimax);
+[newdata] = GeneralizedMeanAN(nms,nms2,dir,midcoord,fincoord,index1,param1,plottype,flag,dapimax,chanmax);
 %[bb,c,~,~] =     GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype);
 
- [totalcells,ratios,ratios2,totcol] = GeneralizedColonyAnalysisAN(thresh,dir,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag,dapimax);
- [rawdata] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax);
+ [totalcells,ratios,ratios2,totcol] = GeneralizedColonyAnalysisAN(thresh,dir,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag,dapimax,chanmax,usemeandapi);
+ [rawdata] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi);
 
-%[newdata2] = MeanDecomposedbyColAN(nms,nms2,dir,midcoord,fincoord,index1,param1,flag,N);
+%[findat] = MeanDecomposedbyColAN(nms,nms2,dir,index1,param1,dapimax,N);
+
 
 end
 

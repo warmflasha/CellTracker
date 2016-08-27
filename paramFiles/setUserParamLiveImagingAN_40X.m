@@ -5,24 +5,24 @@ global userParam;
 
 userParam.gaussRadius = 5;%5
 userParam.gaussSigma = 2;%2
-userParam.small_rad = 2;%2
+userParam.small_rad = 20;%2
 userParam.presubNucBackground = 1;
 userParam.backdiskrad = 200;%200
 userParam.colonygrouping = 90;% for the 40X
 
-userParam.areanuclow = 850;  % this is used only in the Unmerge nuclei function
+userParam.areanuclow = 700;  % this is used only in the Unmerge nuclei function
 userParam.areanuchi = 9000;   % this is used only in the Unmerge nuclei function
-userParam.areanuclow2 = 850; %800% this is used only in the Unmerge nuclei function
+userParam.areanuclow2 = 700; %800% this is used only in the Unmerge nuclei function
 
 userParam.flag = 1;% two parameters below are determined dynamically
 %userParam.areanuclow_unmerge = 3000 ;  % min area of the merged object to start the split ( very specific to the image, need to generalize(select this parameter based on each inpit image)
 userParam.minnucfragment =400;       % smll, to be able to cut of junk like small dead bright cells
-userParam.linedil = 5;                 % size of the strel to dilate the line cut
+userParam.linedil = 6;                 % size of the strel to dilate the line cut
 userParam.tocut = 100;% 230 if less then this parameter, don't cut
 
 
-userParam.probthresh_nuc = 0.7;% 0.7
-userParam.probthresh_cyto = 0.82;
+userParam.probthresh_nuc = 0.8;% 0.7
+userParam.probthresh_cyto = 0.75;
 
 userParam.dilate_cyto = 5;
 userParam.erode_nuc = 8;% 10
