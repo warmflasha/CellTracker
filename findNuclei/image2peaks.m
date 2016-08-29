@@ -27,28 +27,31 @@ end
 if ~exist('maskN','var')
     [maskN, statsN]=getNuclearMaskNoIlastik(red);
 else
+    maskN = imfill(maskN,'holes');
+    
     statsN =ilastikMaskToStats(maskN);
 end
+
 if doCyto == 1
-% look at each V-polygon and use either grad(gr) or fraction of max to
-% define cyto for each cell. MaskC = mask for cells == cyto + nuclei. Redefine
-% the Vpolygons since nuclei have been eliminated since last call
-statsN = addVoronoiPolygon2Stats(statsN, size(red));
-
-%Loop over non-nuclear fluoresence channels. run edgeThreshCyto once
-% for each
-maskC=zeros(size(gr));
-
-nImages = size(gr,3);
-for ii=1:nImages
-    [maskC(:,:,ii), statsN] = edgeThreshCyto(gr(:,:,ii), statsN, maskN,ii);
-end
-
-%cyto mask is 1 if included in any of the individual masks
-maskC=any(maskC,3);
-
-[~, statsN]=addCellAvr2Stats(maskC,gr,statsN);
-outdat=outputData4AWTracker(statsN,red,nImages);
-return
+    % look at each V-polygon and use either grad(gr) or fraction of max to
+    % define cyto for each cell. MaskC = mask for cells == cyto + nuclei. Redefine
+    % the Vpolygons since nuclei have been eliminated since last call
+    statsN = addVoronoiPolygon2Stats(statsN, size(red));
+    
+    %Loop over non-nuclear fluoresence channels. run edgeThreshCyto once
+    % for each
+    maskC=zeros(size(gr));
+    
+    nImages = size(gr,3);
+    for ii=1:nImages
+        [maskC(:,:,ii), statsN] = edgeThreshCyto(gr(:,:,ii), statsN, maskN,ii);
+    end
+    
+    %cyto mask is 1 if included in any of the individual masks
+    maskC=any(maskC,3);
+    
+    [~, statsN]=addCellAvr2Stats(maskC,gr,statsN);
+    outdat=outputData4AWTracker(statsN,red,nImages);
+    return
 end
 
