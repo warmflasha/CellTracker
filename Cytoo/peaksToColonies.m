@@ -37,12 +37,18 @@ totcells=sum(lens);
 %get number of columns from first non-empty image
 q=1; ncol=0;
 while ncol==0
-    ncol=size(peaks{q},2);
+    if ~isempty(peaks{q})
+        ncol=size(peaks{q},2);
+    end
     q=q+1;
 end
 
+% peaks contains segmented cells for each image 
+% combine peaks from all images in one big array
+% allocate array:
 alldat=zeros(totcells,ncol+1);
 
+% combine:
 q=1;
 for ii=1:length(peaks)
     if ~isempty(peaks{ii})
@@ -90,6 +96,7 @@ if  coltype == 0  % analysis for the circular colonies data;
     alldat=[alldat full(allinds)];
     %Make colony structure for the alphavol algorythim
     for ii=1:length(groups)
+        disp(int2str(ii));
         cellstouse=allinds==ii;
         colonies(ii)=colony(alldat(cellstouse,:),ac,dims,[],pp.imgfiles,mm);
     end

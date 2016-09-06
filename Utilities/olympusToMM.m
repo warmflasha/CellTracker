@@ -1,4 +1,4 @@
-function acoords = olympusToMM2(MMdirec,filenames,chan,imsize)
+function acoords = olympusToMM(MMdirec,filenames,chan,imsize)
 % files = olympusToMM(MMdirec,filenames,chan,imsize)
 %------------------------------------------------------
 % Convert from Olympus output large tiled image into a directory with a
@@ -16,9 +16,20 @@ if ~exist('imsize','var'),
 end
 
 files = mkMMFileStruct(MMdirec,chan);
-h = imfinfo(filenames{1});
-n_width = h.Width/imsize(1);
-n_height = h.Height/imsize(2);
+
+h = Tiff(filenames{1});
+fileheight = h.getTag('ImageLength');
+filewidth = h.getTag('ImageWidth');
+n_height = fileheight/imsize(1);
+n_width = filewidth/imsize(2);
+
+% Check if the input file is in the big tiff format
+if ~ isempty(strfind(filenames{1}, '.btf'))
+    bigtiff = 1;
+else
+    bigtiff = 0;
+end
+
 
 if ~isinteger(n_width)
     n_width = floor(n_width) + 1;
@@ -29,11 +40,11 @@ end
 
 for ii = 1:n_width
     for jj = 1:n_height
- 
+        
         xmin = (ii-1)*imsize(2)+1;
-        xmax = min(ii*imsize(2),h.Width);
+        xmax = min(ii*imsize(2),filewidth);
         ymin = (jj-1)*imsize(1)+1;
-        ymax = min(jj*imsize(1),h.Height);
+        ymax = min(jj*imsize(1),fileheight);
         pos_y = jj - 1;
         pos_x = n_width - ii; %MM labels img 0,0 as upper right corner
         
@@ -51,8 +62,14 @@ for ii = 1:n_width
         if ~exist(direc,'dir')
             mkdir(direc);
         end
-        for kk = 1:length(filenames)
-            img=imread(filenames{kk},'PixelRegion',{[ymin, ymax],[xmin, xmax]});%AN 
+        
+        for kk = 1:length(chan)
+            
+            if (bigtiff)
+                img = imread(filenames{1}, kk, 'PixelRegion', {[ymin,ymax], [xmin,xmax]});
+            else
+                img=imread(filenames{kk},'PixelRegion',{[ymin ymax],[xmin, xmax]});
+            end
             
             if size(img,1) ~= imsize(1) || size(img,2) ~= imsize(2)
                 zz =zeros(imsize,'uint16');
@@ -60,15 +77,18 @@ for ii = 1:n_width
             else
                 zz = img;
             end
-            savename = mkMMfilename(files,pos_x,pos_y,[],[],kk);%
+            savename = mkMMfilename(files,pos_x,pos_y,[],[],kk);
             imwrite(zz,savename{1});
         end
         
         %make accords structure for later use
-        ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);%
+        ind = sub2ind([n_width, n_height],pos_x+1,pos_y+1);
         acoords(ind).wabove = [0 0];
         acoords(ind).wside = [0 0];
-        acoords(ind).absinds =[ymin,xmin];%AN
+        
+        acoords(ind).absinds =[ymin, xmin];
+        
+        disp(['Image: ' int2str(ind)]);
         
     end
 end

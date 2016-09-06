@@ -52,23 +52,23 @@ classdef plate
             obj.dims=dims;
             col=colonies;
         %--------------------------------------added for Sapna analysis? 
-%             ncell = [col.ncells]; % _SC
-%             rad=[col.radius];
-%             
-%             gind= [col.aspectRatio] > 0.66 & [col.aspectRatio] < 1.5 & [ncell./(rad.^2) > 0.0030]; %_SC
-%      
-%             col1000= gind & rad > 500*conv*0.9;
-%             col800 = gind & rad < 400*conv*1.1 & rad > 400*conv*0.9;
-%             col500 = gind & rad < 250*conv*1.1 & rad > 250*conv*0.9;
-%             col200 = gind & rad < 100*conv*1.1 & rad > 100*conv*0.9;
-%             
-%             %colSm=gind & rad < 100*conv*0.5;
-%             
-%             
-%             obj.inds1000=find(col1000);
-%             obj.inds500=find(col500);
-%             obj.inds800= find(col800);
-%             obj.inds200=find(col200);
+            ncell = [col.ncells]; % _SC
+            rad=[col.radius];
+            
+            gind= [col.aspectRatio] > 0.66 & [col.aspectRatio] < 1.5; %& [ncell./(rad.^2) > 0.0030]; %_SC
+            conv = 3.0; % pix per micro
+            col1000= gind & rad > 500*conv*0.9;
+            col800 = gind & rad < 400*conv*1.1 & rad > 400*conv*0.9;
+            col500 = gind & rad < 250*conv*1.1 & rad > 250*conv*0.9;
+            col200 = gind & rad < 100*conv*1.1 & rad > 100*conv*0.9;
+            
+            %colSm=gind & rad < 100*conv*0.5;
+            
+            
+            obj.inds1000=find(col1000);
+            obj.inds500=find(col500);
+            obj.inds800= find(col800);
+            obj.inds200=find(col200);
             
             %obj.indsSm=find(colSm);
        %---------------     

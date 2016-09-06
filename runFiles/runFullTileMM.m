@@ -1,4 +1,4 @@
-function runFullTileMM(direc,outfile,paramfile,step)
+function runFullTileMM(direc,outfile,paramfile,step,acoords)
 %runFullTileMM(direc,outfile,maxims,step)
 %---------------------
 % For a set of tiled images, runs segmentCells (uses parfor for this), runs
@@ -58,14 +58,11 @@ end
 %stored in accords, can also return fully aligned image, but not
 %recommended for large numbers of files.
 if step < 4
-    % here add the condition that if acoords already exists (as should be
-    % saved from when you split the .tif huge file from Olympus) then just save the
-    % existing acoords
-    if exist('acoords','var')
-        save([direc filesep outfile],'acoords','-append');
-    end
+    if ~exist('acoords','var')
     acoords=alignManyPanelsMM(ff,1:200,maxims);
+    end
     save([direc filesep outfile],'acoords','-append');
+    
 end
 
 

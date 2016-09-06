@@ -12,6 +12,7 @@ classdef colony
         compressNucMask %compressed binary mask of nuclei
         shape %denotes shape type of colony
         rotate % indicates need to rotate colony for alignment
+        well % for multiwell plates. the well the colony is in. 
         %alignment
         
     end
