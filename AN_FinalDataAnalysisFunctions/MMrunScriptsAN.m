@@ -1,177 +1,424 @@
-%%
- %  [n,totalcells] = RunAnalysisFullChipAN(thresh,Nplot,nms,nms2,midcoord,fincoord,index1,index2,param1,param2)
- % function RunAnalysisFullChipAN produces 5 figures ( meav values, scatter
- % plot and three colony-analysis related plots)
- % see descriptions below and within each function
- 
- % Nplot - number of parts of the chip to plot (usually 4)
- % midcoord - defines the imagenumbers which separate the two quadrants (1,1) and (1,2) in
- % x direction (1,1) and (2,1) in y direction. Need to check these image numbers while setting up the grid
- % before aquisition
- % fincoord - define the imagenumbers of the last images taken in x and y
- % directions. Also need to check these and record while setting up the grid
- % on the microscope.( also they are obvious if use mkCytooPLotPeaks)
- % index1 - specifies which peaks' column to use. If index has two components
- % [ index1(1) index1(2)] - the ratio of the columns is plotted.
- % index2 = the column of the 'peaks' data to plot from the matfile. if input
- % only one number - get the plot of this column = not normalized data
- % values; if input two numbers [index2(1),index2(2)], obtain scatter plot of
- % normalized index2(1)(x-axis) versus normalized index2(2)(y-axis);Normalization
- % to DAPI ( DAPI is assumed to be column 5 of peaks);
- % need to be within the directory with the matfiles
- % nms2 - cell array of strings that specifies the conditions in each
- % quadrant/ used as a label for the x axis
- % param1 - label of the y-axis, input as a string, specifies which peaks' column you
- % are plotting and what it represents ( e.g. 'Sox2 expression');
- % thresh parameter can be first input randomly small (e.g. 0.2) and then
- % adjusted based on the scatter plots for the specific gene of interest
- 
- %Note: need to input manually only the midcoord, fincoord, and the peaks'
- %column number which you want to plot ( in MM data peaks{}(:,6) - cdx2) 
- 
- %nms = {'ESI049FullCytoo'};                  %midcoord[14 12]  fincoord[26 17]     need to rerun the colony; mafullcytooplot looks horrible here
- %nms = {'esi017FullCytoo42hr'};              %midcoord[11 18]  fincoord[19 18]      for this only two condition at one time point were probed: Nplot = 2
- %nms = {'esi017FullCytoo51and61hr'};         %midcoord[12 12]  fincoord[21 20]
- %nms = {'esi017_7260hr_repeat'};             %midcoord[11 9]   fincoord[22 21]
- % nms = {'esi017_42hr53hr_denser'};            %midcoord[11 10]  fincoord[22 22]
-% nms = {'esi017_42hr53hr_denser(2)'};          %midcoord[11 10]  fincoord[22 22]
- %nms = {'esi017_42hr53hr_smalldensity'} ;    %midcoord[10 10]  fincoord[22 21]
- %nms = {'esi017withControl42hr'};            %midcoord[10 10] or (midcoord better[12 13]) fincoord[23 21]  % most recent dataset
-  %nms = {'esi017_42hrVol_1ngBMP'};     %midcoord[11 11]  fincoord[22 21]  % volume-dependent,1ng/ml label
- % nms = {'esi017_42hrVol_control(1)'};     %midcoord[10 11]  fincoord[20 21]  % volume-dependent,contro(1) label
-  nms = {'esi017_42hrVol_control(2)'};       %midcoord[11 10]  fincoord[21 22]  % volume-dependent,contro(2) label
-  
-  %nms = {'esi017fDish_control'};    
-  %nms = {'esi017fDish_1ngml'}; 
-  %nms = {'esi017fDish_10ngml'}; 
-      
-  %nms2 = {'Sox2','pSmad1','Eomes','Gata6'};
-  %nms2 = {'Oct4','Smad2','Cdx2','Cdx2'};
-  %nms2 = {'Bra','Bra','Sox17','Sox17'};
-  
-  
-  nms2 = {'100ul','150ul','200ul','225ul'};
- %nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};                     
-  % nms2 = {'1 ng/ml(42hrs)','10 ng/ml (42hrs)' };                             
- % nms2 = {'10 ng/ml (51hr)','10 ng/ml (61hr)','1 ng/ml (51hr)','1 ng/ml(61hr)'};
- % nms2 = {'1 ng/ml (60hr)','1 ng/ml (72hr)','10 ng/ml (60hr)','10 ng/ml (72hr)'}; 
-  %nms2 = {'10 ng/ml (53hr)','10 ng/ml (42hr)','1 ng/ml (53hr)','1 ng/ml (42hr)'};  
- 
+    %%
+% determine the background images(for all chnnels) for the dataset to run
+ff=readMMdirectory('pluri_30um1');
+dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
+wavenames=ff.chan;
 
-    plotallanalysisAN(0.5,nms,nms2,[],[],[6 5],[6 10],'CY5','RFP',1,flag);
+maxims= dims(1)*dims(2);
+
+%generate background image for each channel
+
+    for ii=1:length(wavenames) % get the background image for al channels  
+        [minI, meanI]=mkBackgroundImageMM(ff,ii,min(500,maxims));
+        bIms{ii}=uint16(2^16*minI);
+        nIms{ii}=ones(size(bIms{ii}));
+%         normIm=(meanI-minI);%%%%%%%%comment the next 3 lines (15-18) if running microcolonies
+%         normIm=normIm.^-1;
+%         normIm=normIm/min(min(normIm));
+%         nIms{ii}=normIm;
+    end
     
- %%
- %scripts for the functions to run Nplot separate matfiles and plot  mean values, scatter plots, colony analysis 
- 
- % nms = {'H2BoutallControlMM','H2Boutall01MM','H2Boutall1MM','H2Boutall10MM'}; 
- 
-% nms = {'esi017fDish_control'};    
-  %nms = {'esi017fDish_1ngml'}; 
-  %nms = {'esi017fDish_10ngml'}; 
-      
-  %nms2 = {'Sox2','pSmad1','Eomes','Gata6'};
-  %nms2 = {'Oct4','Smad2','Cdx2','Cdx2'};
-  %nms2 = {'Bra','Bra','Sox17','Sox17'};
- %nms = { 'esi017noqdratall_control(2)','esi017noqdratall_control(cdx2)','esi017noqdratall_1ngmlBMP','esi017noqdratall_10ngmlBMP'};    % from
- %nms = { 'esi017noQd_C(2)_Repeat','esi017noQd_C(1)_Repeat','esi017noQd_1ng_Repeat','esi017noQd_10ng_Repeat'};
- %nms = { 'esi017noQd_C2_repeat(nonIms)','esi017noQd_C1_repeat(nonIms)','esi017noQd_1_repeat(nonIms)','esi017noQd_10_repeat(nonIms)'};
- 
- %nms = {'esi017noQd_1hr003ng','esi017noQd_1hr03ng','esi017noQd_1hr3ng'};
-% nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
- 
- %nms = {'esi017noQd_(C)sign20hr','esi017noQd_03ngSign20hr','esi017noQd_3ngSign20hr'};
- %nms = {'Q4_1ng42hr','Q2_10ng42hr','Q3gitUpdated','Q1_10ng53hr'}; 
- %nms = {'esi017_30hr_1ng_repeat','esi017_42hr_1ng_repeat','esi017_30hr_10ng_repeat','esi017_42hr_10ng_repeat'};
- %nms = {'Venus_outall_001_NEW','Venus_outall_01_NEW','Venus_outall_1_NEW','Venus_outall_10_NEW'}; 
- %nms = {'ESI049BMP4atControl','ESI049BMP4at01','ESI049BMP4at1','ESI049BMP4at10'};
- %nms = {'outallcontrolH2BSignMM','outall01H2BSignMM','outall1H2BSignMM','outall10H2BSignMM'};
- %nms = {'h2bsignS2_control_MM','h2bsignS2_01_MM','h2bsignS2_1_MM','h2bsignS2_10_MM'};
- 
- %nms = {'esi017noqdratall_control(2)'};
- % nms2 = {'control ','10 ng/ml'};  
- %nms2 = {'control ','0.1 ng/ml','1 ng/ml ','10 ng/ml'};  
- %nms2 = {'control'};
-  %nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'}; 
- 
- %nms2 = {'control(20hr)','0.3 nm/ml(20hr)','3 ng/ml(20hr)',};
- %nms2 = {'0.03(1hr)','0.3 nm/ml(1hr)','3 ng/ml(1hr)',};
-%nms2 = {'control(2)','control(1) ','1 ng/ml ','10 ng/ml'};    
- %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q31ng/ml(53 hr)','10ng/ml(53 hr)'};
- %nms2 = {'1ng/ml(42 hr)','10ng/ml(42 hr)','Q3updatedcode1ng/ml(53 hr)','10ng/ml(53 hr)'};
- %nms2 = {'esi017(30 hr 1 ng/ml)','esi017(42 hr 1 ng/ml)','esi017(30 hr 10 ng/ml)','esi017(42 hr 10 ng/ml)'};  
- %nms2 = {'h2bSignControl','h2bSign 0.1 ng/ml','h2bsign 1 ng/ml','h2bsign 10 ng/ml'};
- 
-%  nms = {'esi017noQd_1hr003ng','esi017noQd_1hr03ng','esi017noQd_1hr3ng','esi017noQd_(C)sign20hr','esi017noQd_03ngSign20hr','esi017noQd_3ngSign20hr'};
-%  nms2 = {'0.03(1hr)','0.3 nm/ml(1hr)','3 ng/ml(1hr)','control(20hr)','0.3 nm/ml(20hr)','3 ng/ml(20hr)'};
- %dir = '/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2015-06-30-Signaling(pSmad1Smad2Nanog)';
-%nms = {'esi017noQd_ControlsignR20hr','esi017noQd_03ngsignR1hr','esi017noQd_3ngsignR1hr','esi017noQd_03ngsignR20hr','esi017noQd_3ngsignR20hr'};
-
-%nms2 = { 'Control(20hrs)','03ng/ml(1hr)','3ng/ml(1hr)', '03ng/ml(20hrs)', '3ng/ml(20hrs)'};
-nms = {'(C)inhibitors_area1','BMPinh_area1','WNTinh_area1'}; 
-nms2 = { 'Control','BMPi','WNTi'};
-
-
- dir = '.';
-    
-   [dapi,a,r1,r2,b]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5],[8 10],'Sox2','Bra',0,1);
-   figure(3)
-   for k=1:3
-       subplot(1,2,k)
-      ylim([0 1])
-      xlim([0 10])
-   end
-   figure(2)
-   for k=1:5
-       subplot(1,5,k)
-      ylim([0 5])
-      xlim([0 9])
-   end
-   figure(6)
-   for k=1:5
-       subplot(1,5,k)
-       xlim([0 10])
-       ylim([0 5])
-   end
-    % [] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag)
-%[newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN
- % [a, b] =   findcolonyAN(dir,2,[1 3],nms,1,[10 5],3,1,15,0);
+% inhibitors with BMP1, FGFRi and control: staining: Cdx2, Nanog, Sox2
 %%
 % script to optimize the segmentation parameters. Can look at a chse image
 % and adjust the parameters. N is a linear index, image number
 % need to be one directory up from the actual images folder ( since using
-% the readMMdirectory function here)
- N =300;
-
- ANrunOneMM('Dynamics_C',N,bIms,nIms,'setUserParamAN20X','DAPI',1);
- %imcontrast
+% the readMM2irectory function here)
+% 
+% MIXED CELLS EXPERIMENT: CUTOFF FOR DAPI : < 5000; same for the
+% inhibtors(2)experiment, with FGFRi
+%close all
+%for k=8:5:25
+ N  =10;% 165
+ 
+   ANrunOneMM('pluri_62um1',N,bIms,nIms,'setUserParamAN20X_uCOLlargeCircles','DAPI',1);%setUserParamAN20X_uCOL
+imcontrast
+%end
+ 
 
 %%
+clear all
 % PLOT STUFF
-
-% nms = { 'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};
-% nms2 = {'control','0.1 ng/ml','0.3 ng/ml','1 ng/ml','3 ng/ml','10 ng/ml','30 ng/ml'};
-  
-% nms = {'siRNAnodalNegativeC(pluri)','siRNAnodal(pluri)'}; % sox2 nanog Cdx2
-% nms2 = {'Nodal(negative Control)','siRNS Nodal (~ 15 nM)' };
-
-% nms = {'CommEffWntExperiment_Control','CommEffWntExperiment_inhIWP2','CommEffWntExperiment_actCHIRR'};%sox2 Oct4 Nanog    
-% nms2 = {'Control','WNTinhibitor','WntAct CHIRR 0.5uM' };
-% nms = {'gfpS4_10ngml20hr_1'}; % dapi CY5 GFP order of channels
-% nms2 = {'GFP:Smad4 cells 20hr, 10 ng/ml bmp4'};
-
-%  nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited','PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_PI3Kinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
-%  nms2 = {'Control','FGF inhibited','Furin(nodal production inhibited)','PI3K inhibited' };
+   
+ %nms = {'Control_pAktdyn','FGFi_1hr_pAktdyn','FGFi_6hr_pAktdyn','FGFi_24hr_pAktdyn','FGFi_30hr_pAktdyn','FGFi_42hr_pAktdyn'}; 
+%  nms2 = {'control','1 hr','6 hr','24 hr', '30 hr', '42 hr'};%  nanog(555) peaks{}(:,8), pERK(488) peaks{}(:,6)
+   
+ nms = {'pluri_30um1','pluri_62um1'};% dapi cy5 
+ nms2 = {'30 um D','62 um D'};%,'
  
-%  nms = {'Dynamics_C(R)','Dynamics_20hr5gnml(R)','Dynamics_27hr5gnml(R)','Dynamics_33hr5gnml(R)','Dynamics_42hr5gnml(R)'}; % Dynamics Sox2 Bra Cdx2
-%  nms2 = {'control(no bmp4),0hrs','20hrs','27hrs','33hrs','42hrs' };%
-%  title('Dynamics, 5 ng/ml bmp4');
+  %nms = {'Mek_inold1hr','Mek_inold6hr','Mek_inold24hr','Mek_inold30hr','Mek_inold42hr'};% ,'C_42hrinmedia'
+  %nms = {'C_1hrinmedia','Mek_innew1hr','Mek_innew6hr','Mek_innew24hr','Mek_innew30hr','C_42hrmedia'};% ,'C_42hrinmedia'
+%   nms = {'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};% ,'C_42hrinmedia'
+%   nms2 = {'Control','0.1','0.3','1','3','10','30'};%,'42 hr in media'
+ % pERK(GFP)peaks(6) Dapi(5)  Rfp(8)nanog(M)
+%Dapi Sox2 Nanog Dapi GFP(6) RFP(8)
+ 
+dapimax =60000;%1400
+chanmax = 60000;
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
 %colors = colorcube(10);
-[cdx2,totalcells,r1,r2,b]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[8],[8 6],'DAPI','Cdx2',0,1);
+%[dapi,totalcells,ratios,ratios2,totcol]= plotallanalysisAN(0.5,nms,nms2,dir,[],[],[5 3],[5 3],' DAPI * CELL AREA ','area',0,1);
+% for the ibidi 8well plte with pAKT staining GFP = peaks{}(:,6); RFP - peaks{}(:,8)
+usemeandapi =[];
+flag1 = 1;
+[mediaonly,~,~,~,~]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[8 6],'Nanog','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
+h = figure(5);
+h.Children.FontSize = 14;
+%%
+%plot mean values of expression specifically for the given colony size 'esi017noQd_01_finerConc'
+nms = {'esi017noQd_C_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};% ,'C_42hrinmedia'
+nms2 = {'c','0.3','1','3','10','30'};
+% nms = {'PluriNtwInh_Control(R)','PluriNtwInh_FGFi(R)'};
+% nms2 = {'Control','MEKi'};%,'42 hr in media'
+dapimax = 4000;%4000
+
+dir = '.';
+index1 = [6 5];param1 ='Cdx2';N = 8;
+for j=N
+[findat] = MeanDecomposedbyColAN(nms,nms2,dir,index1,param1,dapimax,j);
+hold on; figure(7),
+ hold on
+end
+title('Mean expression for colonies of size N');
+legend([num2str(N)]);
+%legend('2','4','6','8');
+ylim([0 6])
+%%
+%plot the mean fraction of cells expressing above thresh , for each colony
+%size; 
+% to answer the question whether the colonies become more speckled,
+%when CE goes awau or not, if yes, then this mean fraction should grow in
+%larger colonies after CE is not there (via MEKi)
+ nms = {'PluriNtwInh_Control(R)','PluriNtwInh_FGFi(R)'};     % PluriNtwInh_FGFi(R)  PluriNtwInh_Control(R)
+ nms2 = {'control','MEKi'}; % ,'MEKi'                  %
+ nms3 = {'control','MEKi','theor'}; % ,'MEKi' 
+ index = [8];param1 = 'Sox2';
+thresh =1.2;
+dapimax =10000;
+flag = 0;
+N = 5;
+dir = '.';
+clear theor
+prob = 0.8;   % from this experiment(mean fractions)
+    for k=1:size(nms,2)
+        [binN, totalcoloniesN,vect] = expressiondistincol(dir,nms,thresh,nms2,param1,index,N,flag);
+        [np]= PartitionFn_noInteraction(N,prob); % get the probability for no interactions model
+        theor{k} = np;
+        
+        figure(11), plot(vect',binN{k},'-*','markersize',18,'linewidth',3);hold on
+        legend(nms2{k}); 
+        figure(11), plot(vect',theor{k},'-k','markersize',18,'linewidth',3);hold on
+    end
+        xlim([0 N+1]);
+        xlabel(['Number of ', (param1) 'cells in the colony'],'fontsize',15);
+        ylabel(['Fraction ',(param1) 'positive'],'fontsize',15);
+        ylim([0 1]);
+        title(['colonies of size  ' num2str(N) ]);
+        legend(nms2)
+
+    
+%%
+% obtain the scatter plots directly from the peaks of all the datasets in
+% nms, 
+%  nms = {'Control_pAktdyn','FGFRi_1hr_pAktdyn','FGFRi_6hr_pAktdyn','FGFRi_24hr_pAktdyn','FGFRi_30hr_pAktdyn','FGFRi_42hr_pAktdyn'}; 
+%  nms2 = {'control','1 hr','6 hr','24 hr', '30 hr', '42 hr'}; %  nanog(555) peaks{}(:,8), pERK(488) peaks{}(:,6)
+   
+nms = {'control6hrperknanog','meki_6hr_perknanog'};% ,'C_42hrinmedia'
+ nms2 = {'C 6hr','MEKi 6hr'};%,'42 hr in media'%dapi,gfp(8),cy5(6)
+ % nanog(RFP), pERK(GFP)
+param1 = 'pERK';
+param2 = 'Nanog';
+index2 = [6 8];
+flag3 = 1; % 0 if don't want to normalize to dapi, 1  or empty = do normalize to dapi
+% scatter plot of index2(1) vs index2(2) for the dataset nms2{1}
+[b,c] = GeneralizedScatterAN(nms,nms2,dir,[],[],index2,param2,param1,0,flag3);
+
+%b{k} : k runs from 1:size(nms2,2)
+% cell array b contains all the normalized values of intex2(1) 
+% cell array c contains all the normalized values of index1(2) 
+for k=1:size(nms2,2)
+figure(10), subplot(1,size(nms2,2),k), scatter(b{k},c{k},[],c{k});
+xlim([0 10]);
+ylim([0 10]);
+%colorbar
+xlabel(['Normalized  ' num2str(param1)]);
+ylabel(['Normalized  ' num2str(param2)]);
+box on
+legend(nms2{k});
+end
 
 %%
-% plot mean expression or selected colony size, plot for different datasets
+n = 2;
+figure(6)
+for k=1:n
+subplot(1,n,k)
+ylim([0 2.5]);
+xlim([0 8])
+
+end
+
+%%
+% plot the scatter plots colorcoded
+nms = {'control6hrperknanog','meki_6hr_perknanog'};% ,'C_42hrinmedia'
+ nms2 = {'C 6hr','MEKi 6hr'};%,'42 hr in media'%dapi,gfp(8),cy5(6)
+ % nanog(RFP), pERK(GFP)
+param1 = 'Sox2';
+param2 = 'Nanog';
+index2 = [6 8];
+%index2 = [6 8];
+toplot = cell(1,size(nms,2));
+flag = 0;% generate third column with the col size
+flag2 = 1;% do not normalize to DAPI if flag == 0;
+for k=1:size(nms,2)
+        filename{k} = [dir filesep  nms{k} '.mat'];
+        load(filename{k},'peaks','dims','plate1');
+        col = plate1.colonies;
+[alldata] = mkVectorsForScatterAN(peaks,col,index2,flag,flag2,dapimax);
+ toplot{k} = alldata;
+end
+
+
+for j=1:size(nms,2)
+    figure(8),subplot(1,size(nms,2),j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
+    legend(nms2{j});
+    box on
+    ylabel('Sox2')
+    xlabel('Nanog')
+      ylim([0 5]);
+      xlim([0 0.5]);
+end
+%%
+% get histograms for differen colony sizes
+
+%index2 = [8 10];toplot{1} corresponds to data from outfile 1, the first
+
+%column within toplo{1} is index(1) data
+controlpErk = toplot{1};
+MEKpErk = toplot{2};
+colSZ = 4;
+chan = 1;% 1 - pERK, 2 - Smad2
+for k=1:colSZ;
+a = find(controlpErk(:,3)==k); % third column is the clony size
+figure(1),histogram(controlpErk(a,chan),'normalization','pdf');hold on;
+figure(2),histogram(MEKpErk(a,chan),'normalization','pdf');hold on
+end
+figure(1), title('Control uColonies');ylabel('Frequency');xlim([0 15]); %ylim([0 0.5])
+legend(colSZ);
+figure(2), title('10 uM MEKi uColonies, 42 hr');ylabel('Frequency');xlim([0 15]);%ylim([0 0.5])
+legend(colSZ);
+
+%%
+% MIXED CELLS EXPREIMTN ANALYSIS
+clear toplot
+clear toplot2
+clear alldata
+clear alldata2
+h2bthresh = 1000;
+
+nms = {'esiPluri_H2Bpluri','esiPluri_H2Bdiff'};%% H2B(488), Dapi, Sox2(555),Cdx2(647)
+nms2 = {'pluri+pluri','pluri+diff'};
+dapimax = 4000;
+dir = '.';
+index2 = [8 5];% H2B AND DAPI
+toplot = cell(1,size(nms,2));
+flag = 0;
+ind = [10 6]; % SOX2 AND CDX2
+for k=1:size(nms,2)
+        filename{k} = [dir filesep  nms{k} '.mat'];
+        load(filename{k},'peaks','dims','plate1');
+        col = plate1.colonies;
+[alldata,alldata2] = SortCellsbyExpressionAN(peaks,col,index2,flag,ind,dapimax,h2bthresh);
+ 
+ toplot{k} = alldata;    % for all the cells: alldata has following columns(index2(1) index2(2) ncell ind(1) ind(2) )
+ toplot2{k} = alldata2;  % alldata2 contains only cells that are within mixed colonies, same columns (index2(1) index2(2) ncell ind(1) ind(2) )
+end
+%%
+%MIXED CELL EXPERIMENT
+% plot the analysis for the esi and h2b cells separately , excluding the
+%  cells that are within mixed clonies
+clear dataforesicells
+clear dataforeh2b
+clear r
+clear r2
+clear torm
+
+k = 2; % k = 2 for the (esipluri+h2bdiff); k = 1 for (esipluri+h2bpluri)
+
+alldata = toplot{k};
+% now need to sort the all data into h2b and esi cells
+
+% here need to remove the cells that are within the mixed colonies, to
+% leave only the cells that are of the same type
+[torm,ia,ib] = intersect(alldata,alldata2,'rows'); % ia are the row coordiantes of the repeating values in alldata to be removed
+
+% test = alldata(ia,:);                   % to test that indeed found the rows that are
+% tt = intersect(test,alldata2,'rows');
+
+alldata(ia,:)=[];  % at this point the alldata contains nly the coloniues that are either only esi or h2b, without the mix
+
+[r,~] = find(alldata(:,1)>h2bthresh); % cells that have high levels of H2B
+[r2,~] = find(alldata(:,1)<h2bthresh);% cells that have background expression in GFP channel (esi cells)
+
+dataforesicells = alldata(r2,:);
+dataforeh2b = alldata(r,:);
+
+esiSox2 = mean(dataforesicells(:,4));
+esiCdx2 = mean(dataforesicells(:,5));
+
+h2bSox2 = mean(dataforeh2b(:,4));
+h2bCdx2 =  mean(dataforeh2b(:,5));
+% plot mean values of Sox2 and Cdx2 for each cell type separately
+
+figure(1), plot([esiSox2 h2bSox2],'-*');
+hold on;plot([esiCdx2 h2bCdx2],'-r*');
+title('Excluding mixed colonies, same chip ');
+
+xlim([0 3]);
+ylim([0 1.5]);
+
+h = figure(1);
+h.Children.XTick = [1 2];
+h.Children.XTickLabel = {'esi','h2b differentaited'};
+if k == 1
+  h.Children.XTickLabel = {'esi pluri ','h2b pluri'};
+end
+title('same chip')
+legend('Sox2','Cdx2');
+ylabel('Mean expression');
+
+% scatter plot of esi and h2b cells separately , color by cell type
+figure(2), subplot(1,2,1), scatter(dataforeh2b(:,4),dataforeh2b(:,5),'*b'); % 4 - (ind(1); 5 - ind(2) 3 - colony size the cell belongs to
+xlim([0 4]);
+ylim([0 1.5]);
+xlabel('sox2');
+ylabel('Cdx2');
+title('Excluding mixed colonies, same chip ');
+legend('H2B ');
+subplot(1,2,2), scatter(dataforeh2b(:,4),dataforeh2b(:,5),[],dataforeh2b(:,3)); % 4 - (ind(1); 5 - ind(2) 3 - colony size the cell belongs to
+xlabel('sox2');
+ylabel('Cdx2');
+title('Excluding mixed colonies, same chip');
+xlim([0 4]);
+ylim([0 1.5]);
+legend('H2B ');
+
+figure(3),subplot(1,2,1), scatter(dataforesicells(:,4),dataforesicells(:,5),'m');
+xlim([0 4]);
+ylim([0 1.5]);
+xlabel('sox2');
+ylabel('Cdx2');
+title('Excluding mixed colonies, same chip');
+legend('ESI ');
+subplot(1,2,2), scatter(dataforesicells(:,4),dataforesicells(:,5),[],dataforesicells(:,3));
+xlabel('sox2');
+ylabel('Cdx2');
+title('Excluding mixed colonies, same chip');
+xlim([0 4]);
+ylim([0 1.5]);
+legend('ESI');
+% scatter plot on the same plot
+figure(4), scatter(dataforeh2b(:,4),dataforeh2b(:,5),'b'); % 4 - (ind(1); 5 - ind(2) 3 - colony size the cell belongs to
+hold on,  scatter(dataforesicells(:,4),dataforesicells(:,5),'m');
+xlabel('sox2');
+ylabel('Cdx2');
+title('Excluding mixed colonies, same chip');
+xlim([0 4]);
+ylim([0 1.5]);
+legend('h2b','esi');
+
+%%
+% MIXED CELLS ANALYSIS CONTINUED
+% plot the data for the cells that are within the mixed colonies only
+% all the same for the alldata2 ( contains cells that are within the colony
+% of h2b+esi)
+clear dataforesicells
+clear dataforeh2b
+clear r
+clear r2
+clear h2bSox2
+clear h2bCdx2
+clear esiSox2
+clear esiCdx2
+
+k = 2; % k = 2 for the (esipluri+h2bdiff); k = 1 for (esipluri+h2bpluri)
+
+alldata2 = toplot2{k};
+
+[r,~] = find(alldata2(:,1)>h2bthresh); % cells that have high levels of H2B
+[r2,~] = find(alldata2(:,1)<h2bthresh);% cells that have background expression in GFP channel (esi cells)
+
+dataforesicells = alldata2(r2,:);
+dataforeh2b = alldata2(r,:);
+
+esiSox2 = mean(dataforesicells(:,4));
+esiCdx2 = mean(dataforesicells(:,5));
+
+h2bSox2 = mean(dataforeh2b(:,4));
+h2bCdx2 =  mean(dataforeh2b(:,5));
+% plot mean values of Sox2 and Cdx2 for each cell type separately
+
+figure(1), plot([esiSox2 h2bSox2],'-*');
+hold on;plot([esiCdx2 h2bCdx2],'-r*');
+xlim([0 3]);
+ylim([0 1.5]);
+h = figure(1);
+h.Children.XTick = [1 2];
+h.Children.XTickLabel = {'esi','h2b differentaited'};
+if k ==1 
+h.Children.XTickLabel = {'esi pluri ','h2b pluri'};
+end
+ylabel('Mean expression');
+title('same chip, Mixed colonies only')
+legend('Sox2','Cdx2');
+
+
+
+% scatter plot of esi and h2b cells within the same colony , color by cell type
+
+figure(2), subplot(1,2,1), scatter(dataforeh2b(:,4),dataforeh2b(:,5),'*b'); % 4 - (ind(1); 5 - ind(2) 3 - colony size the cell belongs to
+xlim([0 4]);
+ylim([0 1.5]);
+xlabel('sox2');
+ylabel('Cdx2');
+title('Mixed Colonies only, same chip ');
+legend('H2B');
+subplot(1,2,2), scatter(dataforeh2b(:,4),dataforeh2b(:,5),[],dataforeh2b(:,3)); % 4 - (ind(1); 5 - ind(2) 3 - colony size the cell belongs to
+xlabel('sox2');
+ylabel('Cdx2');
+title('Mixed Colonies only, same chip');
+xlim([0 4]);
+ylim([0 1.5]);
+legend('H2B');
+
+figure(3),subplot(1,2,1), scatter(dataforesicells(:,4),dataforesicells(:,5),'m');
+xlim([0 4]);
+ylim([0 1.5]);
+xlabel('sox2');
+ylabel('Cdx2');
+title('Mixed Colonies only, same chip');
+legend('ESI');
+subplot(1,2,2), scatter(dataforesicells(:,4),dataforesicells(:,5),[],dataforesicells(:,3));
+xlabel('sox2');
+ylabel('Cdx2');
+title('Mixed Colonies only, same chip');
+xlim([0 4]);
+ylim([0 1.5]);
+legend('ESI');
+% scatter plot on the same plot
+figure(4), scatter(dataforeh2b(:,4),dataforeh2b(:,5),'b'); % 4 - (ind(1); 5 - ind(2) 3 - colony size the cell belongs to
+hold on,  scatter(dataforesicells(:,4),dataforesicells(:,5),'m');
+xlabel('sox2');
+ylabel('Cdx2');
+title('Mixed Colonies only, same chip');
+xlim([0 4]);
+ylim([0 1.5]);
+legend('h2b','esi');
+
+
+%%
+% CLEAN UP THIS CODE
+%plot mean expression or selected colony size, plot for different datasets
 
 nms = {'PluriNtwInh_Control','PluriNtwInh_FGFinhibited'}; % Pluri Ntw Inhibited Sox2 Nanog Cdx2
 nms2 = {'Control','FGF inhibited'};
@@ -417,10 +664,30 @@ runFullTileMM('siRNAnodal(pluri)2_1','siRNAnodal(pluri).mat','setUserParamAN20X'
 disp('Successfully ran all files');
 
 %%
-% run the gfpS4 rfpH2b chip (left from live imaging experiment)
-% cdx2 - 647; smad4 - 488; dapi
+% march 2016 Inhibitors experiment
+runFullTileMM('extracted_Control','Control(R).mat','setUserParamAN20X');
+runFullTileMM('extracted_BMPi','BMPi.mat','setUserParamAN20X');
 
-runFullTileMM('gfpS4_10ngml20hr_1','gfpS4_10ngml20hr_1.mat','setUserParamAN20X');
+disp('Successfully ran all files');
+
+%%
+%FGF in dofferentiated conditions and community effect
+% 2016-03-23 (march 23)
+
+runFullTileMM('Control_pluri_extracted','C_pluri_fgfindiff.mat','setUserParamAN20X');
+runFullTileMM('Control_diff3ngml_extracted','C_diff_fgfindiff.mat','setUserParamAN20X');
+runFullTileMM('3ngmlBMP4withFGFi_extracted','FGFi_BMP4_fgfindiff.mat','setUserParamAN20X');
+
+
+disp('Successfully ran all files');
+
+
+
+%%
+% 
+% Oct4 - 647; 488 - pERK; 555 - Bra
+
+runFullTileMM('extracted_FGFi','FGFi.mat','setUserParamAN20X');% march 2016 Inhibitors experiment
 
 
 disp('Successfully ran all files');
@@ -474,5 +741,111 @@ runFullTileMM('PluriNtwInh_Furin(nodal_Inh)','PluriNtwInh_Furin(nodal_Inh).mat',
 runFullTileMM('PluriNtwInh_PI3Kinhibited','PluriNtwInh_PI3Kinhibited.mat','setUserParamAN20X');
 
 disp('Successfully ran all files');
+%%
+% April 2016 Mixed Experiment run ( esi+h2b)
+
+runFullTileMM('esiPluri_H2BPluri_extracted','esiPluri_H2Bpluri.mat','setUserParamAN20X');
+
+runFullTileMM('esiPluri_H2BDiff_extracted','esiPluri_H2Bdiff.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+%%
+% inhibitors experimnt repeat, April 2016 ( done tigether with the Mixed
+% experiment)
+% control, bmpi, FGFri
+% not very good seeding
+runFullTileMM('control_extracted','Control_inh(2).mat','setUserParamAN20X');
+runFullTileMM('bmpi_extracted','BMP_inh(2).mat','setUserParamAN20X');
+runFullTileMM('FGFRi_extracted','FGFReceptor_inh.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% ibidi slides run ( 24 hr, XP antibody)
+
+runFullTileMM('C_for_FGFi_24hrXP','C_24hr_FGFi_XP.mat','setUserParamAN20X');
+runFullTileMM('C_for_FGFRi_24hrXP','C_24hr_FGFRi_XP.mat','setUserParamAN20X');
+runFullTileMM('FGFi_24hrXP','FGFi_24hr_XP.mat','setUserParamAN20X');
+runFullTileMM('FGFRi_24hrXP','FGFRi_24hr_XP.mat','setUserParamAN20X');
 
 
+disp('Successfully ran all files');
+%%
+% ibidi slides run ( 6 hr, XP antibody) Nanog stain added
+
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/CM/cm_control','cm_control.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/CM/cm_FGFi10uM','cm_FGFi10uM.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/CM/cm_FGFi30uM','cm_FGFi30uM.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/CM/cm_FGFRi200nM','cm_FGFRi200nM.mat','setUserParamAN20X');
+%mt
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/Mtesr/mt_control','mt_control.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/Mtesr/mt_FGFi10uM','mt_FGFi10uM.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/Mtesr/mt_FGFi30uM','mt_FGFi30uM.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-04-27-CMvsMtesrFGFigraded/Mtesr/mt_FGFRi200nM','mt_FGFRi200nM.mat','setUserParamAN20X');
+
+
+disp('Successfully ran all files');
+
+%%
+% inhibitors experimentwith good pERK AB (uColonies)
+% chips imaged on may 12, 2016
+
+runFullTileMM('Control_perknanogcdx2','C_pERKnanogCDX2.mat','setUserParamAN20X');
+
+runFullTileMM('FGFi_20uM','20uM_MEKi_pERKnanogCDX2.mat','setUserParamAN20X');
+
+runFullTileMM('Lefty_500ngml','500ngml_Lefty_pERKnanogCDX2.mat','setUserParamAN20X');
+
+disp('Successfully ran all files');
+
+%%
+% ibidi, pAKT ab reponse test: June 13 imaging 6 hr ibidi row
+% 
+
+runFullTileMM('control_24','control_24hr.mat','setUserParamAN20X');
+runFullTileMM('LY_24hr','PI3Ki_via_LY10uM_24hr.mat','setUserParamAN20X');
+runFullTileMM('MEKi_24hr','FGFi_via_MEKi10uM_24hr.mat','setUserParamAN20X');
+runFullTileMM('FGFRi_24hr','FGFRi_24hr.mat','setUserParamAN20X');
+
+
+disp('Successfully ran all files');
+%%
+% FucciG1 cells
+% control and 10 ng/ml BMP4
+runFullTileMM('FucciG1_control','FucciG1_control42hr.mat','setUserParamAN20X');
+
+runFullTileMM('FucciG1_BMP410ngml','FucciG1_BMP410ngml42hr.mat','setUserParamAN20X');
+
+
+disp('Successfully ran all files');
+
+%%
+% run the pAkt dynamics
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-15-pAkt_DYN(Gabby)pAktNanogSmad2/contol_pAktdyn','Control_pAktdyn.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-15-pAkt_DYN(Gabby)pAktNanogSmad2/1hr_pAktdyn','FGFRi_1hr_pAktdyn.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-15-pAkt_DYN(Gabby)pAktNanogSmad2/6hr_pAktdyn','FGFRi_6hr_pAktdyn.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-15-pAkt_DYN(Gabby)pAktNanogSmad2/24hr_pAktdyn','FGFRi_24hr_pAktdyn.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-15-pAkt_DYN(Gabby)pAktNanogSmad2/30hr_pAktdyn','FGFRi_30hr_pAktdyn.mat','setUserParamAN20X');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-15-pAkt_DYN(Gabby)pAktNanogSmad2/42hr_pAktdyn','FGFRi_42hr_pAktdyn.mat','setUserParamAN20X');
+
+disp('Successfully ran all files for ibidi pAkt');
+
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-16-uCol_MEKi10uM_pERKNanogSmad2/control_pERKnanogSmad2','C_R_pErkNanogSmad2.mat','setUserParamAN20X_uCOL');
+runFullTileMM('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-07-16-uCol_MEKi10uM_pERKNanogSmad2/MEKi_pERKnanogSmad2','MEKi_R_pErkNanogSmad2.mat','setUserParamAN20X_uCOL');
+
+
+disp('Successfully ran all files for uCol analysis');
+
+%%
+runFullTileMM('control24hr','control24hr.mat','setUserParamAN20X');
+runFullTileMM('MEKi_other1uM24hr','MEKi_other1uM24hr.mat','setUserParamAN20X');
+runFullTileMM('MEKi_other3uM24hr','MEKi_other3uM24hr.mat','setUserParamAN20X');
+% runFullTileMM('24hrSB','24hrSB.mat','setUserParamAN20X');
+% runFullTileMM('48hrMEKi','48hrMEKi.mat','setUserParamAN20X');
+% runFullTileMM('48hrMEKiSB','48hrMEKiSB.mat','setUserParamAN20X');
+% runFullTileMM('48hrSB','48hrSB.mat','setUserParamAN20X');
+% runFullTileMM('72hrMEKi','72hrMEKi.mat','setUserParamAN20X');
+% runFullTileMM('72hrMEKiSB','72hrMEKiSB.mat','setUserParamAN20X');
+% runFullTileMM('72hrSB','72hrSB.mat','setUserParamAN20X');
+
+disp('Successfully ran all files for MEKi* analysis');

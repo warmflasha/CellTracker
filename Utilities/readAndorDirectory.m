@@ -27,7 +27,7 @@ for ii=1:nImages
         m{nprefix}=[];
     end
     
-    ind = strfind(nm,'_f');
+    ind = strfind(nm,'_f0');
     if length(ind) > 1 
         toremove = false(length(ind),1);
         for ii=1:length(ind)

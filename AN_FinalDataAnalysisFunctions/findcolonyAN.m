@@ -100,7 +100,7 @@ end
 % find the colony numbers with the specific size && AND expression in
 % channel 'index' above the threshold (basically find the intersection
 % between vectors A and B
-% fi returned is a cell array with four images in order of ff.chan (returned by readMMdirectory : { Dapi Cy5 Gfp Rfp} 
+% fi returned is a cell array with four images in order of ff.chan (returned by ff = readMMdirectory(dir); readMMdirectory : { Dapi Cy5 Gfp Rfp} 
 
 if flag2 == 2
 for j=1:showcol
@@ -121,7 +121,7 @@ im = colonies{dataset}(C(j)).imagenumbers;
     %text(colonies{dataset}(C(j)).data(:,1)+35,colonies{dataset}(C(j)).data(:,2),num2str(im),'Color','m');
     title('dapi');
     
-    figure(j),subplot(1,2,2),imshow(fi{chan(2)},[]);
+    figure(j),subplot(1,2,2),imshow(fi{chan(3)},[]);
     hold on;  plot(colonies{dataset}(C(j)).data(:,1),colonies{dataset}(C(j)).data(:,2),'r*');
     text(colonies{dataset}(C(j)).data(:,1)+5,colonies{dataset}(C(j)).data(:,2),num2str(dat),'Color','r');
 end

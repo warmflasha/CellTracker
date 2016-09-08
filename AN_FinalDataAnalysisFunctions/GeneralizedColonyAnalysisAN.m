@@ -7,7 +7,8 @@
 % see also: plotallanalysisAN,MMrunscriptsAN
 
 
-function [totalcells,ratios,ratios2,totcol] = GeneralizedColonyAnalysisAN(thresh,dir,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag)
+function [totalcells,ratios,ratios2,totcol] = GeneralizedColonyAnalysisAN(thresh,dir,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag,dapimax,chanmax,usemeandapi)
+[dapimeanall,~] = getmeandapi(nms,dir,index1, dapimax);
 if plottype == 1
     for k=1:size(nms,2)
         
@@ -45,7 +46,7 @@ if plottype == 1
         end
         
     end
-    [totalcells,ratios,ratios2,totcol] = PlotColAnalysisQuadrAN(coloniesnew,M,thresh,nms2,param1,index1,flag);
+    [totalcells,ratios,ratios2,totcol] = PlotColAnalysisQuadrAN(coloniesnew,M,thresh,nms2,param1,index1,flag,dapimax,chanmax,dapimeanall,usemeandapi);
 end
 
 if plottype == 0 % do NOT need to separate into quadrants
@@ -62,7 +63,7 @@ if plottype == 0 % do NOT need to separate into quadrants
         
     end
     M = max(M);
-    [totalcells,ratios,ratios2,totcol] = PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag); % separate function which does the plotting
+    [totalcells,ratios,ratios2,totcol] = PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag,dapimax,chanmax,dapimeanall,usemeandapi); % separate function which does the plotting
     
 end
 end
