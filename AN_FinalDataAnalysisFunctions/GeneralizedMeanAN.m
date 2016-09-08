@@ -32,7 +32,7 @@ if plottype == 0
     if size(index1) == 1
         ylabel(param1);
     else
-        ylabel([param1,'/meanDAPI']);
+        ylabel([param1,'/DAPI']);
     end
     end
    

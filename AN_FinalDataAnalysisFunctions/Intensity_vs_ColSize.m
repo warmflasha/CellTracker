@@ -1,8 +1,9 @@
 % plot the average intensity of the marker as a function of colony size
-function [rawdata] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi)
+function [rawdata1] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi,flag)
 clear tmp
 clear tmp2
 clear rawdata
+rawdata1 = cell(1,size(nms,2));
 [dapimeanall,~] = getmeandapi(nms,dir,index1, dapimax);
 for k=1:size(nms,2)
     filename{k} = [dir filesep  nms{k} '.mat'];
@@ -60,9 +61,12 @@ for k=1:size(nms,2)
         rawdata(j) = tmp2(j)./totalcells(j); % average intensity of expression ( devide by the total number of cells of each colony size)
     end
     
+    if flag == 1
     figure(6);subplot(1,size(nms2,2),k),  plot(rawdata(~isnan(rawdata)),'b*','markersize',15,'linewidth',2); legend(nms2{k});
     xlabel('Colony size');
     ylabel(['Expression of ',(param1),'marker']);
     xlim([0 8]);%size(rawdata(~isnan(rawdata)),1)
-    
+    end
+    rawdata1{k} = rawdata;
+end
 end

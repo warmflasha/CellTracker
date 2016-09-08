@@ -25,7 +25,7 @@
 % flag = specifies whether to display the plots of the colony-wise
 % annalysis
 
-function [newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag,dapimax,chanmax,usemeandapi)
+function [newdata,totalcells,ratios,ratios2,totcol] = plotallanalysisAN(thresh,nms,nms2,dir,midcoord,fincoord,index1,index2,param1,param2,plottype,flag,dapimax,chanmax,usemeandapi,flag1)
 
 if   ~exist('plottype','var') 
     disp('Error: specify whether to devide the outall file into the quadrants (plottype var)') %error
@@ -44,7 +44,7 @@ end
 %[bb,c,~,~] =     GeneralizedScatterAN(nms,nms2,dir,midcoord,fincoord,index2,param1,param2,plottype);
 
  [totalcells,ratios,ratios2,totcol] = GeneralizedColonyAnalysisAN(thresh,dir,nms,nms2,midcoord,fincoord,index1,param1,plottype,flag,dapimax,chanmax,usemeandapi);
- [rawdata] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi);
+ [rawdata] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi,flag1);
 
 %[findat] = MeanDecomposedbyColAN(nms,nms2,dir,index1,param1,dapimax,N);
 

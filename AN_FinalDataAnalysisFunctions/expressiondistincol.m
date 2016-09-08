@@ -15,7 +15,7 @@ for k=1:size(nms,2)
     M(k) = max([colonies{k}.ncells]);
     
 end
-M = max(M);
+M = max(M);% not used really
 
 % obtain experimental distributions ( within the colony size N)
 

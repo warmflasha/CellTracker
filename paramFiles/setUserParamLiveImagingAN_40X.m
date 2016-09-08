@@ -21,8 +21,8 @@ userParam.linedil = 6;                 % size of the strel to dilate the line cu
 userParam.tocut = 100;% 230 if less then this parameter, don't cut
 
 
-userParam.probthresh_nuc = 0.8;% 0.7
-userParam.probthresh_cyto = 0.75;
+userParam.probthresh_nuc = 0.82;% 0.7
+userParam.probthresh_cyto = 0.9;
 
 userParam.dilate_cyto = 5;
 userParam.erode_nuc = 8;% 10

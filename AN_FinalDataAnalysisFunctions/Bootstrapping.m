@@ -27,7 +27,7 @@ for ii=1:length(peaks)
             alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,col);%make a single column vector from all the data (normalized intensity of col.6 in peaks to dapi (col. 5) in peaks
             
         else
-            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,col(1))./dapimeanall;%dapimeanall peaks{ii}(:,col(2))
+            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,col(1))./peaks{ii}(:,col(2));%dapimeanall peaks{ii}(:,col(2))
         end
         q=q+nlines(ii);
     end
