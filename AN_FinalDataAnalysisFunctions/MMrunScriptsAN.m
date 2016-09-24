@@ -1,6 +1,6 @@
     %%
 % determine the background images(for all chnnels) for the dataset to run
-ff=readMMdirectory('pluri_30um1');
+ff=readMMdirectory('10ngmlBMP4gata3cdx2');
 dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
 wavenames=ff.chan;
 
@@ -29,9 +29,9 @@ maxims= dims(1)*dims(2);
 % inhibtors(2)experiment, with FGFRi
 %close all
 %for k=8:5:25
- N  =10;% 165
+ N  =520;% 149,150,120 (gata3 diff)
  
-   ANrunOneMM('pluri_62um1',N,bIms,nIms,'setUserParamAN20X_uCOLlargeCircles','DAPI',1);%setUserParamAN20X_uCOL
+   ANrunOneMM('10ngmlBMP4gata3cdx2',N,bIms,nIms,'setUserParamAN20X_uCOLlargeCircles','DAPI',1);%setUserParamAN20X_uCOL
 imcontrast
 %end
  
@@ -40,12 +40,16 @@ imcontrast
 clear all
 % PLOT STUFF
    
- %nms = {'Control_pAktdyn','FGFi_1hr_pAktdyn','FGFi_6hr_pAktdyn','FGFi_24hr_pAktdyn','FGFi_30hr_pAktdyn','FGFi_42hr_pAktdyn'}; 
-%  nms2 = {'control','1 hr','6 hr','24 hr', '30 hr', '42 hr'};%  nanog(555) peaks{}(:,8), pERK(488) peaks{}(:,6)
+ nms = {'controlGATA3cdx2','10ngmlBMP4gata3cdx2'}; 
+ nms2 = {'c','10ngml bmp4'};%  nanog(555) peaks{}(:,8), pERK(488) peaks{}(:,6)
+   % C1: cdx2,eomes sox17 C2: Sox2,Oct4,Bra
    
- nms = {'pluri_30um1','pluri_62um1'};% dapi cy5 
- nms2 = {'30 um D','62 um D'};%,'
+%  nms = {'otherMEKi_C','otherMEKi_1uM'};% dapi gfp rfp 
+%  nms2 = {'control','1 uM other MEKi'};%,'
  
+%  nms = {'controlGATA3cdx2','10ngmlBMP4gata3cdx2'};% dapi cy5 gfp 
+%  nms2 = {'control','10 ng/ml bmp4'};%,
+%  
   %nms = {'Mek_inold1hr','Mek_inold6hr','Mek_inold24hr','Mek_inold30hr','Mek_inold42hr'};% ,'C_42hrinmedia'
   %nms = {'C_1hrinmedia','Mek_innew1hr','Mek_innew6hr','Mek_innew24hr','Mek_innew30hr','C_42hrmedia'};% ,'C_42hrinmedia'
 %   nms = {'esi017noQd_C_finerConc','esi017noQd_01_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};% ,'C_42hrinmedia'
@@ -53,7 +57,7 @@ clear all
  % pERK(GFP)peaks(6) Dapi(5)  Rfp(8)nanog(M)
 %Dapi Sox2 Nanog Dapi GFP(6) RFP(8)
  
-dapimax =60000;%1400
+dapimax =1200;%now used as the area thresh; dapimax is set to max 60000 withi the generalized mean functio
 chanmax = 60000;
 dir = '.';
 %colors = {'c','c','b','b','g','g','m','m','r','r'};
@@ -62,9 +66,19 @@ dir = '.';
 % for the ibidi 8well plte with pAKT staining GFP = peaks{}(:,6); RFP - peaks{}(:,8)
 usemeandapi =[];
 flag1 = 1;
-[mediaonly,~,~,~,~]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[10 5],[8 6],'Nanog','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
-h = figure(5);
+[mediaonly,~,~,~,~]= plotallanalysisAN(1.5,nms,nms2,dir,[],[],[8 5],[8 6],'gata3','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
+h = figure(1);
 h.Children.FontSize = 14;
+
+%%
+n = 2;
+figure(6)
+for k=1
+subplot(1,n,k)
+ylim([0 1]);
+xlim([0 7])
+
+end
 %%
 %plot mean values of expression specifically for the given colony size 'esi017noQd_01_finerConc'
 nms = {'esi017noQd_C_finerConc','esi017noQd_03_finerConc','esi017noQd_1_finerConc','esi017noQd_3_finerConc','esi017noQd_10_finerConc','esi017noQd_30_finerConc'};% ,'C_42hrinmedia'
@@ -94,8 +108,8 @@ ylim([0 6])
  nms2 = {'control','MEKi'}; % ,'MEKi'                  %
  nms3 = {'control','MEKi','theor'}; % ,'MEKi' 
  index = [8];param1 = 'Sox2';
-thresh =1.2;
-dapimax =10000;
+thresh =1.2;% 1.2
+dapimax =60000;%10000
 flag = 0;
 N = 5;
 dir = '.';
@@ -106,13 +120,13 @@ prob = 0.8;   % from this experiment(mean fractions)
         [np]= PartitionFn_noInteraction(N,prob); % get the probability for no interactions model
         theor{k} = np;
         
-        figure(11), plot(vect',binN{k},'-*','markersize',18,'linewidth',3);hold on
+        figure(12), plot(vect',binN{k},'-*','markersize',18,'linewidth',3);hold on
         legend(nms2{k}); 
-        figure(11), plot(vect',theor{k},'-k','markersize',18,'linewidth',3);hold on
+        figure(12), plot(vect',theor{k},'-k','markersize',18,'linewidth',3);hold on
     end
         xlim([0 N+1]);
-        xlabel(['Number of ', (param1) 'cells in the colony'],'fontsize',15);
-        ylabel(['Fraction ',(param1) 'positive'],'fontsize',15);
+        xlabel('Number of positive cells in the colony','fontsize',15);
+        ylabel(['Fraction of ' [num2str(N)] '-cell colonies with x ',(param1) ' positive cells'],'fontsize',15);
         ylim([0 1]);
         title(['colonies of size  ' num2str(N) ]);
         legend(nms2)
@@ -148,24 +162,15 @@ box on
 legend(nms2{k});
 end
 
-%%
-n = 2;
-figure(6)
-for k=1:n
-subplot(1,n,k)
-ylim([0 2.5]);
-xlim([0 8])
-
-end
 
 %%
 % plot the scatter plots colorcoded
-nms = {'control6hrperknanog','meki_6hr_perknanog'};% ,'C_42hrinmedia'
- nms2 = {'C 6hr','MEKi 6hr'};%,'42 hr in media'%dapi,gfp(8),cy5(6)
+nms = {'controlGATA3cdx2','10ngmlBMP4gata3cdx2'};% dapi gfp cy5 
+ nms2 = {'control','10ng/ml BMP4'};%,'
  % nanog(RFP), pERK(GFP)
-param1 = 'Sox2';
-param2 = 'Nanog';
-index2 = [6 8];
+param1 = 'GATA3';
+param2 = 'Cdx2';
+index2 = [8 6];
 %index2 = [6 8];
 toplot = cell(1,size(nms,2));
 flag = 0;% generate third column with the col size
@@ -183,10 +188,10 @@ for j=1:size(nms,2)
     figure(8),subplot(1,size(nms,2),j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
     legend(nms2{j});
     box on
-    ylabel('Sox2')
-    xlabel('Nanog')
-      ylim([0 5]);
-      xlim([0 0.5]);
+    ylabel(param1)
+    xlabel(param2)
+      ylim([0 10]);
+      xlim([0 10]);
 end
 %%
 % get histograms for differen colony sizes

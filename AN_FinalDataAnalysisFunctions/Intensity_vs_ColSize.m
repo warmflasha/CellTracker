@@ -25,9 +25,10 @@ for k=1:size(nms,2)
     col = colonies{k};
     
     for ii=1:length(col)
-        a = any(col(ii).data(:,index1(1))>dapimax);
+        a = any(col(ii).data(:,3)>dapimax(1));%%any(col(ii).data(:,index1(1))>dapimax(1))
+      %  c = any(col(ii).data(:,index1(1))>dapimax(2));%%
         b = any(col(ii).data(:,index1(2))>chanmax);
-        if ~isempty(col(ii).data) && a==0 && b==0;
+        if ~isempty(col(ii).data) && a==0 && b==0 ;
             nc = col(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;

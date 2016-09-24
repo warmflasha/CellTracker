@@ -51,7 +51,7 @@ alldat=zeros(totcells,ncol+1);
 % combine:
 q=1;
 for ii=1:length(peaks)
-    if ~isempty(peaks{ii})
+    if ~isempty(peaks{ii}) 
         currdat=peaks{ii};
         toadd=[ac(ii).absinds(2) ac(ii).absinds(1)];
         currdat(:,1:2)=bsxfun(@plus,currdat(:,1:2),toadd);

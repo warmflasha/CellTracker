@@ -121,7 +121,7 @@ im = colonies{dataset}(C(j)).imagenumbers;
     %text(colonies{dataset}(C(j)).data(:,1)+35,colonies{dataset}(C(j)).data(:,2),num2str(im),'Color','m');
     title('dapi');
     
-    figure(j),subplot(1,2,2),imshow(fi{chan(3)},[]);
+    figure(j),subplot(1,2,2),imshow(fi{chan(2)},[]);
     hold on;  plot(colonies{dataset}(C(j)).data(:,1),colonies{dataset}(C(j)).data(:,2),'r*');
     text(colonies{dataset}(C(j)).data(:,1)+5,colonies{dataset}(C(j)).data(:,2),num2str(dat),'Color','r');
 end
