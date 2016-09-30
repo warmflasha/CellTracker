@@ -27,7 +27,7 @@ userParam.coltype = 0;
 % when groupinf colonies by distance need to supply the parameter to still
 % consider cells within one colony ( 80 works for microcolonies at 20X
 % magnification
-userParam.colonygrouping = 80;% 120 for 60X
+userParam.colonygrouping = 100;% 120 for 60X
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
@@ -35,7 +35,7 @@ userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on 
 
 % image smoothing parameters 
 userParam.gaussRadius=10;% 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=3; % 3
+userParam.gaussSigma=2; % 3
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -68,7 +68,7 @@ userParam.radiusMin = 20; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 30;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  = 1000;  % 270
+userParam.nucIntensityLoc  =500;  % 270
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW

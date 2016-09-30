@@ -31,7 +31,7 @@ for k=1:size(nms,2)
         if ~isempty(col(ii).ncells) && nc == N;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
-            X = col(ii).data(:,index)./col(ii).data(:,5)>thresh;
+            X = (col(ii).data(:,index)./col(ii).data(:,5))>thresh;
             j = sum(X);
             binN{k}(j+1)=binN{k}(j+1)+1; % binN(j+1) contains the number of colonies, within which only j cells (out of N total cell within the colony) are gene-positive
             

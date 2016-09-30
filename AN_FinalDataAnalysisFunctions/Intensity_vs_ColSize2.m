@@ -1,5 +1,7 @@
-% plot the average intensity of the marker as a function of colony size
-function [rawdata1] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi,flag)
+function [rawdata1] =  Intensity_vs_ColSize2(nms,nms2,dir,index1,param1,dapimax,chanmax,flag)
+% this function is to plot the product of columns of peaks with indexes
+% index1 : peaks(:,index1(1))*peaks(:,index1(2))
+
 clear tmp
 clear tmp2
 clear rawdata
@@ -25,29 +27,15 @@ for k=1:size(nms,2)
     col = colonies{k};
     
     for ii=1:length(col)
-        a = any(col(ii).data(:,3)>dapimax(1));%%any(col(ii).data(:,index1(1))>dapimax(1))
-      %  c = any(col(ii).data(:,index1(1))>dapimax(2));%%
+        a = any(col(ii).data(:,3)>dapimax(1));%%
         b = any(col(ii).data(:,index1(2))>chanmax);
         if ~isempty(col(ii).data) && a==0 && b==0 ;
             nc = col(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
             % totalcells(nc)=totalcells(nc)+nc;
-            if size(index1,2) == 1
-            tmp = col(ii).data(:,index1(1)); %assign the value of the normalized intensity in specific channel to tmp;
+            tmp = col(ii).data(:,index1(1)).*col(ii).data(:,index1(2)); %assign the value of product to tmp;
             tmp2(nc) = tmp2(nc) + sum(tmp); % add the elements tmp, corresponding to the same colony size, into the tmp2
-            end
-            if size(index1,2) >1
-           tmp = col(ii).data(:,index1(1))./col(ii).data(:,index1(2)); %assign the value of the normalized intensity in specific channel to tmp;
-          %tmp = col(ii).data(:,index1(1)).*col(ii).data(:,index1(2));
-            tmp2(nc) = tmp2(nc) + sum(tmp); % add the elements tmp, corresponding to the same colony size, into the tmp2
-           
-            end
-            if usemeandapi == 1
-                tmp = col(ii).data(:,index1(1))./dapimeanall; %assign the value of the normalized intensity in specific channel to tmp;
-          %tmp = col(ii).data(:,index1(1)).*col(ii).data(:,index1(2));
-            tmp2(nc) = tmp2(nc) + sum(tmp);
-            end
         end
         
         

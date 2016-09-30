@@ -4,7 +4,7 @@ if ~exist('parrange','var')
     parrange = 50:200;
 end
 imFiles=readAndorDirectory(direc);
-tot_imgs=length(imFiles.m);
+tot_imgs=length(imFiles.p);% AN, cahnged from tot_imgs=length(imFiles.m)
 previmg=andorMaxIntensity(imFiles,0,0,chan);
 si=size(previmg);
 
