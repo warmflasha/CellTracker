@@ -18,9 +18,10 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     
     for ii=1:size(colonies{k},2)
         a = any(colonies{k}(ii).data(:,3)>dapimax(1));%%any(colonies{k}(ii).data(:,index1(1))>dapimax(1))
-      %  c = any(col(ii).data(:,index1(1))>dapimax(2));%%
+       in = colonies{k}(ii).imagenumbers;
+        %  c = any(col(ii).data(:,index1(1))>dapimax(2));%%
         b = any(colonies{k}(ii).data(:,index1(1))>chanmax);
-        if ~isempty(colonies{k}(ii).data) && a ==0 && b == 0 ; % if the colony is not empty and does not contain junk in DAPI and junk in the channel index(2)
+        if ~isempty(colonies{k}(ii).data) && (a ==0) ; % if the colony is not empty and does not contain junk in DAPI and belongs to the specific set of images&& (in(1) < 160)  
             nc = colonies{k}(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;

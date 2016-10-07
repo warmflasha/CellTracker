@@ -15,7 +15,7 @@ if flag == 0   % if flag ==0, generate the third column with the colony size tha
  q = 1;
  alldata = zeros(size(peaks,2),3);
  for ii=1:length(col)
-     a = any(col(ii).data(:,5)>dapimax);
+     a = any(col(ii).data(:,3)>dapimax);
      if a == 0
          ncell = size(col(ii).data,1);
          if ncell > 8
@@ -48,7 +48,7 @@ if flag == 1      % if flag ==1, generate 2 columns with combined peaks data col
   q = 1;
   alldata = zeros(size(peaks,2),2);
   for ii=1:length(col)
-      a = any(col(ii).data(:,5)>dapimax);
+      a = any(col(ii).data(:,3)>dapimax);
       if a == 0
           ncell = size(col(ii).data,1);
           if ncell > 8

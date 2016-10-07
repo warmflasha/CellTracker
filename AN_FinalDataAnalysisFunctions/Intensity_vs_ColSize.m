@@ -25,10 +25,10 @@ for k=1:size(nms,2)
     col = colonies{k};
     
     for ii=1:length(col)
-        a = any(col(ii).data(:,3)>dapimax(1));%%any(col(ii).data(:,index1(1))>dapimax(1))
-      %  c = any(col(ii).data(:,index1(1))>dapimax(2));%%
+        a = any(col(ii).data(:,3)>dapimax(1));%%      any(col(ii).data(:,index1(1))>dapimax(1))
+        in = colonies{k}(ii).imagenumbers;
         b = any(col(ii).data(:,index1(2))>chanmax);
-        if ~isempty(col(ii).data) && a==0 && b==0 ;
+        if ~isempty(col(ii).data) && a==0 ; % only specific image numbers && in(1) < 160  
             nc = col(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
@@ -63,7 +63,7 @@ for k=1:size(nms,2)
     end
     
     if flag == 1
-    figure(6);subplot(1,size(nms2,2),k),  plot(rawdata(~isnan(rawdata)),'b*','markersize',15,'linewidth',2); legend(nms2{k});
+    figure(6+k);  plot(rawdata(~isnan(rawdata)),'b*','markersize',15,'linewidth',2); legend(nms2{k});%subplot(1,size(nms2,2),k)
     xlabel('Colony size');
     ylabel(['Expression of ',(param1),'marker']);
     xlim([0 8]);%size(rawdata(~isnan(rawdata)),1)

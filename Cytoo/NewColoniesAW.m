@@ -22,9 +22,9 @@ function [groupids]= NewColoniesAW(pts)
 global userParam;
 %userParam.colonygrouping = 120;
 
-XX=ipdm(pts);
-% XX1 = pdist(pts);   % pdist with squareform is the same as the ipdm ( but only part of the statistical toolbox)
-% XX = squareform(XX1);
+%XX=ipdm(pts);
+XX1 = pdist(pts);   % pdist with squareform is the same as the ipdm ( but only part of the statistical toolbox)
+XX = squareform(XX1);
 ncells = size(pts,1);
 groupids=zeros(ncells,1);
 mindist = userParam.colonygrouping;% 40 for the 10X images % 80 for 20X images % ~ 120 for 60X images % need to put in the paramfile!!!!

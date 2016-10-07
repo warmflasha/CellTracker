@@ -1,24 +1,29 @@
 %split btf files
 
- MMdirec1 =('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-09-13-uColGATA3Cdx2/controlGATA3cdx2');
- MMdirec2 =('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-09-13-uColGATA3Cdx2/10ngmlBMP4gata3cdx2');
+ MMdirec1 =('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/Outall_files_PluriNtwInh/C_RonlyDapiSox2');
+%  MMdirec2 =('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-10-04-RotherMEKiLefty_Sox2Nanog/otherMEKi_R');
+%  MMdirec3 =('/Users/warmflashlab/Desktop/A_NEMASHKALO_Data_and_stuff/2_NO_QUADRANTS_goodData(esi017Cells)/2016-10-04-RotherMEKiLefty_Sox2Nanog/Lefty_R');
 
  
- chan1 = {'DAPI','GFP','CY5'};%  488 GATA3 647 - cdx2
 
- filenames1 = 'Control_gata3Cdx2.btf';
- filenames2 = '10ngmlBMP4_gata3Cdx2.btf';
-
- acoords1 = olympusToMMbtf(MMdirec1,filenames1,chan1);
- acoords2 = olympusToMMbtf(MMdirec2,filenames2,chan1);
  
+ chan = {'DAPI','GFP'};% 
+
+ filenames1 = {'Control(R)_C0001.tif','Control(R)_C0002.tif'};
+%  filenames2 = 'MEKiother.btf';
+%  filenames3 = 'Lefty.btf';
  
- 
- disp('Succesfully split all files for gata3 exper');
 
 
-save('c','acoords1');
-save('10ngmlbmp4','acoords2');
+ acoords1 = olympusToMM(MMdirec1,filenames1,chan);
+%  acoords2 = olympusToMMbtf(MMdirec2,filenames2,chan);
+%  acoords3 = olympusToMMbtf(MMdirec3,filenames3,chan);
+
+
+ save('Conlyaccords','acoords1');
+ 
+ disp('Succesfully split all files for meki control');
+
 
 
 
