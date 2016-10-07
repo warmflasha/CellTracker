@@ -1,4 +1,6 @@
 function out_masks = statsArrayToSplitMasks(stats,imsize)
+
+minArea = 1000;
 medfiltsize = 11;
 maxeroderad = 50;
 ntimes = length(stats);
@@ -25,14 +27,15 @@ xyti = [xyt,allinds];
 
 
 ncolonies = max(allinds);
+%
+% figure; plot(xyt(:,1),xyt(:,2),'r.'); hold on;
+% for ii = 1:ncolonies
+%     coldata = xyti(allinds == ii,:);
+%     mm  = mean(coldata,1);
+%     text(mm(1),mm(2),int2str(ii),'Color','c');
+% end
 
-figure; plot(xyt(:,1),xyt(:,2),'r.'); hold on;
-for ii = 1:ncolonies
-    coldata = xyti(allinds == ii,:);
-    mm  = mean(coldata,1);
-    text(mm(1),mm(2),int2str(ii),'Color','c');
-end
-
+out_masks = false(imsize(1),imsize(2),ntimes);
 
 for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
     coldata = xyti(allinds == ii,:);
@@ -42,56 +45,73 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
         curr_inds = coldata(:,3) == jj;
         nc_time(jj) = sum(curr_inds); %number of cells in colony
         nc_area(jj) = sum(coldata(curr_inds,5)); %colony area
-    end
-    nc_time_f = medfilt1(nc_time,medfiltsize);
-    needspliting1 = find(nc_time < nc_time_f & nc_time > 0); % goes down and back up
-    %nc_time(nc_time > nc_time_f) = nc_time_f(nc_time > nc_time_f);
-    cmax = cummax(nc_time);
-    needspliting2 = find(nc_time > 0 & nc_time < cmax & nc_area > 1.05*cummin(nc_area)); %down from max but not smaller
-    correctcell1 = nc_time_f(needspliting1);
-    correctcell2 = cmax(needspliting2);
-    [needspliting{ii}, inds] = unique([needspliting1; needspliting2]);
-    correctcell_num{ii} = [correctcell1; correctcell2];
-    correctcell_num{ii} = correctcell_num{ii}(inds);
-end
-
-for ii=1:ntimes % loop over time and put
-    mask = false(imsize);
-    disp(['Time: ' int2str(ii)]);
-    for jj = 1:ncolonies
-        inds = xyti(:,6) == jj & xyti(:,3) == ii; %correct colony and time
-        cellnums = xyti(inds,4);
+        if jj > 1 %store mask from last frame
+            oldmask = tmpmask;
+        end
+        
+        %make the mask of the current colony
+        cellnums = coldata(curr_inds,4);
         tmpmask = false(imsize);
-        tmpmask(cat(1,stats{ii}(cellnums).PixelIdxList))=true;
-        if ismember(ii,needspliting{jj}) % if colony needs to be split
-            numneeded = correctcell_num{jj}(needspliting{jj}==ii);
-            cc = bwconncomp(tmpmask);
-            ncell = cc.NumObjects;
-            erode_rad = 1;
-            while ncell < numneeded && erode_rad < maxeroderad
-                newmask = imerode(tmpmask,strel('disk',erode_rad));
-                cc = bwconncomp(newmask);
+        tmpmask(cat(1,stats{jj}(cellnums).PixelIdxList))=true;
+        
+        if jj > 1
+            if nc_time(jj) < nc_time(jj-1) && nc_area(jj) > 0.9*nc_area(jj-1) %lost a cell, didn't lose area
+                intmask = tmpmask | oldmask;
+                cc = bwconncomp(intmask);
                 ncell = cc.NumObjects;
-                erode_rad = erode_rad + 1;
-                
-            end
-            if erode_rad == maxeroderad
-                disp(['Warning: Failed to split. Colony ' int2str(jj) ' time ' int2str(ii)]);
+                if ncell == nc_time(jj-1)
+                    outside = ~imdilate(tmpmask,strel('disk',1));
+                    basin = imcomplement(bwdist(outside));
+                    basin = imimposemin(basin, intmask | outside);
+                    L = watershed(basin);
+                    maskToUse = L > 1;
+                    cc = bwconncomp(maskToUse);
+                    a = regionprops(cc,'Area');
+                    if min([a.Area]) > minArea %its good, move on.
+                        disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Used overlap with previous']);
+                        out_masks(:,:,jj) = outmasks(:,:,jj) | maskToUse;
+                        continue;
+                    end
+                end
+                %if we are here, splitting needed, but overlap based
+                %splitting failed. try erosion based. 
+                numneeded = nc_time(jj-1);
+                erode_rad = 1;
+                while ncell < numneeded && erode_rad < maxeroderad
+                    newmask = imerode(tmpmask,strel('disk',erode_rad));
+                    cc = bwconncomp(newmask);
+                    ncell = cc.NumObjects;
+                    erode_rad = erode_rad + 1;
+                end
+                if erode_rad == maxeroderad
+                    disp(['Warning: Failed to split. Colony ' int2str(ii) ' time ' int2str(jj)]);
+                    maskToUse = tmpmask;
+                    
+                else
+                    
+                    outside = ~imdilate(tmpmask,strel('disk',1));
+                    basin = imcomplement(bwdist(outside));
+                    basin = imimposemin(basin, newmask | outside);
+                    
+                    L = watershed(basin);
+                    testmask = L > 1;
+                    cc = bwconncomp(testmask);
+                    a = regionprops(cc,'Area');
+                    if min([a.Area]) < minArea
+                        disp(['Warning: discarding erode-based split. Resulting cells too small']);
+                        maskToUse = tmpmask;
+                    else
+                        disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Erode radius: ' int2str(erode_rad)]);
+                        maskToUse = L > 1;
+                    end
+                end
+            else %doesn't need splitting
                 maskToUse = tmpmask;
-            else
-                disp(['Split: Colony ' int2str(jj) ' time ' int2str(ii) '. Erode radius: ' int2str(erode_rad)]);
-                
-                outside = ~imdilate(tmpmask,strel('disk',1));
-                basin = imcomplement(bwdist(outside));
-                basin = imimposemin(basin, newmask | outside);
-                
-                L = watershed(basin);
-                maskToUse = L > 1;
             end
         else
-            maskToUse  = tmpmask;
+            maskToUse = tmpmask; %first frame
         end
-        mask = mask | maskToUse;
+        out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
     end
-    out_masks(:,:,ii) = mask;
+
 end
