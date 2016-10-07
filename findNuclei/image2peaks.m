@@ -28,7 +28,7 @@ if ~exist('maskN','var')
     [maskN, statsN]=getNuclearMaskNoIlastik(red);
 else
     maskN = imfill(maskN,'holes');
-    
+    maskN = bwareafilt(maskN,[userParam.nucAreaLo, userParam.nucAreaHi]);
     statsN =ilastikMaskToStats(maskN);
 end
 
