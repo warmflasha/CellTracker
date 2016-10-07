@@ -14,7 +14,7 @@ immask = squeeze(immask);
 
 mask = immask > 1;
 if complement
-    mask = imcomplement(mask);% if object 1 refers to background, comment this statement.
+    mask = imcomplement(mask);
 end
 
 
