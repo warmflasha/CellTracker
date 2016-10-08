@@ -8,14 +8,15 @@ userParam.gaussSigma = floor(cellSize/18);
 userParam.presubNucBackground = 1;
 userParam.backdiskrad = round(cellSize*2);
 erodeSize = 1.2;
-cellarea = (cellSize/2)^2*pi;
 
 img_proc = preprocessImages(img);
 
-mask = img_proc > cellIntensity;
+%e_img = edge(img_proc,'canny');
+
+mask = (img_proc > cellIntensity); %& ~e_img;
 
 mask = imfill(mask,'holes');
-mask = bwareaopen(mask,2*floor(cellarea/3));
+mask = bwareaopen(mask,2*floor(cellArea/3));
 
 
 
@@ -23,7 +24,7 @@ if separateFused
     CC = bwconncomp(mask);
     stats = regionprops(CC, 'Area');
     area = [stats.Area];
-    fusedCandidates = area > 1.7*cellarea;
+    fusedCandidates = area > 1.7*cellArea;
     
     sublist = CC.PixelIdxList(fusedCandidates);
     sublist = cat(1,sublist{:});

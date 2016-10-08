@@ -2,10 +2,12 @@ function out_masks = statsArrayToSplitMasks(stats,nuc_imgs)
 
 imsize = size(nuc_imgs(:,:,1));
 
+%a few parameters
 minArea = 1000;
-medfiltsize = 11;
 maxeroderad = 12;
 discardsmall = 300;
+
+
 ntimes = length(stats);
 ncellsperframe = cellfun(@(x)size(x,1),stats);
 ncells = sum(cellfun(@length,stats));
@@ -59,47 +61,22 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
         
         if jj > 1
             if nc_time(jj) < max(nc_time(1:jj-1)) && nc_time(jj) > 0 %&& nc_area(jj) > 0.9*nc_area(jj-1) %lost a cell, didn't lose area
-                intmask = tmpmask & oldmask;
-                cc = bwconncomp(intmask);
-                ncell = cc.NumObjects;
-                if ncell >= nc_time(jj-1)
-                    outside = ~imdilate(tmpmask | intmask ,strel('disk',2));
-                    intmask(outside) = false; %make sure new mask doesn't overlap background
-                    intmask = imerode(intmask,strel('disk',1));
-                    intmask = bwareaopen(intmask,discardsmall,4); %remove small stuff from mask
-                    basin = sobelEdge(nuc_imgs(:,:,jj));
-                    basin = imimposemin(basin, intmask | outside);
-                    L = watershed(basin);
-                    maskToUse = L > 1;
-                    maskToUse = bwareaopen(maskToUse,discardsmall,4);
-                    cc = bwconncomp(maskToUse);
-                    a = regionprops(cc,'Area');
-                    if min([a.Area]) > minArea %its good, move on.
-                        disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Used overlap with previous']);
-                        out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
-                        continue;
-                    else
-                        ncell = nc_time(jj); % reset cell number before continuing
-                    end
-                end
-                %if we are here, splitting needed, but overlap based
-                %splitting failed. try erosion based.
+                done = false;
+                %first try erosion based splitting
                 numneeded = max(nc_time(1:jj-1));
+                ncell = nc_time(jj);
                 erode_rad = 1;
+                %increase erosion radius until object is separated
                 while ncell < numneeded && erode_rad < maxeroderad
                     newmask = imerode(tmpmask,strel('disk',erode_rad));
+                    newmask = bwareaopen(newmask,discardsmall,4);
                     cc = bwconncomp(newmask);
                     ncell = cc.NumObjects;
                     erode_rad = erode_rad + 1;
                 end
-                if erode_rad == maxeroderad
-                    disp(['Warning: Failed to split. Colony ' int2str(ii) ' time ' int2str(jj)]);
-                    maskToUse = tmpmask;
-                    
-                else
-                    
-                    outside = ~imdilate(tmpmask,strel('disk',1));
-                    basin = imcomplement(bwdist(outside));
+                if erode_rad < maxeroderad %possible success
+                    outside = ~imdilate(tmpmask,strel('disk',2));
+                    basin =  sobelEdge(nuc_imgs(:,:,jj));
                     basin = imimposemin(basin, newmask | outside);
                     
                     L = watershed(basin);
@@ -107,15 +84,49 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                     testmask = bwareaopen(testmask,discardsmall,4); %remove small stuff from mask
                     cc = bwconncomp(testmask);
                     a = regionprops(cc,'Area');
-
-                    if min([a.Area]) < minArea
-                        disp(['Warning: discarding erode-based split. Resulting cells too small']);
-                        maskToUse = tmpmask;
-                    else
+                    a = sort([a.Area],'descend');
+                    a = a(1:numneeded);
+                    
+                    
+                    if min([a.Area]) < minArea %didn't work
+                        disp(['Warning: Colony ' int2str(ii) ' time ' int2str(jj) '. Discarding erode-based split. Resulting cells too small.'...
+                            ' Trying overlap based splitting.']);
+                    else %it's good
                         disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Erode radius: ' int2str(erode_rad)]);
                         maskToUse = L > 1;
+                        done = true;
                     end
                 end
+                if ~done
+                    disp(['Warning: erosion based splitting failed. Colony ' int2str(ii) ' time ' int2str(jj)...
+                        '. Trying overlap based spliting.']);
+                    maskToUse = tmpmask;
+                    intmask = tmpmask & oldmask;
+                    cc = bwconncomp(intmask);
+                    ncell = cc.NumObjects;
+                    if ncell >= max(nc_time(1:jj-1))
+                        outside = ~imdilate(tmpmask | intmask ,strel('disk',2));
+                        intmask(outside) = false; %make sure new mask doesn't overlap background
+                        intmask = imerode(intmask,strel('disk',1));
+                        intmask = bwareaopen(intmask,discardsmall,4); %remove small stuff from mask
+                        basin = sobelEdge(nuc_imgs(:,:,jj));
+                        basin = imimposemin(basin, intmask | outside);
+                        L = watershed(basin);
+                        maskToUse = L > 1;
+                        maskToUse = bwareaopen(maskToUse,discardsmall,4);
+                        cc = bwconncomp(maskToUse);
+                        a = regionprops(cc,'Area');
+                        a = sort([a.Area],'descend');
+                        a = a(1:max(nc_time(1:jj-1)));
+                        if min([a.Area]) > minArea
+                            disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Used overlap with previous']);
+                        else
+                            maskToUse = tmpmask;
+                        end
+                    end
+                end %erosion method succeeded
+
+                
             else %doesn't need splitting
                 maskToUse = tmpmask;
             end
