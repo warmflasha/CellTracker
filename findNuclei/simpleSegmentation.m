@@ -1,4 +1,4 @@
-function finalMask = simpleSegmentation(img,cellArea,cellIntensity,separateFused)
+function [finalMask, img_proc] = simpleSegmentation(img,cellArea,cellIntensity,separateFused)
 
 global userParam;
 
@@ -11,6 +11,7 @@ erodeSize = 1.2;
 cellarea = (cellSize/2)^2*pi;
 
 img_proc = preprocessImages(img);
+
 mask = img_proc > cellIntensity;
 
 mask = imfill(mask,'holes');

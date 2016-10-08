@@ -1,8 +1,11 @@
-function out_masks = statsArrayToSplitMasks(stats,imsize)
+function out_masks = statsArrayToSplitMasks(stats,nuc_imgs)
+
+imsize = size(nuc_imgs(:,:,1));
 
 minArea = 1000;
 medfiltsize = 11;
 maxeroderad = 50;
+discardsmall = 200;
 ntimes = length(stats);
 ncellsperframe = cellfun(@(x)size(x,1),stats);
 ncells = sum(cellfun(@length,stats));
@@ -46,7 +49,7 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
         nc_time(jj) = sum(curr_inds); %number of cells in colony
         nc_area(jj) = sum(coldata(curr_inds,5)); %colony area
         if jj > 1 %store mask from last frame
-            oldmask = tmpmask;
+            oldmask = maskToUse;
         end
         
         %make the mask of the current colony
@@ -55,16 +58,16 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
         tmpmask(cat(1,stats{jj}(cellnums).PixelIdxList))=true;
         
         if jj > 1
-            if nc_time(jj) < nc_time(jj-1) && nc_time(jj) > 0 %&& nc_area(jj) > 0.9*nc_area(jj-1) %lost a cell, didn't lose area
+            if nc_time(jj) < max(nc_time(1:jj-1)) && nc_time(jj) > 0 %&& nc_area(jj) > 0.9*nc_area(jj-1) %lost a cell, didn't lose area
                 intmask = tmpmask & oldmask;
-                intmask = bwareaopen(intmask,50,4); %remove small stuff from mask
                 cc = bwconncomp(intmask);
                 ncell = cc.NumObjects;
                 if ncell >= nc_time(jj-1)
-                    outside = ~imdilate(tmpmask | intmask ,strel('disk',1));
+                    outside = ~imdilate(tmpmask | intmask ,strel('disk',2));
                     intmask(outside) = false; %make sure new mask doesn't overlap background
-                    intmask = imerode(intmask,strel('disk',1)); 
-                    basin = imcomplement(bwdist(outside));
+                    intmask = imerode(intmask,strel('disk',1));
+                    intmask = bwareaopen(intmask,discardsmall,4); %remove small stuff from mask
+                    basin = sobelEdge;
                     basin = imimposemin(basin, intmask | outside);
                     L = watershed(basin);
                     maskToUse = L > 1;
@@ -72,13 +75,15 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                     a = regionprops(cc,'Area');
                     if min([a.Area]) > minArea %its good, move on.
                         disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Used overlap with previous']);
-                        out_masks(:,:,jj) = outmasks(:,:,jj) | maskToUse;
+                        out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
                         continue;
+                    else
+                        ncell = nc_time(jj); % reset cell number before continuing
                     end
                 end
                 %if we are here, splitting needed, but overlap based
-                %splitting failed. try erosion based. 
-                numneeded = nc_time(jj-1);
+                %splitting failed. try erosion based.
+                numneeded = max(nc_time(1:jj-1));
                 erode_rad = 1;
                 while ncell < numneeded && erode_rad < maxeroderad
                     newmask = imerode(tmpmask,strel('disk',erode_rad));
@@ -98,8 +103,10 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                     
                     L = watershed(basin);
                     testmask = L > 1;
+                    testmask = bwareaopen(testmask,discardsmall,4); %remove small stuff from mask
                     cc = bwconncomp(testmask);
                     a = regionprops(cc,'Area');
+
                     if min([a.Area]) < minArea
                         disp(['Warning: discarding erode-based split. Resulting cells too small']);
                         maskToUse = tmpmask;
@@ -116,5 +123,5 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
         end
         out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
     end
-
+    
 end

@@ -1,9 +1,11 @@
-function out_masks = statsArrayToSplitMasks(stats,imsize)
+function out_masks = statsArrayToSplitMasks(stats,nuc_imgs)
+
+imsize = size(nuc_imgs(:,:,1));
 
 minArea = 1000;
 medfiltsize = 11;
-maxeroderad = 50;
-discardsmall = 200;
+maxeroderad = 12;
+discardsmall = 300;
 ntimes = length(stats);
 ncellsperframe = cellfun(@(x)size(x,1),stats);
 ncells = sum(cellfun(@length,stats));
@@ -61,14 +63,15 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                 cc = bwconncomp(intmask);
                 ncell = cc.NumObjects;
                 if ncell >= nc_time(jj-1)
-                    outside = ~imdilate(tmpmask | intmask ,strel('disk',1));
+                    outside = ~imdilate(tmpmask | intmask ,strel('disk',2));
                     intmask(outside) = false; %make sure new mask doesn't overlap background
                     intmask = imerode(intmask,strel('disk',1));
                     intmask = bwareaopen(intmask,discardsmall,4); %remove small stuff from mask
-                    basin = imcomplement(bwdist(outside));
+                    basin = sobelEdge(nuc_imgs(:,:,jj));
                     basin = imimposemin(basin, intmask | outside);
                     L = watershed(basin);
                     maskToUse = L > 1;
+                    maskToUse = bwareaopen(maskToUse,discardsmall,4);
                     cc = bwconncomp(maskToUse);
                     a = regionprops(cc,'Area');
                     if min([a.Area]) > minArea %its good, move on.
