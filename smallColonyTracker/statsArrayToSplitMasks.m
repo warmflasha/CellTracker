@@ -3,6 +3,7 @@ function out_masks = statsArrayToSplitMasks(stats,imsize)
 minArea = 1000;
 medfiltsize = 11;
 maxeroderad = 50;
+discardsmall = 200;
 ntimes = length(stats);
 ncellsperframe = cellfun(@(x)size(x,1),stats);
 ncells = sum(cellfun(@length,stats));
@@ -63,7 +64,7 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                     outside = ~imdilate(tmpmask | intmask ,strel('disk',1));
                     intmask(outside) = false; %make sure new mask doesn't overlap background
                     intmask = imerode(intmask,strel('disk',1));
-                    intmask = bwareaopen(intmask,50,4); %remove small stuff from mask
+                    intmask = bwareaopen(intmask,discardsmall,4); %remove small stuff from mask
                     basin = imcomplement(bwdist(outside));
                     basin = imimposemin(basin, intmask | outside);
                     L = watershed(basin);
@@ -100,8 +101,10 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                     
                     L = watershed(basin);
                     testmask = L > 1;
+                    testmask = bwareaopen(testmask,discardsmall,4); %remove small stuff from mask
                     cc = bwconncomp(testmask);
                     a = regionprops(cc,'Area');
+
                     if min([a.Area]) < minArea
                         disp(['Warning: discarding erode-based split. Resulting cells too small']);
                         maskToUse = tmpmask;
