@@ -29,10 +29,9 @@ userParam.colonygrouping = 100;
 allinds=NewColoniesAW(xyt(:,1:2));
 xyti = [xyt,allinds];
 
-
-
 ncolonies = max(allinds);
-%
+
+% %diagnostic plotting to label colonies
 % figure; plot(xyt(:,1),xyt(:,2),'r.'); hold on;
 % for ii = 1:ncolonies
 %     coldata = xyti(allinds == ii,:);
@@ -78,17 +77,16 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                     outside = ~imdilate(tmpmask,strel('disk',2));
                     basin =  sobelEdge(nuc_imgs(:,:,jj));
                     basin = imimposemin(basin, newmask | outside);
-                    
                     L = watershed(basin);
                     testmask = L > 1;
+                    
                     testmask = bwareaopen(testmask,discardsmall,4); %remove small stuff from mask
                     cc = bwconncomp(testmask);
                     a = regionprops(cc,'Area');
                     a = sort([a.Area],'descend');
-                    a = a(1:numneeded);
+                    a = a(1:min(numneeded,length(a)));
                     
-                    
-                    if min([a.Area]) < minArea %didn't work
+                    if min(a) < minArea %didn't work
                         disp(['Warning: Colony ' int2str(ii) ' time ' int2str(jj) '. Discarding erode-based split. Resulting cells too small.'...
                             ' Trying overlap based splitting.']);
                     else %it's good
@@ -104,7 +102,8 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                     intmask = tmpmask & oldmask;
                     cc = bwconncomp(intmask);
                     ncell = cc.NumObjects;
-                    if ncell >= max(nc_time(1:jj-1))
+                    numneeded = max(nc_time(1:jj-1));
+                    if ncell >= numneeded %try spliting based on overlap with last frame
                         outside = ~imdilate(tmpmask | intmask ,strel('disk',2));
                         intmask(outside) = false; %make sure new mask doesn't overlap background
                         intmask = imerode(intmask,strel('disk',1));
@@ -117,20 +116,19 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                         cc = bwconncomp(maskToUse);
                         a = regionprops(cc,'Area');
                         a = sort([a.Area],'descend');
-                        a = a(1:max(nc_time(1:jj-1)));
-                        if min([a.Area]) > minArea
+                        if min(a) > minArea
                             disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Used overlap with previous']);
                         else
                             maskToUse = tmpmask;
                         end
                     end
-                end %erosion method succeeded
-
+                end
                 
             else %doesn't need splitting
                 maskToUse = tmpmask;
             end
         else %first frame
+            colonies(ii) = dynColony();
             maskToUse = tmpmask; 
         end
         out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
