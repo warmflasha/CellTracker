@@ -1,12 +1,20 @@
 classdef dynColony %object for storing dynamic colony level data
     properties
         cells %array of dynCell objects
+        ncells % vector containing number of cells, same length as frames
+        frames % frames in which colony exists
+        nucfluor % vector of total nuclear intensity over colony   
+                 %(reliable even when splitting isn't)
+        cytfluor %vector of total nuclear intensity over colony   
+                 %(reliable even when splitting isn't)
         
     end
     
     methods
         function obj = dynColony(cells)
+            if nargin == 1
             obj.cells = cells;
+            end
         end
         
         function obj = addCellToColony(obj,newCell)

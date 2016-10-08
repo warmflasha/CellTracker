@@ -1,4 +1,4 @@
-function out_masks = statsArrayToSplitMasks(stats,nuc_imgs)
+function [out_masks, colonies] = statsArrayToSplitMasks(stats,nuc_imgs)
 
 imsize = size(nuc_imgs(:,:,1));
 
@@ -130,8 +130,8 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
             else %doesn't need splitting
                 maskToUse = tmpmask;
             end
-        else
-            maskToUse = tmpmask; %first frame
+        else %first frame
+            maskToUse = tmpmask; 
         end
         out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
     end
