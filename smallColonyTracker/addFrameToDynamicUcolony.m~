@@ -5,7 +5,6 @@ function colonies = addFrameToDynamicUcolony(mask,mask2,nimg,fimg,framenumber,co
 % nimg - nuclear image -
 % fimg - other fluorescence image
 
-discardsmallcyto = 600;
 matchdist = 150;
 erode_buf = 1;
 if ~exist('colonies','var')
@@ -68,16 +67,7 @@ elseif length(stats) == 2 % 2 cells, voronoi won't work, use distance transforms
 else
     cmask = mask2;
 end
-
-cmask = imerode(cmask,strel('disk',erode_buf));
-cmask = bwareaopen(cmask,discardsmallcyto,4);
-
-stats2 = regionprops(cmask,fimg,'MeanIntensity','Area');
-if length(stats2) > length(stats)
-    a = [stats2.Area];
-    [~,inds]=sort(a,'descend');
-    stats2 =stats2(sort(inds(1:length(stats))));
-end
+stats2 = regionprops(cmask,fimg,'MeanIntensity');
 for ii = 1:length(stats2)
     stats(ii).fluordata(end+1) = stats2(ii).MeanIntensity;
 end

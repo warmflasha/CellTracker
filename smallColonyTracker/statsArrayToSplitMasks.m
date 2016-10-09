@@ -46,6 +46,7 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
     nc_time =zeros(ntimes,1);
     nc_area = nc_time;
     for jj = 1:ntimes
+        disp(int2str(jj));
         curr_inds = coldata(:,3) == jj;
         nc_time(jj) = sum(curr_inds); %number of cells in colony
         nc_area(jj) = sum(coldata(curr_inds,5)); %colony area
@@ -91,7 +92,7 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                             ' Trying overlap based splitting.']);
                     else %it's good
                         disp(['Split: Colony ' int2str(ii) ' time ' int2str(jj) '. Erode radius: ' int2str(erode_rad)]);
-                        maskToUse = L > 1;
+                        maskToUse = testmask;
                         done = true;
                     end
                 end
@@ -128,10 +129,10 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                 maskToUse = tmpmask;
             end
         else %first frame
-            %colonies(ii) = dynColony();
+            colonies(ii) = dynColony();
             maskToUse = tmpmask; 
         end
-        %colonies = addFrameToDynamicUcolony(maskToUse,cellmasks(:,:,jj),nuc_imgs(:,:,jj),cyt_imgs(:,:,jj),jj,colonies);
+        colonies = addFrameToDynamicUcolony(maskToUse,cellmasks(:,:,jj),nuc_imgs(:,:,jj),cyt_imgs(:,:,jj),jj,colonies);
         out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
     end
     
