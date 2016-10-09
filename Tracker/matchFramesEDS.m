@@ -1,58 +1,10 @@
 function peaks=matchFramesEDS(peaks)
-%
-%   peaks=MatchFrames(peaks)
-%
-% Compute the optimum matching between sucessive frames and update
-% peaks{frame}(:,4) which carries the index in frame+1 that cell matched to
-%
-% The routine computes cutoffs to define the top (out of focus cells) and
-% eliminates these from each frame before matching frames. It computes the
-% mean and std of displacement of matched cells from frame to frame for the
-% first few frames to establish over what distance a match is allowed. More
-% diagnostics returned for each match than in AW routine. Uses
-%   checkAssociation() &
-%   initializeAssociationMatrix() &
-%   doOneMove()  routines from AW
-%
-% TODO should include change in area or area./fluor in defn of cost matrix.
-% Move the determination of dst_dummy to separate routine to call in
-% findBirthNodes and remove global birthNodeParam. Use mask for CCC
-%
 
-global userParam
-global birthNodeParam
 
-% optionally eliminate diffuse cells on top of chamber
-if isfield(userParam, 'useCCC') && userParam.useCCC
-    [min_top, std_bot] = cellsTopBottom(peaks, userParam.verboseCellTrackerEDS );
-else
-    min_top = Inf; std_bot = 0;
-end
 
-%check if distance parameter should be recomputed each step
-if userParam.L < 0
-    fixedDistParam  = 0;
-else
     fixedDistParam = 1;
     dst_dummy = userParam.L;
 end
-
-
-% establish typical parameters for frame to frame change
-% dst = [];
-% for frame = 2:min(4, length(peaks))
-%     cost = costMatrixEDS(peaks{frame-1}, peaks{frame}, userParam.L, min_top, std_bot);
-%     [Ilink, Jlink] = match1Frame(cost);
-%     ok = find(Jlink>0);
-%     [mean_step, std_step, dst] = stats_xy_dst(peaks{frame-1}(Ilink(ok), 1:2), peaks{frame}(Jlink(ok), 1:2), dst);
-% end
-%
-% dst_dummy = userParam.sclDstCost(1)*mean_step + userParam.sclDstCost(2)*std_step; % larger pairwise dst cost=Inf
-% birthNodeParam.dst2dummy = dst_dummy;
-%
-% fprintf(1, 'matchFramesEDS using cutoff topcells= %d, std bottom cells= %d (Inf,0 -> do not filter out top cells)\n', min_top, std_bot);
-% fprintf(1, '  (The defn of cutoff for topcells is in test4TopCells(). The std of this statistic for the bottom cells is given for ref)\n');
-% fprintf(1, '  From few frames, mean,std of nuc movement= %d %d, max dst for match= %d\n', mean_step, std_step, dst_dummy);
 
 for frame = 2:length(peaks)
     

@@ -2,8 +2,8 @@ function colonies = addFrameToDynamicUcolony(mask,mask2,nimg,fimg,framenumber,co
 % fill in last entry of dynamicColony array colonies using:
 % mask - nuclear mask (only for this colony)
 % mask2 - total cell mask (could have other colonies)
-% nimg - nuclear image - 
-% fimg - other fluorescence image 
+% nimg - nuclear image -
+% fimg - other fluorescence image
 
 matchdist = 150;
 erode_buf = 1;
@@ -11,11 +11,15 @@ if ~exist('colonies','var')
     colonies = dynColony();
 end
 
+if max(max(mask)) %nothing to do
+    return;
+end
+
 %get the nuclear stats
 stats = regionprops(mask,nimg,'Centroid','Area','MeanIntensity','PixelIdxList');
 stats2 = regionprops(mask,fimg,'MeanIntensity');
 for ii = 1:length(stats)
-    stats.fluordata = [stats(ii).MeanIntensity, stats2(ii).MeanIntensity];
+    stats(ii).fluordata = [stats(ii).MeanIntensity, stats2(ii).MeanIntensity];
 end
 
 %total nuclear mean
@@ -44,27 +48,29 @@ cytfluor = [mean2(nimg(mask2)), mean2(fimg(mask2))];
 colonies(end).nucfluor = nucfluor;
 colonies(end).cytfluor = cytfluor;
 
-if ~isempty(colonies(end).onframes) 
-%first frame for matching
-ToMatch{1} = [cat(1,stats.Centroid), cat(1,stats.Area), -1*ones(length(stats),1)];
-cells = colonies(end).cells;
-for ii = 1:length(cells)
-    if cells(ii).onframes(end) == framenumber-1;
-        dat = cells(ii).data;
-        ToMatch{2}(q,:) = dat(end,:);
-        q = q + 1;
+if ~isempty(colonies(end).onframes)
+    %first frame for matching
+    ToMatch{1} = [cat(1,stats.Centroid), cat(1,stats.Area), -1*ones(length(stats),1)];
+    cells = colonies(end).cells;
+    q = 1;
+    for ii = 1:length(cells)
+        if ~isempty(cells(ii).onframes) && cells(ii).onframes(end) == framenumber-1;
+            dat = cells(ii).data;
+            ToMatch{2}(q,:) = dat(end,:);
+            q = q + 1;
+        end
     end
-end
-ToMatch = MatchFrames(ToMatch,2,matchdist);
-
-for ii = 1:size(ToMatch{1},1)
-    cellfound = ToMatch{1}(ii,4);
-    if cellfound > -1
-        colonies(end).cells(cellfound).addTimeToCell(stats(ii),framenumber);
-    else
-        colonies(end).cell(end+1) = dynCell(stats(ii),framenumber);
+    if length(ToMatch) > 1
+    ToMatch = MatchFrames(ToMatch,2,matchdist);
     end
-end
+    for ii = 1:size(ToMatch{1},1)
+        cellfound = ToMatch{1}(ii,4);
+        if cellfound > -1
+            colonies(end).cells(cellfound).addTimeToCell(stats(ii),framenumber);
+        else
+            colonies(end).cells(end+1) = dynCell(stats(ii),framenumber);
+        end
+    end
     
 else %
     for ii = 1:length(stats)
@@ -72,7 +78,7 @@ else %
     end
 end
 colonies(end).onframes(end+1) = framenumber;
-    
+
 
 
 

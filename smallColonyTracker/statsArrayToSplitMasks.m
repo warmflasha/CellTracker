@@ -1,4 +1,4 @@
-function [out_masks, colonies] = statsArrayToSplitMasks(stats,nuc_imgs)
+function [out_masks, colonies] = statsArrayToSplitMasks(stats,nuc_imgs,cyt_imgs,cellmasks)
 
 imsize = size(nuc_imgs(:,:,1));
 
@@ -128,9 +128,10 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                 maskToUse = tmpmask;
             end
         else %first frame
-            colonies(ii) = dynColony();
+            %colonies(ii) = dynColony();
             maskToUse = tmpmask; 
         end
+        %colonies = addFrameToDynamicUcolony(maskToUse,cellmasks(:,:,jj),nuc_imgs(:,:,jj),cyt_imgs(:,:,jj),jj,colonies);
         out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
     end
     

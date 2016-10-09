@@ -8,19 +8,12 @@ userParam.gaussSigma = max(floor(cellSize/18),1);
 userParam.presubNucBackground = 1;
 userParam.backdiskrad = round(cellSize*2);
 erodeSize = 1.2;
-toobright = 750;
 
 img_proc = preprocessImages(img);
+mask = (img_proc > cellIntensity); %& ~e_img;
 
-%e_img = edge(img_proc,'canny');
-
-mask = (img_proc > cellIntensity & img_proc < toobright); %& ~e_img;
-
-mask = imopen(mask,strel('disk',1));
 mask = imfill(mask,'holes');
 mask = bwareaopen(mask,2*floor(cellArea/3));
-
-
 
 if separateFused
     CC = bwconncomp(mask);
