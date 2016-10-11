@@ -42,13 +42,13 @@ xyti = [xyt,allinds];
 
 ncolonies = max(allinds);
 
-%diagnostic plotting to label colonies
-figure; plot(xyt(:,1),xyt(:,2),'r.'); hold on;
-for ii = 1:ncolonies
-    coldata = xyti(allinds == ii,:);
-    mm  = mean(coldata,1);
-    text(mm(1),mm(2),int2str(ii),'Color','c');
-end
+% %diagnostic plotting to label colonies
+% figure; plot(xyt(:,1),xyt(:,2),'r.'); hold on;
+% for ii = 1:ncolonies
+%     coldata = xyti(allinds == ii,:);
+%     mm  = mean(coldata,1);
+%     text(mm(1),mm(2),int2str(ii),'Color','c');
+% end
 
 out_masks = false(imsize(1),imsize(2),ntimes);
 
@@ -57,6 +57,7 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
     nc_time =zeros(ntimes,1);
     nc_area = nc_time;
     for jj = 1:ntimes
+        disp(int2str(jj));
         curr_inds = coldata(:,3) == jj;
         nc_time(jj) = sum(curr_inds); %number of cells in colony
         nc_area(jj) = sum(coldata(curr_inds,5)); %colony area
@@ -137,12 +138,11 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
                 
             else %doesn't need splitting
                 maskToUse = tmpmask;
-                numneeded = nc_time(jj);
+                numneeded = nc_time
             end
         else %first frame
             colonies(ii) = dynColony();
             maskToUse = tmpmask; 
-            numneeded = nc_time(jj); 
         end
         colonies(end).ncells_predicted = [colonies(end).ncells_predicted, numneeded];
         colonies = addFrameToDynamicUcolony(maskToUse,cellmasks(:,:,jj),nuc_imgs(:,:,jj),cyt_imgs(:,:,jj),jj,colonies);

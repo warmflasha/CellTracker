@@ -7,6 +7,8 @@ classdef dynColony %object for storing dynamic colony level data
                  %(reliable even when splitting isn't)
         cytfluor %vector of total nuclear intensity over colony   
                  %(reliable even when splitting isn't)
+        ncells_predicted 
+        ncells_actual
         
     end
     

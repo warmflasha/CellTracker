@@ -5,6 +5,7 @@ function colonies = addFrameToDynamicUcolony(mask,mask2,nimg,fimg,framenumber,co
 % nimg - nuclear image -
 % fimg - other fluorescence image
 
+disp([ 'Frame: ' int2str(framenumber)])
 discardsmallcyto = 600;
 matchdist = 150;
 erode_buf = 1;
@@ -40,11 +41,10 @@ for ii = 1:length(cc2)
 end
 cc2(toremove) = [];
 
-%put mask back together and remove nuclei
+%put mask back together
 allcytpixel = cat(1,cc2.PixelIdxList);
 mask2 = false(size(mask2));
 mask2(allcytpixel) = true;
-mask2(imerode(mask,strel('disk',erode_buf))) = false; %remove nuclei
 
 cytfluor = [mean2(nimg(mask2)), mean2(fimg(mask2))];
 colonies(end).nucfluor = [colonies(end).nucfluor; nucfluor];
@@ -71,15 +71,27 @@ end
 
 cmask = imerode(cmask,strel('disk',erode_buf));
 cmask = bwareaopen(cmask,discardsmallcyto,4);
+stats2 = regionprops(cmask,fimg,'MeanIntensity','Area','PixelIdxList');
 
-stats2 = regionprops(cmask,fimg,'MeanIntensity','Area');
-if length(stats2) > length(stats)
-    a = [stats2.Area];
-    [~,inds]=sort(a,'descend');
-    stats2 =stats2(sort(inds(1:length(stats))));
-end
-for ii = 1:length(stats2)
-    stats(ii).fluordata(end+1) = stats2(ii).MeanIntensity;
+
+for ii = 1:length(stats)
+    done = false;
+    pixoverlap = zeros(length(stats2),1);
+    for jj = 1:length(stats2)
+        pixoverlap(jj) = length(intersect(stats(ii).PixelIdxList,stats2(jj).PixelIdxList));
+    end
+    [max_ov, ind] = max(pixoverlap);
+    
+    if max_ov > 0
+        nmasknow = false(size(mask));
+        nmasknow(stats(ii).PixelIdxList) = true;
+        cmasknow = false(size(mask));
+        cmasknow(stats2(ind).PixelIdxList) = true;
+        cmasknow(imerode(nmasknow,strel('disk',erode_buf))) = false;
+        stats(ii).fluordata(end+1) = mean2(fimg(cmasknow));
+    else
+        stats(ii).fluordata(end+1) = 0; %no data for cyto
+    end
 end
 
 if ~isempty(colonies(end).onframes)
@@ -89,11 +101,17 @@ if ~isempty(colonies(end).onframes)
     q = 1;
     for ii = 1:length(cells)
         if ~isempty(cells(ii).onframes) && cells(ii).onframes(end) == framenumber-1;
-            dat = cells(ii).data;
-            ToMatch{2}(q,:) = dat(end,:);
             goodcells(q) = ii;
             q = q + 1;
         end
+    end
+    if length(cells) > 1
+        ncol = size(cells(2).data,2);
+    end
+    ToMatch{2}=zeros(length(goodcells),ncol);
+    for ii = 1:length(goodcells)
+        dat = cells(goodcells(ii)).data;
+        ToMatch{2}(ii,:) = dat(end,:);
     end
     if length(ToMatch) > 1
         ToMatch = MatchFrames(ToMatch,2,matchdist);
@@ -113,6 +131,7 @@ else %
     end
 end
 colonies(end).onframes = [colonies(end).onframes; framenumber];
+colonies(end).ncells_actual = [colonies(end).ncells_actual; length(stats)];
 
 
 
