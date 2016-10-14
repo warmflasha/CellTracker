@@ -99,6 +99,7 @@ if ~isempty(colonies(end).onframes)
     ToMatch{1} = [cat(1,stats.Centroid), cat(1,stats.Area), -1*ones(length(stats),1)];
     cells = colonies(end).cells;
     q = 1;
+    goodcells =[];
     for ii = 1:length(cells)
         if ~isempty(cells(ii).onframes) && cells(ii).onframes(end) == framenumber-1;
             goodcells(q) = ii;
@@ -108,10 +109,12 @@ if ~isempty(colonies(end).onframes)
     if length(cells) > 1
         ncol = size(cells(2).data,2);
     end
-    ToMatch{2}=zeros(length(goodcells),ncol);
-    for ii = 1:length(goodcells)
-        dat = cells(goodcells(ii)).data;
-        ToMatch{2}(ii,:) = dat(end,:);
+    if ~isempty(goodcells)
+        ToMatch{2}=zeros(length(goodcells),ncol);
+        for ii = 1:length(goodcells)
+            dat = cells(goodcells(ii)).data;
+            ToMatch{2}(ii,:) = dat(end,:);
+        end
     end
     if length(ToMatch) > 1
         ToMatch = MatchFrames(ToMatch,2,matchdist);
@@ -132,11 +135,3 @@ else %
 end
 colonies(end).onframes = [colonies(end).onframes; framenumber];
 colonies(end).ncells_actual = [colonies(end).ncells_actual; length(stats)];
-
-
-
-
-
-
-
-

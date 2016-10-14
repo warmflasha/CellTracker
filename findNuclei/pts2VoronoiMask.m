@@ -50,6 +50,7 @@ function mask = vrtc2mask(vx, vy, sizei)
         end
         [lx,ly] = limit2mask(lx, ly, sizei);
         lx = max(lx, 1);  ly = max(ly,1);  % bug in pts2line that can return 0
+        lx = min(lx,sizei(1)); ly = min(ly,sizei(2));
         pixel = sub2ind(sizei, ly, lx);
         mask(pixel) = 1;
     end
