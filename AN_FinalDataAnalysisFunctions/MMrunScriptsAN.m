@@ -40,10 +40,10 @@ imcontrast
 clear all
 % PLOT STUFF
    
- nms = {'control','Lefty_R','otherMEKi_R'};    % ,'Lefty_R','otherMEKi_R'  dapi gfp(sox2) rfp(nanog)
+ nms = {'Dynamics_control','Dynamics_27hr5gnml','Dynamics_42hr5gnml'};    % ,'Lefty_R','otherMEKi_R'  dapi gfp(sox2) rfp(nanog)
  %nms = {'C_R_pErkNanogSmad2','MEKi_R_pErkNanogSmad2'}; 
  % nms = {'PluriNtwInh_Control(R)','PluriNtwInh_FGFi(R)'}; 
- nms2 = {'control','Lefty','otherMEKi'};%  ,'Lefty','MEKi*'  nanog(555) peaks{}(:,8), pERK(488) peaks{}(:,6)
+ nms2 = {'control','27 hr','42 hr'};%  ,'Lefty','MEKi*'  nanog(555) peaks{}(:,8), pERK(488) peaks{}(:,6)
    % C1: cdx2,eomes sox17 C2: Sox2,Oct4,Bra
    
 %  nms = {'otherMEKi_C','otherMEKi_1uM'};% dapi gfp rfp 
@@ -68,7 +68,7 @@ dir = '.';
 % for the ibidi 8well plte with pAKT staining GFP = peaks{}(:,6); RFP - peaks{}(:,8)
 usemeandapi =[];
 flag1 = 1;
-[mediaonly,~,~,~,~]= plotallanalysisAN(1.2,nms,nms2,dir,[],[],[8 5],[8 6],'Nanog','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
+[mediaonly,~,~,~,~]= plotallanalysisAN(1.2,nms,nms2,dir,[],[],[6 5],[8 6],'Cdx2','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
 h = figure(1);
 h.Children.FontSize = 14;
 
@@ -77,7 +77,7 @@ n = 3;
 figure(6)
 for k=1:n
 subplot(1,n,k)
-ylim([0 1.2]);
+ylim([0 2]);
 xlim([0 8])
 
 end

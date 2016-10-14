@@ -1,5 +1,5 @@
 % plot the average intensity of the marker as a function of colony size
-function [rawdata1] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi,flag)
+function [rawdata1,totalcells] =  Intensity_vs_ColSizeSelectImages(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi,flag,imN)
 clear tmp
 clear tmp2
 clear rawdata
@@ -28,7 +28,7 @@ for k=1:size(nms,2)
         a = any(col(ii).data(:,3)>dapimax(1));%%      any(col(ii).data(:,index1(1))>dapimax(1))
         in = colonies{k}(ii).imagenumbers;
         b = any(col(ii).data(:,index1(2))>chanmax);
-        if ~isempty(col(ii).data) && (a==0)% only specific image numbers  a==0
+        if ~isempty(col(ii).data) && (any(in(1) == imN)); % only specific image numbers  a==0
             nc = col(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
@@ -63,7 +63,7 @@ for k=1:size(nms,2)
     end
     
     if flag == 1 
-    figure(6);subplot(1,size(nms2,2),k),  plot(rawdata(~isnan(rawdata)),'r*','markersize',15,'linewidth',2); legend(nms2{k});%subplot(1,size(nms2,2),k)
+    hold on;figure(7);subplot(1,size(nms2,2),k),  plot(rawdata(~isnan(rawdata)),'r*','markersize',15,'linewidth',2); legend(nms2{k});%subplot(1,size(nms2,2),k)
     
     xlabel('Colony size');
     ylabel(['Expression of ',(param1),'marker']);

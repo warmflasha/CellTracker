@@ -18,7 +18,7 @@ if ~exist('scale','var') || isempty(scale)
     scale = 0.2;
 end
 fi = StitchPreviewMM(files,acoords);
-
+figure(1), imshow(fi,[]);
 
  
 q=1;
@@ -29,16 +29,16 @@ for ii=xrange(end):-1:xrange(1)
         
         ind = sub2ind([length(files.pos_x) length(files.pos_y)],ii+1,jj+1);
         xy=ceil(scale*acoords(ind).absinds);
-        for k=1:size(plate1.colonies,2)
-            if (plate1.colonies(k).imagenumbers(1) == ind) && (plate1.colonies(k).ncells == N)
-                
-                toplot = 0.2*plate1.colonies(k).data(:,1:2);
-            end
-        end
+%         for k=1:size(plate1.colonies,2)
+%             if (plate1.colonies(k).imagenumbers(1) == ind) && (plate1.colonies(k).ncells == N)
+%                 
+%                 toplot = 0.2*plate1.colonies(k).data(:,1:2);
+%             end
+%         end
         figure(1), hold on
         text(xy(1),xy(2),num2str(ind),'color','r');
-        figure(1), hold on
-        plot(toplot(:,1)+acoords(ind).absinds(2),toplot(:,2)+acoords(ind).absinds(1),'.r','markersize',10);
+%         figure(1), hold on
+%         plot(toplot(:,1)+acoords(ind).absinds(2),toplot(:,2)+acoords(ind).absinds(1),'.r','markersize',10);
         if q==1
             xy0=xy;
         end

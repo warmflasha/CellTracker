@@ -3,11 +3,11 @@
 
 %runFullTileMM('control','control.mat','setUserParamAN20X_uCOL');% 
 %runFullTileMM('otherMEKi_R','otherMEKi_R.mat','setUserParamAN20X_uCOL');% 
-runFullTileMM('control','control.mat','setUserParamAN20X_uCOL');% 
+runFullTileMM('area2_noPattern','area2_noPattern.mat','setUserParamAN20X_uCOL');% 
 
 
 
-disp('successfully ran lefty again ');
+disp('successfully ran');
 
 
 

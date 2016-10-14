@@ -1,4 +1,4 @@
-function alldat=mkFullCytooPlotSelectCol(matfile,printnum,returndat,mm,N)
+function [alldat,alldat2]=mkFullCytooPlotSelectCol(matfile,printnum,returndat,mm,N)
 
 if ~exist('printnum','var')
     printnum=0;
@@ -14,7 +14,7 @@ ac=pp.acoords;
 totalcells=sum([col.ncells]);
 ncolumn=size(col(1).data,2);
 alldat=zeros(totalcells,ncolumn);
-
+alldat2 = zeros(totalcells,ncolumn);
 %figure; hold on;
 cc=colorcube(20);
 q=1;
@@ -33,6 +33,7 @@ for ii=1:length(col)
         dtoplot=bsxfun(@plus,col(ii).data(:,1:2),toadd);
         if returndat
             alldat(q:(q+col(ii).ncells-1),:)=[dtoplot col(ii).data(:,3:end)];
+            alldat2(q:(q+col(ii).ncells-1),:)=col(ii).ncells;
             q=q+col(ii).ncells;
         end
         %plot(dtoplot(:,2),dtoplot(:,1),'.','Color',cc(mod(ii,19)+1,:));

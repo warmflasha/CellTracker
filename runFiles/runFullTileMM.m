@@ -75,15 +75,15 @@ end
 %colonies
 if step < 6
       
-%     load([direc filesep outfile],'bIms','nIms');
-%     [colonies, peaks]=peaksToColonies([direc filesep outfile]);
-%     plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms, outfile);
-% 
-%     plate1.mm = 1;
-%     plate1.si = size(bIms{1});
-%     save([direc filesep outfile],'plate1','peaks','-append');  
-%   
-disp('Need to run colony analysis separately bc of memory issues')
+    load([direc filesep outfile],'bIms','nIms');
+    [colonies, peaks]=peaksToColonies([direc filesep outfile]);
+    plate1=plate(colonies,dims,direc,ff.chan,bIms,nIms, outfile);
+
+    plate1.mm = 1;
+    plate1.si = size(bIms{1});
+    save([direc filesep outfile],'plate1','peaks','-append');  
+  
+%disp('Need to run colony analysis separately bc of memory issues')
 end
 
 

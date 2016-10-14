@@ -19,15 +19,16 @@ if ~exist('scale','var') || isempty(scale)
     scale = 0.2;
 end
 fi = StitchPreviewMM(files,acoords);
-figure(1), imshow(fi,[]),hold on
+figure(7), imshow(fi,[]),hold on
 % incorporate colony size and colorcode here
 colormap = prism;
 for i =1:N
-     dat = mkFullCytooPlotSelectCol(matfile,0,1,1,i);
+     [dat,dat2] = mkFullCytooPlotSelectCol(matfile,0,1,1,i);
  
- figure(1), hold on
+ figure(7), hold on
  plot(scale*nonzeros(dat(:,2)),scale*nonzeros(dat(:,1)),'*');
-
+ figure(7), hold on
+ text(scale*nonzeros(dat(:,2))-15,scale*nonzeros(dat(:,1))-5,num2str(nonzeros(dat2(:,1))),'color','w');
 end
 
 
