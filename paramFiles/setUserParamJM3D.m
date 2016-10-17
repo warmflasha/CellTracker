@@ -32,6 +32,8 @@ userParam.newFigure = 1;
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;
 
+userParam.maskDiskSize = 5;
+
 % use at least one of these methods to find nuclei. 
 %   findNucThresh() thresholds on a global intensity value determined via
 % gauss_thresh(), and then tries to segment composite nuclei. Can miss

@@ -1,4 +1,4 @@
-function [outdat, statsAll]=runOneLargeVsi(vsifile,paramfile,chans)
+function [outdat, maskN, statsAll]=runOneLargeVsi(vsifile,paramfile,chans)
 
 global userParam;
 eval(paramfile);

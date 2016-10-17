@@ -1,14 +1,23 @@
-function [acoords, fullIm]=alignManyPanelsAndorZstackMontage(direc,dims,chan,parrange,acoords)
+function [acoords, fullIm]=alignManyPanelsAndorZstackMontage(direc,dims,chan,parrange,acoords,prefix)
 
 if ~exist('parrange','var')
     parrange = 50:200;
 end
 imFiles=readAndorDirectory(direc);
 tot_imgs=length(imFiles.p);% AN, cahnged from tot_imgs=length(imFiles.m)
+
+if exist('prefix','var') %allows overwriting of prefix. 
+    imFiles.prefix = prefix;
+end
+
+%if ~isfield(imFiles,'m') && isfield(imFiles
+
+tot_imgs=length(imFiles.p);
+>>>>>>> Stashed changes
 previmg=andorMaxIntensity(imFiles,0,0,chan);
 si=size(previmg);
 
-if exist('acoords','var')
+if exist('acoords','var') && ~isempty(acoords)
     fullIm=zeros(si(1)*dims(1),si(2)*dims(2));
 
     for ii=0:(tot_imgs-1)

@@ -1,4 +1,4 @@
-function setUserParamAN20X
+function setUserParamJM3Dnew
 %
 %
 % Contains master set of comments on how to adjust parameters and other
@@ -20,6 +20,8 @@ userParam.coltype = 1;
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
+userParam.maskDiskSize = 5;
+userParam.maskDiskSize3D = [5 2.2]; %for eroding 3D ilastik mask
 
 
 % image smoothing parameters

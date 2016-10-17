@@ -51,7 +51,7 @@ classdef dynCell %object to store dynamic data for a single cell
         end
         
         function dat = data(obj) % dump cell data in the usual format
-            dat = [obj.position obj.nucArea -1*ones(obj.numberOfTimePoints,1) obj.fluorData];
+            dat = [obj.position obj.nucArea' -1*ones(obj.numberOfTimePoints,1) obj.fluorData];
         end
         
         function obj = addTimeToCell(obj,dat,newframes) %add more time points to a cell's trajectory
@@ -73,7 +73,7 @@ classdef dynCell %object to store dynamic data for a single cell
         end
         
         function rat1 = ratio1(obj)
-            rat1 = obj.fluorData(:,2); %./obj.fluorData(:,3);
+            rat1 = obj.fluorData(:,1)./obj.fluorData(:,2);
         end
     end
 end

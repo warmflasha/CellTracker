@@ -12,13 +12,14 @@ end
 immask = h5read(filename, '/exported_data');
 immask = squeeze(immask);
 
-thresh = (max(immask(:))+min(immask(:)))/2;
-
-
-mask = immask >= thresh;
-
+mask = immask > 1;
 if complement
-    mask = imcomplement(mask);% if object 1 refers to background, comment this statement.
+    mask = imcomplement(mask);
 end
 
-mask = permute(mask,[2 1 3]); % transpose the x and y dimensions
+
+for ii = 1:size(mask,3)
+    mask2(:,:,ii) = mask(:,:,ii)';
+end
+
+mask = mask2;
