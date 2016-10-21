@@ -1,7 +1,6 @@
-function [nmask, cmask, nuc_p, fimg_p] =  simpleSegmentationLoop(nucmoviefile,fmoviefile,mag)
+function [nmask, cmask, nuc_p, fimg_p] =  simpleSegmentationLoop(nucmoviefile,fmoviefile,mag,cellIntensity,cellIntensity1)
 
 cellSize = 2500*(mag/40)^2;
-cellIntensity = 100;
 
 nreader = bfGetReader(nucmoviefile);
 nt = nreader.getSizeT;
@@ -27,6 +26,6 @@ for ii = 1:nt
     
     
     
-    [nmask(:,:,ii), nuc_p(:,:,ii)]=simpleSegmentation(nuc,cellSize,cellIntensity,false);
-    [cmask(:,:,ii), fimg_p(:,:,ii)]=simpleSegmentation(fimg,1.5*cellSize,cellIntensity,false);
+    [nmask(:,:,ii), nuc_p(:,:,ii)]=simpleSegmentation(nuc,cellSize,cellIntensity,false);%false
+    [cmask(:,:,ii), fimg_p(:,:,ii)]=simpleSegmentation(fimg,1.5*cellSize,cellIntensity1,false);
 end

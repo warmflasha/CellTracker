@@ -39,7 +39,20 @@ classdef dynColony %object for storing dynamic colony level data
                 plot(of,rat1',cc{mod(ii,7)+1});
             end
         end
-        function smadratio = NucSmadRatio(obj,tr)%all timepoints, traces
+        function smadratio = NucSmadRatio(obj)%all timepoints, traces
+             
+            Ntr = size(obj.cells,2);
+            alltimes = cat(1,obj.cells.onframes);
+            timepoints = max(alltimes);
+            smadratio = zeros(timepoints,Ntr);
+            for k=1:Ntr
+                if ~isempty(obj.cells(k).onframes)
+            smadratio(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,2)./obj.cells(k).fluorData(:,3);
+                end
+            end
+           
+        end
+        function smadratio = NucSmadRatioOld(obj)% for the data files returned by the older segmentation (3D)
              
             Ntr = size(obj.cells,2);
             alltimes = [obj.cells.onframes];
@@ -50,18 +63,17 @@ classdef dynColony %object for storing dynamic colony level data
             smadratio(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,2)./obj.cells(k).fluorData(:,3);
            
             end
-           
-        end
-        function nuconly = NucOnlyData(obj,tr)%all timepoints, traces
+        end 
+        function nuconly = NucOnlyData(obj)%all timepoints, traces
              
             Ntr = size(obj.cells,2);
-            alltimes = [obj.cells.onframes];
+            alltimes = cat(1,obj.cells.onframes);
             timepoints = max(alltimes);
             nuconly = zeros(timepoints,Ntr);
             for k=1:Ntr
-                
+                if ~isempty(obj.cells(k).onframes)
             nuconly(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,1);
-           
+           end
             end
            
         end

@@ -27,7 +27,7 @@ end
 
  %save('Conlyaccords','acoords1');
  
- disp('Succesfully split all files for meki control');
+% disp('Succesfully split all files for meki control');
 end
  
 

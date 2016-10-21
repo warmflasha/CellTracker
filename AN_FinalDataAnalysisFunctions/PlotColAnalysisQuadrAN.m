@@ -7,7 +7,7 @@
 
 function [totalcells,ratios,ratios2,totcol]=PlotColAnalysisQuadrAN(colonies,M,thresh,nms2,param1,index1,flag,dapimax,chanmax,dapimeanall,usemeandapi)
 clear tmp
-
+colormap = prism;
 for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     
     totalcolonies = zeros(M,1);
@@ -51,25 +51,25 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     ratios2{k} = geneposcolonies./totalcolonies;
      totcol{k} = totalcolonies;
     if flag == 1
-    figure(3), subplot(1,size(nms2,2),k),  plot(ratios{k},'b*'); legend(nms2{k});
+    figure(3), plot(ratios{k},'-*','color',colormap(k+2,:),'markersize',18,'linewidth',2); legend(nms2,'location','southeast');figure(3),hold on
     xlabel('Number of cells in the colony');
     ylabel(['FractionOf',(param1),'PositiveCells']);
     title ([thresh]);
-    xlim([0 10]);
+    xlim([0 8]);
     ylim([0 1]);
     
-    figure(4),  subplot(1,size(nms2,2),k), plot(ratios2{k},'b*'); legend(nms2{k});
+    figure(4), plot(ratios2{k},'-*','color',colormap(k+2,:),'markersize',18,'linewidth',2); legend(nms2,'location','southeast');figure(4),hold on
     xlabel('Number of cells in the colony');
     ylabel(['FractionOf',(param1),'PositiveColonies']);
     title ([thresh]);
-    xlim([0 10]);
+    xlim([0 8]);
     ylim([0 1]);
     
-    figure(5),  subplot(1,size(nms2,2),k), plot(totalcolonies,'b*'); legend(nms2{k}); % plot toalcolonies instead
+    figure(5),  plot(totalcolonies,'-*','color',colormap(k+2,:),'markersize',18,'linewidth',2); legend(nms2);figure(5),hold on % plot toalcolonies instead
     xlabel('Number of cells in the colony');
     ylabel('Total COlonies');
     title ([thresh]);
-    xlim([0 15]);
+    xlim([0 8]);
     end
     
 end

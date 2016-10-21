@@ -15,6 +15,7 @@ end
 
 if max(max(mask)) == 0 %nothing to do
     disp('empty mask');
+    %colonies = [];
     return;
 end
 

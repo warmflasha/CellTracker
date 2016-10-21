@@ -3,6 +3,7 @@ function [rawdata1] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,c
 clear tmp
 clear tmp2
 clear rawdata
+colormap = colorcube;
 rawdata1 = cell(1,size(nms,2));
 [dapimeanall,~] = getmeandapi(nms,dir,index1, dapimax);
 for k=1:size(nms,2)
@@ -63,12 +64,13 @@ for k=1:size(nms,2)
     end
     
     if flag == 1 
-    figure(6);subplot(1,size(nms2,2),k),  plot(rawdata(~isnan(rawdata)),'r*','markersize',15,'linewidth',2); legend(nms2{k});%subplot(1,size(nms2,2),k)
+    figure(6);  plot(rawdata(~isnan(rawdata)),'-*','color',colormap(k+2,:),'markersize',15,'linewidth',2); legend(nms2);hold on;%subplot(1,size(nms2,2),k)
     
     xlabel('Colony size');
     ylabel(['Expression of ',(param1),'marker']);
-    xlim([0 8]);%size(rawdata(~isnan(rawdata)),1)
+    xlim([0 5]);%size(rawdata(~isnan(rawdata)),1)
     end
     rawdata1{k} = rawdata;
 end
+
 end
