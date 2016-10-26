@@ -42,10 +42,10 @@ imcontrast
 clear all
 % PLOT STUFF
    
- nms = {'R2control160','R2Lefty160','R2otherMEK160'};    % ,'Lefty_R','otherMEKi_R'  dapi gfp(sox2) rfp(nanog)
+ nms = {'FGFinCE_Control','FGFinCE_FGFi160'};    % ,'Lefty_R','otherMEKi_R'  dapi gfp(sox2) rfp(nanog)
  %nms = {'C_R_pErkNanogSmad2','MEKi_R_pErkNanogSmad2'}; 
  % nms = {'PluriNtwInh_Control(R)','PluriNtwInh_FGFi(R)'}; 
- nms2 = {'control','Lefty','otherMEKi'};%  ,'Lefty','MEKi*'  dapi gfp(6) rfp(8)
+ nms2 = {'C','PD98059'};%  ,'Lefty','MEKi*'  dapi gfp(6) rfp(8)
    % C1: cdx2,eomes sox17 C2: Sox2,Oct4,Bra
    
 %  nms = {'otherMEKi_C','otherMEKi_1uM'};% dapi gfp rfp 
@@ -70,7 +70,7 @@ dir = '.';
 % for the ibidi 8well plte with pAKT staining GFP = peaks{}(:,6); RFP - peaks{}(:,8)
 usemeandapi =[];
 flag1 = 1;
-[mediaonly,~,~,~,~]= plotallanalysisAN(0.8,nms,nms2,dir,[],[],[6 5],[6 8],'Sox2','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
+[mediaonly,~,~,~,~]= plotallanalysisAN(3,nms,nms2,dir,[],[],[8 5],[6 8],'Sox2','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
 h = figure(1);
 h.Children.FontSize = 14;
 
@@ -171,13 +171,14 @@ end
 
 %%
 % plot the scatter plots colorcoded
- nms = {'control','Lefty_R','otherMEKi_R'}; % dapi gfp cy5 
- nms2 = {'control','lefty','MEKi*'};%,'
+ nms = {'FGFinCE_Control','FGFinCE_FGFhigh','FGFinCE_FGFi'}; % dapi gfp cy5 
+ nms2 = {'control','high','PD98059'};%,PD98059
  % nanog(RFP), pERK(GFP)
-param1 = 'nanog';
-param2 = 'Sox2';
+param1 = 'Sox2';
+param2 = 'Cdx2';
 index2 = [8 6];
 %index2 = [6 8];
+dapimax = 5000;
 toplot = cell(1,size(nms,2));
 flag = 0;% generate third column with the col size
 flag2 = 1;% do not normalize to DAPI if flag == 0;
@@ -196,8 +197,8 @@ for j=1:size(nms,2)
     box on
     ylabel(param1)
     xlabel(param2)
-    ylim([0 5]);
-    xlim([0 8]);
+    ylim([0 8]);
+    xlim([0 10]);
 end
 %%
 % get histograms for differen colony sizes

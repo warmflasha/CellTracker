@@ -1,4 +1,4 @@
-function [nmask, cmask, nuc_p, fimg_p] =  simpleSegmentationLoop(nucmoviefile,fmoviefile,mag,cellIntensity,cellIntensity1)
+function [nmask, cmask, nuc_p, I2_bgsubtract] =  simpleSegmentationLoop(nucmoviefile,fmoviefile,mag,cellIntensity,cellIntensity1)
 
 cellSize = 2500*(mag/40)^2;
 
@@ -28,4 +28,5 @@ for ii = 1:nt
     
     [nmask(:,:,ii), nuc_p(:,:,ii)]=simpleSegmentation(nuc,cellSize,cellIntensity,false);%false
     [cmask(:,:,ii), fimg_p(:,:,ii)]=simpleSegmentation(fimg,1.5*cellSize,cellIntensity1,false);
+    [I2_bgsubtract(:,:,ii)] = simplebg(cmask(:,:,ii),nmask(:,:,ii),fimg);
 end
