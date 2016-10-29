@@ -1,4 +1,4 @@
-function [out_masks, colonies] = statsArrayToSplitMasks(nmasks,nuc_imgs,cyt_imgs,cellmasks)
+function [out_masks, colonies] = statsArrayToSplitMasks(nmasks,nuc_imgs,cyt_imgs,cellmasks,toshift,matchdist,shiftframe)
 
 imsize = size(nuc_imgs(:,:,1));
 
@@ -17,8 +17,11 @@ else
         stats{ii} = regionprops(nmasks(:,:,ii),'Area','Centroid','PixelIdxList');
     end
 end
-    
-
+    % shift the centroids, not the xyt
+if toshift == 1
+shifted = shiftcoordinates(stats,shiftframe,imsize);
+stats = shifted;
+end
 
 ncellsperframe = cellfun(@(x)size(x,1),stats);
 ncells = sum(cellfun(@length,stats));
@@ -153,7 +156,7 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
 %          end
 
         colonies(end).ncells_predicted = [colonies(end).ncells_predicted, numneeded];
-        colonies = addFrameToDynamicUcolony(maskToUse,cellmasks(:,:,jj),nuc_imgs(:,:,jj),cyt_imgs(:,:,jj),jj,colonies);
+        colonies = addFrameToDynamicUcolony(maskToUse,cellmasks(:,:,jj),nuc_imgs(:,:,jj),cyt_imgs(:,:,jj),jj,colonies,matchdist);
             
         out_masks(:,:,jj) = out_masks(:,:,jj) | maskToUse;
     end

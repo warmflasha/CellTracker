@@ -7,8 +7,9 @@ clear totalcells
 
 rawdata1 = cell(1,size(nms,2));
 %totalcells = zeros(8,size(nms,2));
-
+if usemeandapi == 1
 [dapimeanall,~] = getmeandapi(nms,dir,index1, dapimax);
+end
 for k=1:size(nms,2)
     filename{k} = [dir filesep  nms{k} '.mat'];
     load(filename{k},'plate1');

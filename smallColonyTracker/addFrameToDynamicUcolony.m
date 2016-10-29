@@ -1,4 +1,4 @@
-function colonies = addFrameToDynamicUcolony(mask,mask2,nimg,fimg,framenumber,colonies)
+function colonies = addFrameToDynamicUcolony(mask,mask2,nimg,fimg,framenumber,colonies,matchdist)
 % fill in last entry of dynamicColony array colonies using:
 % mask - nuclear mask (only for this colony)
 % mask2 - total cell mask (could have other colonies)
@@ -7,7 +7,7 @@ function colonies = addFrameToDynamicUcolony(mask,mask2,nimg,fimg,framenumber,co
 
 disp([ 'Frame: ' int2str(framenumber)])
 discardsmallcyto = 600;
-matchdist = 150;
+%matchdist = 150;% this parameter needs to be chanded, if the cells were shifted (still track as the came cell
 erode_buf = 1;
 if ~exist('colonies','var')
     colonies = dynColony();
