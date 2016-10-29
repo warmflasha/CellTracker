@@ -1,4 +1,4 @@
-function setUserParamAN20X_uCOL
+function setUserParamAN20X_uCOL_mek
 %
 %
 % Contains master set of comments on how to adjust parameters and other
@@ -35,7 +35,7 @@ userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on 
 
 % image smoothing parameters 
 userParam.gaussRadius=8;% 8   4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=1; %1 3
+userParam.gaussSigma=3; %1 3
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -68,7 +68,7 @@ userParam.radiusMin = 20; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 20;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  =250;  % 250
+userParam.nucIntensityLoc  =350;  % 250
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW

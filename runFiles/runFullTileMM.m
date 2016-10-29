@@ -83,7 +83,7 @@ if step < 6
     plate1.si = size(bIms{1});
     save([direc filesep outfile],'plate1','peaks','-append');  
   
-disp('Need to run colony analysis separately bc of memory issues')
+%disp('Need to run colony analysis separately bc of memory issues')
 end
 
 

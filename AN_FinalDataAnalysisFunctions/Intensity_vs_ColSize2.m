@@ -1,4 +1,4 @@
-function [rawdata1] =  Intensity_vs_ColSize2(nms,nms2,dir,index1,param1,dapimax,chanmax,flag)
+function [rawdata1] =  Intensity_vs_ColSize2(nms,nms2,dir,index1,dapimax,chanmax,imN,flag1)
 % this function is to plot the product of columns of peaks with indexes
 % index1 : peaks(:,index1(1))*peaks(:,index1(2))
 
@@ -29,7 +29,8 @@ for k=1:size(nms,2)
     for ii=1:length(col)
         a = any(col(ii).data(:,3)>dapimax(1));%%
         b = any(col(ii).data(:,index1(2))>chanmax);
-        if ~isempty(col(ii).data) && a==0 && b==0 ;
+         in = colonies{k}(ii).imagenumbers;
+        if ~isempty(col(ii).data) && (flag1 == 1) &&  (a==0); 
             nc = col(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
@@ -37,7 +38,14 @@ for k=1:size(nms,2)
             tmp = col(ii).data(:,index1(1)).*col(ii).data(:,index1(2)); %assign the value of product to tmp;
             tmp2(nc) = tmp2(nc) + sum(tmp); % add the elements tmp, corresponding to the same colony size, into the tmp2
         end
-        
+        if ~isempty(col(ii).data) && (any(in(1)==imN)) &&  (a==0); % only specific image numbers  a==0
+        nc = col(ii).ncells;
+            
+            totalcolonies(nc)=totalcolonies(nc)+1;
+            % totalcells(nc)=totalcells(nc)+nc;
+            tmp = col(ii).data(:,index1(1)).*col(ii).data(:,index1(2)); %assign the value of product to tmp;
+            tmp2(nc) = tmp2(nc) + sum(tmp); % add the elements tmp, corresponding to the same colony size, into the tmp2
+        end
         
     end
     
@@ -49,13 +57,6 @@ for k=1:size(nms,2)
     for j=1:length(tmp2)
         rawdata(j) = tmp2(j)./totalcells(j); % average intensity of expression ( devide by the total number of cells of each colony size)
     end
-    
-    if flag == 1
-    figure(6);subplot(1,size(nms2,2),k),  plot(rawdata(~isnan(rawdata)),'b*','markersize',15,'linewidth',2); legend(nms2{k});
-    xlabel('Colony size');
-    ylabel(['Expression of ',(param1),'marker']);
-    xlim([0 8]);%size(rawdata(~isnan(rawdata)),1)
-    end
-    rawdata1{k} = rawdata;
+   rawdata1{k} = rawdata;
 end
 end

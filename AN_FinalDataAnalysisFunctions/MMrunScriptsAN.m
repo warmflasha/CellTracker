@@ -1,6 +1,6 @@
     %%
 % determine the background images(for all chnnels) for the dataset to run
-ff=readMMdirectory('10ngmlBMP4gata3cdx2');
+ff=readMMdirectory('R2control');   % dapi, cy5, gfp
 dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
 wavenames=ff.chan;
 
@@ -28,10 +28,12 @@ maxims= dims(1)*dims(2);
 % MIXED CELLS EXPERIMENT: CUTOFF FOR DAPI : < 5000; same for the
 % inhibtors(2)experiment, with FGFRi
 %close all
+%149,150,120 (gata3 diff)
+
 %for k=8:5:25
- N  =520;% 149,150,120 (gata3 diff)
+ N  =335;%  380 control check mask
  
-   ANrunOneMM('10ngmlBMP4gata3cdx2',N,bIms,nIms,'setUserParamAN20X_uCOLlargeCircles','DAPI',1);%setUserParamAN20X_uCOL
+   ANrunOneMM('R2Lefty',N,bIms,nIms,'setUserParamAN20X_uCOL_lefty','DAPI',1);%setUserParamAN20X_uCOL
 imcontrast
 %end
  
@@ -40,10 +42,10 @@ imcontrast
 clear all
 % PLOT STUFF
    
- nms = {'GFPs4cells_jan8imaging','GFPs4cells_failedimagingJune3'}; 
+ nms = {'FGFinCE_Control','FGFinCE_FGFi160'};    % ,'Lefty_R','otherMEKi_R'  dapi gfp(sox2) rfp(nanog)
  %nms = {'C_R_pErkNanogSmad2','MEKi_R_pErkNanogSmad2'}; 
  % nms = {'PluriNtwInh_Control(R)','PluriNtwInh_FGFi(R)'}; 
- nms2 = {'gfpS4cellsSox210ngmlbmp4','GFPs4cellsfailedimagingJune3'};%  nanog(555) peaks{}(:,8), pERK(488) peaks{}(:,6)
+ nms2 = {'C','PD98059'};%  ,'Lefty','MEKi*'  dapi gfp(6) rfp(8)
    % C1: cdx2,eomes sox17 C2: Sox2,Oct4,Bra
    
 %  nms = {'otherMEKi_C','otherMEKi_1uM'};% dapi gfp rfp 
@@ -68,17 +70,17 @@ dir = '.';
 % for the ibidi 8well plte with pAKT staining GFP = peaks{}(:,6); RFP - peaks{}(:,8)
 usemeandapi =[];
 flag1 = 1;
-[mediaonly,~,~,~,~]= plotallanalysisAN(5,nms,nms2,dir,[],[],[6 5],[8 6],'Sox2','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
+[mediaonly,~,~,~,~]= plotallanalysisAN(3,nms,nms2,dir,[],[],[8 5],[6 8],'Sox2','Dapi',0,1,dapimax,chanmax,usemeandapi,flag1);  
 h = figure(1);
 h.Children.FontSize = 14;
 
 %%
-n = 2;
-figure(6)
-for k=1
+n = 3;
+figure(3)
+for k=1:n
 subplot(1,n,k)
-ylim([0 0.5]);
-xlim([0 8])
+ylim([0 1]);
+xlim([0 5])
 
 end
 %%
@@ -109,11 +111,13 @@ ylim([0 6])
  nms = {'PluriNtwInh_Control(R)','PluriNtwInh_FGFi(R)'};     % PluriNtwInh_FGFi(R)  PluriNtwInh_Control(R)
  nms2 = {'control','MEKi'}; % ,'MEKi'                  %
  nms3 = {'control','MEKi','theor'}; % ,'MEKi' 
+ 
  index = [8];param1 = 'Sox2';
-thresh =1.2;% 1.2
+
+ thresh =1.2;% 1.2
 dapimax =60000;%10000
 flag = 0;
-N = 5;
+N = 2;
 dir = '.';
 clear theor
 prob = 0.8;   % from this experiment(mean fractions)
@@ -167,13 +171,14 @@ end
 
 %%
 % plot the scatter plots colorcoded
-nms = {'controlGATA3cdx2','10ngmlBMP4gata3cdx2'};% dapi gfp cy5 
- nms2 = {'control','10ng/ml BMP4'};%,'
+ nms = {'FGFinCE_Control','FGFinCE_FGFhigh','FGFinCE_FGFi'}; % dapi gfp cy5 
+ nms2 = {'control','high','PD98059'};%,PD98059
  % nanog(RFP), pERK(GFP)
 param1 = 'Sox2';
 param2 = 'Cdx2';
 index2 = [8 6];
 %index2 = [6 8];
+dapimax = 5000;
 toplot = cell(1,size(nms,2));
 flag = 0;% generate third column with the col size
 flag2 = 1;% do not normalize to DAPI if flag == 0;
@@ -187,13 +192,13 @@ end
 
 
 for j=1:size(nms,2)
-    figure(8),subplot(1,size(nms,2),j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);hold on % color with: set{}(:,1) - SOx2 subplot(1,7,j)
-    legend(nms2{j});
+    figure(8+j),scatter(toplot{j}(:,2),toplot{j}(:,1),[],toplot{j}(:,3),'LineWidth',2);legend(nms2{j}); hold on %[],toplot{j}(:,3)
+    
     box on
     ylabel(param1)
     xlabel(param2)
-      ylim([0 15]);
-      xlim([0 8]);
+    ylim([0 8]);
+    xlim([0 10]);
 end
 %%
 % get histograms for differen colony sizes
