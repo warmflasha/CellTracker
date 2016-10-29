@@ -2,6 +2,7 @@ function [nmask, cmask, nuc_p, I2_bgsubtract] =  simpleSegmentationLoop(nucmovie
 
 cellSize = 2500*(mag/40)^2;
 
+
 nreader = bfGetReader(nucmoviefile);
 nt = nreader.getSizeT;
 
@@ -29,4 +30,5 @@ for ii = 1:nt
     [nmask(:,:,ii), nuc_p(:,:,ii)]=simpleSegmentation(nuc,cellSize,cellIntensity,false);%false
     [cmask(:,:,ii), fimg_p(:,:,ii)]=simpleSegmentation(fimg,1.5*cellSize,cellIntensity1,false);
     [I2_bgsubtract(:,:,ii)] = simplebg(cmask(:,:,ii),nmask(:,:,ii),fimg);
+
 end
