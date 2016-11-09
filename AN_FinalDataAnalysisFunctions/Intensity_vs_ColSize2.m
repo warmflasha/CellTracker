@@ -30,7 +30,7 @@ for k=1:size(nms,2)
         a = any(col(ii).data(:,3)>dapimax(1));%%
         b = any(col(ii).data(:,index1(2))>chanmax);
          in = colonies{k}(ii).imagenumbers;
-        if ~isempty(col(ii).data) && (flag1 == 1) &&  (a==0); 
+        if ~isempty(col(ii).data) && (flag1 == 1)% &&  (a==0); 
             nc = col(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;

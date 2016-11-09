@@ -34,6 +34,7 @@ ncells = sum(cellfun(@length,stats));
 %get all xyt data
 xyt = zeros(ncells,3);
 q = 1;
+
 for ii = 1:ntimes
     xyt(q:(q+ncellsperframe(ii)-1),1:2) = cat(1,stats{ii}.Centroid);
     xyt(q:(q+ncellsperframe(ii)-1),3) = ii; %time number

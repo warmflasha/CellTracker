@@ -39,7 +39,7 @@ classdef dynColony %object for storing dynamic colony level data
                 plot(of,rat1',cc{mod(ii,7)+1});
             end
         end
-        function smadratio = NucSmadRatio(obj)%all timepoints, traces
+        function smadratio = NucSmadRatio(obj)%all timepoints, traces for the data files returned by the new segmentation (from projections)
              
             Ntr = size(obj.cells,2);
             alltimes = cat(1,obj.cells.onframes);
@@ -64,7 +64,7 @@ classdef dynColony %object for storing dynamic colony level data
            
             end
         end 
-        function nuconly = NucOnlyData(obj)%all timepoints, traces
+        function nuconly = NucOnlyData(obj)% for the data files returned by the new segmentation (from projections)
              
             Ntr = size(obj.cells,2);
             alltimes = cat(1,obj.cells.onframes);
@@ -72,9 +72,10 @@ classdef dynColony %object for storing dynamic colony level data
             nuconly = zeros(timepoints,Ntr);
             for k=1:Ntr
                 if ~isempty(obj.cells(k).onframes)
-            nuconly(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,1);
-           end
+            nuconly(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = ((obj.cells(k).fluorData(:,2)));% times the nuclear Area  .*obj.cells(k).nucArea(:) 
+                end
             end
+           
            
         end
         function dynsmad = DynNucSmadRatio(obj,tpts,fr_stim,resptime,range,jumptime)%

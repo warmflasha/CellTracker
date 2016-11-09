@@ -1,11 +1,14 @@
-% plot the average intensity of the marker as a function of colony size
 function [rawdata1] =  Intensity_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,chanmax,usemeandapi,flag)
+% plot the average intensity of the marker as a function of colony size
+
 clear tmp
 clear tmp2
 clear rawdata
 colormap = colorcube;
 rawdata1 = cell(1,size(nms,2));
+if usemeandapi == 1
 [dapimeanall,~] = getmeandapi(nms,dir,index1, dapimax);
+end
 for k=1:size(nms,2)
     filename{k} = [dir filesep  nms{k} '.mat'];
     load(filename{k},'plate1');
