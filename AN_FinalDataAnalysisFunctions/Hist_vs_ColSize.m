@@ -75,6 +75,19 @@ if flag == 1
             ylim([0 ((size(nonzeros(tmp2(ii,:)),1)))]); % 
             xlim([0 (round(mean(nonzeros(tmp2(ucol,:))))+1)]);
             title('Distributions by colony size (unnormalized)')
+            figure(ucol+1), histogram(nonzeros(tmp2(1,:)),xbin,'FaceColor',colormap(1,:));hold on
+            figure(ucol+1), histogram(nonzeros(tmp2(ucol,:)),xbin,'FaceColor',colormap(ucol,:));
+            xlabel(param1);
+            ylabel('Frequency');
+            h1 = figure(ucol+1);            
+            ylim([0 ((size(nonzeros(tmp2(ucol,:)),1)))]); % 
+            xlim([0 (round(mean(nonzeros(tmp2(ucol,:))))+1)]);
+            title('Distributions by colony size (unnormalized)')
+            legend('1-cell', [ num2str(ucol) '-cell' ]);
+            h1.CurrentAxes.FontSize = 20;
+            h1.CurrentAxes.LineWidth = 2;
+            
+
         end
     end
 end
