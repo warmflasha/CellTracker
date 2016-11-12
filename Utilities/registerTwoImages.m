@@ -1,5 +1,8 @@
 function [imgstack, row_shift, col_shift] = registerTwoImages(img1in,img2in,chan)
-
+% function to register two images. outputs a stack with the two images
+% registered as well as the row and column shifts between the images. 
+% if the images are already stacks, will use the channel chan for alignment
+% (default 1) but will make stacks containing all channels.
 
 if exist('chan','var')
     img1 = img1in(:,:,chan);
