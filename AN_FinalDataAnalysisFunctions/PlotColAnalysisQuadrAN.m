@@ -18,21 +18,21 @@ for k=1:size(nms2,2) % need to loop over the number of experimental conditions
     
     for ii=1:size(colonies{k},2)
         a = any(colonies{k}(ii).data(:,3)>dapimax(1));%%any(colonies{k}(ii).data(:,index1(1))>dapimax(1))
-       in = colonies{k}(ii).imagenumbers;
-        %  c = any(col(ii).data(:,index1(1))>dapimax(2));%%
-        b = any(colonies{k}(ii).data(:,index1(1))>chanmax);
-        if ~isempty(colonies{k}(ii).data) && (a ==0) ; % if the colony is not empty and does not contain junk in DAPI and belongs to the specific set of images&& (in(1) < 160)  
+        in = colonies{k}(ii).imagenumbers;
+        b = any(colonies{k}(ii).data(:,index1(1))./colonies{k}(ii).data(:,5)<chanmax);
+        if ~isempty(colonies{k}(ii).data)  ; %  && (b ==0) only for the fgfhigh dataset fractions
             nc = colonies{k}(ii).ncells;
             
             totalcolonies(nc)=totalcolonies(nc)+1;
             if size(index1,2)==1
-            tmp = colonies{k}(ii).data(:,index1(1))> thresh;
+            tmp = colonies{k}(ii).data(:,index1(1))> thresh(k);
             end
             if size(index1,2)>1
-            tmp = colonies{k}(ii).data(:,index1(1))./colonies{k}(ii).data(:,5) > thresh;
+            tmp = (colonies{k}(ii).data(:,index1(1))./colonies{k}(ii).data(:,5) > thresh(k)) ;
+            
             end
             if usemeandapi ==1
-                tmp = colonies{k}(ii).data(:,index1(1))./dapimeanall > thresh;
+                tmp = colonies{k}(ii).data(:,index1(1))./dapimeanall > thresh(k);
             end
             genepositive(nc)= genepositive(nc)+sum(tmp);
             geneposcolonies(nc)=geneposcolonies(nc)+any(tmp);

@@ -59,36 +59,39 @@ for k=1:size(nms,2)
     data{k} = tmp2;
 end
 %plot histograms
-%xbin = (0:(round(max(max(tmp2)))/10):round(max(max(tmp2))));
-xbin = (0:((round(mean(nonzeros(tmp2(ucol,:))))+1)/20):(round(mean(nonzeros(tmp2(ucol,:))))+1));
+xbin = (0:(round(max(max(tmp2(ucol,:))))/20):round(max(max(tmp2(ucol,:)))));% ucol
+%xbin = (0:((round(mean(nonzeros(tmp2(ucol,:)))))/10):(round(mean(nonzeros(tmp2(ucol,:))))));
 %xbin = (0:1:10);
 
 if flag == 1
     for ii=1:ucol
-        if ~isempty(nonzeros(tmp2(ii,:)))            
-            figure(ii),histogram(nonzeros(tmp2(ii,:)),xbin,'FaceColor',colormap(ii,:));legend(num2str(ii));hold on %'Normalization','probability'        
+        if ~isempty(nonzeros(tmp2(ii,:)))
+            figure(ii),histogram(nonzeros(tmp2(ii,:)),xbin,'FaceColor',colormap(ii,:),'Normalization','probability');legend(num2str(ii));hold on %'Normalization','probability'
             xlabel(param1);
             ylabel('Frequency');
             h1 = figure(ii);
             h1.CurrentAxes.FontSize = 20;
             h1.CurrentAxes.LineWidth = 2;
-            ylim([0 ((size(nonzeros(tmp2(ii,:)),1)))]); % 
-            xlim([0 (round(mean(nonzeros(tmp2(ucol,:))))+1)]);
-            title('Distributions by colony size (unnormalized)')
-            figure(ucol+1), histogram(nonzeros(tmp2(1,:)),xbin,'FaceColor',colormap(1,:));hold on
-            figure(ucol+1), histogram(nonzeros(tmp2(ucol,:)),xbin,'FaceColor',colormap(ucol,:));
-            xlabel(param1);
-            ylabel('Frequency');
-            h1 = figure(ucol+1);            
-            ylim([0 ((size(nonzeros(tmp2(ucol,:)),1)))]); % 
-            xlim([0 (round(mean(nonzeros(tmp2(ucol,:))))+1)]);
-            title('Distributions by colony size (unnormalized)')
-            legend('1-cell', [ num2str(ucol) '-cell' ]);
-            h1.CurrentAxes.FontSize = 20;
-            h1.CurrentAxes.LineWidth = 2;
-            
-
+            ylim([0 ((size(nonzeros(tmp2(ii,:)),1)))]); %
+            ylim([0 0.6]);
+            xlim([0 round(max(max(tmp2(ii,:))))]);
+            title(['Distributions by colony size (normalized)' nms2 ])
         end
     end
+    
+    figure(ucol+1), histogram(nonzeros(tmp2(1,:)),xbin,'FaceColor',colormap(1,:),'Normalization','probability');hold on
+    figure(ucol+1), histogram(nonzeros(tmp2(ucol,:)),xbin,'FaceColor',colormap(ucol,:),'Normalization','probability');
+    xlabel(param1);
+    ylabel('Frequency');
+    h1 = figure(ucol+1);
+    ylim([0 ((size(nonzeros(tmp2(1,:)),1)))]); %
+    ylim([0 0.6]);
+    xlim([0 round(max(max(tmp2(1,:))))]);
+    title(['Distributions by colony size (normalized)' nms2 ])
+    legend('1-cell', [ num2str(ucol) '-cell' ]);
+    h1.CurrentAxes.FontSize = 18;
+    h1.CurrentAxes.LineWidth = 2;
+    
 end
+
 end
