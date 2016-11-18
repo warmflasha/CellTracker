@@ -1,4 +1,19 @@
 function [acoords, fullIm]=alignAndorOneFile(filename,dims,chan,parrange,imsize,acoords)
+% Make an aligned image from one andor file in which the positions have
+% been stored in different series. 
+% inputs: 
+% - filename: name of file
+% - dims - dimensions of tiling. 2 element array. horizontal dimension
+%       first
+% -chan - channel to use (default 1)
+% -parange - range to search in the parallel direction (i.e. range of
+%   overlaps to search). default 50:200
+% -imsize - size of each image. default 1024x1024
+% -acoords - previously computed alignment. if input, wont realign, just
+%   assemble the image
+% outputs: 
+% - accords - alignment structure
+% - fullIm - aligned image
 
 if ~exist('parrange','var')
     parrange = 50:200;
@@ -6,6 +21,10 @@ end
 
 if ~exist('imsize','var')
     imsize = [1024, 1024];
+end
+
+if ~exist('chan','var')
+    chan = 1;
 end
 
 perpsearch = 20;
