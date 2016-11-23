@@ -10,10 +10,7 @@ if exist('prefix','var') %allows overwriting of prefix.
     imFiles.prefix = prefix;
 end
 
-%if ~isfield(imFiles,'m') && isfield(imFiles
-
 tot_imgs=length(imFiles.p);
->>>>>>> Stashed changes
 previmg=andorMaxIntensity(imFiles,0,0,chan);
 si=size(previmg);
 
