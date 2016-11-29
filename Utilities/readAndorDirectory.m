@@ -27,7 +27,7 @@ for ii=1:nImages
         m{nprefix}=[];
     end
     
-    ind = strfind(nm,'_f');
+    ind = strfind(nm,'_f0');
     if length(ind) > 1 
         toremove = false(length(ind),1);
         for ii=1:length(ind)
@@ -46,7 +46,7 @@ for ii=1:nImages
         inds(1) = 0;
     end
     
-    ind = strfind(nm,'_t');
+    ind = strfind(nm,'_t0');
     if ~isempty(ind)
         inds(2) = ind;
     t{currPrefixNum} = [t{currPrefixNum} str2num(nm((inds(2)+2):(inds(2)+5)))];

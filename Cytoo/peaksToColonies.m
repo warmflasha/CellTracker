@@ -7,7 +7,7 @@ dims=pp.dims;
 param = pp.userParam;
 % if exist('userParam','var')
 % param = pp.userParam;
-
+pp.userParam.alphavol = 100;
 if ~isfield(param,'coltype')
     disp('Error: coltype must be 1 or 0');
     return 
@@ -51,7 +51,7 @@ alldat=zeros(totcells,ncol+1);
 % combine:
 q=1;
 for ii=1:length(peaks)
-    if ~isempty(peaks{ii})
+    if ~isempty(peaks{ii}) 
         currdat=peaks{ii};
         toadd=[ac(ii).absinds(2) ac(ii).absinds(1)];
         currdat(:,1:2)=bsxfun(@plus,currdat(:,1:2),toadd);

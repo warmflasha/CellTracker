@@ -64,7 +64,7 @@ verbose = 0;
 ntimes = length(peaks);
 % count number of cells X times present in data as crude measure of amount
 % of data, and what gets lost along the way.
-cell_times_in = size(peaks{1}, 1);
+cell_times_in = size(peaks{1}, 1); 
 for nt = 2:ntimes
     cell_times_in = cell_times_in + size(peaks{nt}, 1);
 end

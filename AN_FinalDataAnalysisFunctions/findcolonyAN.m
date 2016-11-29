@@ -100,7 +100,7 @@ end
 % find the colony numbers with the specific size && AND expression in
 % channel 'index' above the threshold (basically find the intersection
 % between vectors A and B
-% fi returned is a cell array with four images in order of ff.chan (returned by readMMdirectory : { Dapi Cy5 Gfp Rfp} 
+% fi returned is a cell array with four images in order of ff.chan (returned by ff = readMMdirectory(dir); readMMdirectory : { Dapi Cy5 Gfp Rfp} 
 
 if flag2 == 2
 for j=1:showcol

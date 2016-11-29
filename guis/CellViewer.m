@@ -204,30 +204,95 @@ end
 
 function updateImageView(handles)
 ff = readAndorDirectory(handles.directory);
-img0 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,0);
-img1 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,1);
-axes(handles.axes1)
-zz = zeros(size(img0));
-img2show = {zz,zz,zz};
-if get(handles.redbox,'Value')
-    img2show{1} = imadjust(img0);
-end
-if get(handles.greenbox,'Value')
-    img2show{2} = imadjust(img1);
-end
-showImg(img2show); hold on;
-if get(handles.celllabelbox,'Value') && isfield(handles,'cells')
-    cc = handles.cells;
-    for ii = 1:length(cc)
-        ind = find(cc(ii).onframes==handles.currtime+1);
-        if ~isempty(ind)
-            plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'c.','MarkerSize',16);
-            text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','c','FontSize',14);
-            
-            if ii == handles.currcell
-                plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'gs','MarkerSize',16);
-                text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','g','FontSize',14);
+if size(ff.w,2) >2
+    img0 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,0);
+    img1 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,1);
+    axes(handles.axes1)
+    zz = zeros(size(img0));
+    img2show = {zz,zz,zz};
+    if get(handles.redbox,'Value')
+        img2show{1} = imadjust(img0);
+    end
+    if get(handles.greenbox,'Value')
+        img2show{2} = imadjust(img1);
+    end
+    showImg(img2show); hold on;
+    if get(handles.celllabelbox,'Value') && isfield(handles,'cells')
+        cc = handles.cells;
+        for ii = 1:length(cc)
+            ind = find(cc(ii).onframes==handles.currtime+1);
+            if ~isempty(ind)
+                plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'c.','MarkerSize',16);
+                text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','c','FontSize',14);
                 
+                if ii == handles.currcell
+                    plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'gs','MarkerSize',16);
+                    text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','g','FontSize',14);
+                    
+                end
+            end
+        end
+    end
+end
+if size(ff.w,2) == 1
+    dirchanel = ff.w;
+    if dirchanel == 0 % (if nuc channel directory is selected)
+        img0 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,dirchanel);
+        % img1 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,1);
+        axes(handles.axes1)
+        zz = zeros(size(img0));
+        img2show = {zz,zz,zz};
+        if get(handles.redbox,'Value')
+            img2show{1} = imadjust(img0);
+        end
+        % if get(handles.greenbox,'Value')
+        %     img2show{2} = imadjust(img1);
+        % end
+        showImg(img2show); hold on;
+        if get(handles.celllabelbox,'Value') && isfield(handles,'cells')
+            cc = handles.cells;
+            for ii = 1:length(cc)
+                ind = find(cc(ii).onframes==handles.currtime+1);
+                if ~isempty(ind)
+                    plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'c.','MarkerSize',16);
+                    text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','c','FontSize',14);
+                    
+                    if ii == handles.currcell
+                        plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'gs','MarkerSize',16);
+                        text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','g','FontSize',14);
+                        
+                    end
+                end
+            end
+        end
+    end
+    if dirchanel == 1 % (if cyto channel directory is selected)
+        %img0 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,0);
+        img1 = andorMaxIntensityBF(ff,handles.pos,handles.currtime,dirchanel);
+        axes(handles.axes1)
+        zz = zeros(size(img1));
+        img2show = {zz,zz,zz};
+        % if get(handles.redbox,'Value')
+        %     img2show{1} = imadjust(img0);
+        % end
+        if get(handles.greenbox,'Value')
+            img2show{2} = imadjust(img1);
+        end
+        showImg(img2show); hold on;
+        if get(handles.celllabelbox,'Value') && isfield(handles,'cells')
+            cc = handles.cells;
+            for ii = 1:length(cc)
+                ind = find(cc(ii).onframes==handles.currtime+1);
+                if ~isempty(ind)
+                    plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'r.','MarkerSize',16);
+                    text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','c','FontSize',14);
+                    
+                    if ii == handles.currcell
+                        plot(cc(ii).position(ind,1),cc(ii).position(ind,2),'gs','MarkerSize',16);
+                        text(cc(ii).position(ind,1),cc(ii).position(ind,2)-5,int2str(ii),'Color','g','FontSize',14);
+                        
+                    end
+                end
             end
         end
     end

@@ -1,4 +1,4 @@
-function runTracker(inmatfile, paramfile)
+'function runTracker(inmatfile, paramfile)
 %
 %% runTracker(inmatfile,paramfile)
 %
