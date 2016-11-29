@@ -2,11 +2,11 @@
 clear all
 
 direc = '.';
-filename = 'allpost1.tif';
+filename = 'Protocol18920161111_13038 PM.tif';
 dir1 = 1;
 dir2 = 4;
-dims = [8 5];
-parrange = 150:250;
+dims = [10 10];
+parrange = 20:100;
 maxims = 40;
 perpsearch = 20;
 
@@ -70,57 +70,57 @@ m = 1;
 for j = 1:dims(2)
     idcl = 1024;
     
-for i = 1:dims(1)
-    ova = acoords(m).wabove(1);
-    ovl = acoords(m).wside(1);
-    
-    if(i==1)
-        idc=1;
-    else
-        idc = idcl-ovl+1;
+    for i = 1:dims(1)
+        ova = acoords(m).wabove(1);
+        ovl = acoords(m).wside(1);
+        
+        if(i==1)
+            idc=1;
+        else
+            idc = idcl-ovl+1;
+        end
+        
+        
+        if(j ==1)
+            idr(i) = 1;
+        else
+            idr(i) = idrl(i)-ova+1;
+        end
+        
+        idrl(i) = idr(i)+1023;
+        
+        idcl = idc+1023;
+        
+        newim(idr(i):idrl(i), idc:idcl) = img{1}{m,1};
+        m = m+1;
+        
     end
-    
-    
-    if(j ==1)
-        idr(i) = 1;
-    else
-        idr(i) = idrl(i)-ova+1;
-    end
+end
+figure; imshow(newim,[]);
 
-    idrl(i) = idr(i)+1023;
-    
-    idcl = idc+1023;
-    
-    newim(idr(i):idrl(i), idc:idcl) = img{1}{m,1};
-    m = m+1;
-    
-end
-end
-  figure; imshow(newim,[]);
-  
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
