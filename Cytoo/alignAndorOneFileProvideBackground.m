@@ -95,6 +95,7 @@ for ii=1:tot_imgs
             currimg = imsubtract(currimg,backgroundImage);
         end
         fullIm(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=currimg;
+        fullIm = uint16(fullIm);
     end
     
 end
