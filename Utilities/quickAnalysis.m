@@ -1,4 +1,4 @@
-function [ allPeaks,tidyPosMeansNuc,tidyPosMeansCyto,plotX ] = quickAnalysis
+function [ allPeaks,tidyPosMeansNuc,tidyPosMeansCyto,plotX ] = quickAnalysis(setAnalysisParam)
 %quickAnalysis throws together commonly used plots for a directory of
 %output files
 %  reads the outfiles directory, has inputs to
@@ -18,7 +18,7 @@ addpath(genpath(cd),'-begin');
 global analysisParam;
 
 try
-    setAnalysisParam;
+    eval(setAnalysisParam);
 catch
     error('Could not evaluate paramfile command');
 end

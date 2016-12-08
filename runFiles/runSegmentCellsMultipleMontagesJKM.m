@@ -15,7 +15,7 @@ function runSegmentCellsMultipleMontagesJKM(direc,chan,paramfile,outfilePrefix)
 
 % Output data is saved in the output file inside of a new outfiles directory in peaks variable
 
-
+tic;
 mkdir('outfiles');
 
 
@@ -67,26 +67,30 @@ disp(['Segmenting image ' int2str(iImgFiles) ' of ' int2str(length(imgFiles))]);
         
         
         %run routines to segment cells, do stats, and get the output matrix
-        
+        try
                 
                 [outdat, ~, statsN] = image2peaks(nuc, fimg, masks);
             
         catch err
-            disp(['Error with image ' int2str(ii) ' continuing...']);
+            disp(['Error with image ' int2str(iImgFiles) ' continuing...']);
             
-            peaks{iImgFiles}=[];
-            statsArray{iImgFiles}=[];
+            peaks=[];
+            statsArray=[];
             
             
             %rethrow(err);
             continue;
-        
-        
+        end;
+        peaks=outdat;
+        statsN = rmfield(statsN,'VPixelIdxList');
+    statsArray=statsN;
     [~,name,~] = fileparts(filename)
          
   dateSegmentCells = clock;
 save(['outfiles' filesep outfilePrefix '_' name '.mat'],'peaks','statsArray','userParam','dateSegmentCells');
 disp(['outfiles' filesep outfilePrefix '_' name '.mat has been saved']);
+clear('nuc'); clear('fimg');
+toc;
 end
   disp(['All images and outfiles saved']);
 end
