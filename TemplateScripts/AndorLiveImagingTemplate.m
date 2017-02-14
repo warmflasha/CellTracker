@@ -6,18 +6,18 @@
 % I usually will save a version of this script with each dataset, along
 % with a version of the userparm.m and trackparam.m files that were used.
 
-%Dataset name: '091516_Wnt3aDoseResponse_LI'
+%Dataset name: '122216_wntDoseResponse_Rko'
 
 % Brief desc: beta-cat-GFP measured at varied concentrations
 % Microscope: Olympus/Andor Spinning Disk Confocal
 
 % Channels:
 %   1. 488 - betaCat-GFP   (OvCan)
-%   2. 561 - YFP-Smad2 (OvCan)
+%   2. 561 - RFP-H2B (OvCan)
 %   3. not used
 
 % Cell lines used: 
-%               (1)ESI017 betaCat-GFP w/ H2B-RFP (piggyback)
+%               (1)RKO betaCat-GFP w/ H2B-RFP 
 %               
 %               
 %               
@@ -28,16 +28,16 @@
 %               
 %               
 %               
-% Other:                Wnt3a added at time elapsed = 5:30
+% Other:                Wnt3a added at time elapsed = 6:45
 
 %% datset params (set these for each dataset) along with values in accompanying paramfiles
 %  You shouldn't have to make changes to anything after this section
 %  (besides param files)
-data_direc = '901516_Wnt3aDoseResponse_LI_20160915_15630 PM';
+data_direc = '122216_wntDoseResponse_Rko_20161223_31420 PM';
 file_suffix = '.tif'; % may have to make further adjustments if not using andor .tif files
-paramfile = 'setUserParamForOvCan30x1024'; %the paramfile for preprocessing images
-trackParam = 'setTrackParamJKM40xOvCans';
-positions = 0:23; %positions to run (assumes andor dataset naming conventions)
+paramfile = 'setUserParamForJKM_ESI017_40x1024'; %the paramfile for preprocessing images
+%trackParam = 'setTrackParamJKM40xOvCans';
+positions = 0:95; %positions to run (assumes andor dataset naming conventions)
 chan = [2 1]; %first value is nuc channel, following contains other channels
 %% set up folder (run inside dataset root directory (one dir up from raw images)
 mkdir('Outfiles');
@@ -53,7 +53,7 @@ mkdir('scripts&paramfiles');
 
 %                                              in ilastik before moving forward
 %% read in ilastik masks and run segmentation
-direc = 'MaxIntensity';
+direc = '122216_wntDoseResponse_Rko_20161223_31420 PM';
     parfor pos = positions;
     outfile = fullfile('Outfiles',['pos' int2str(pos) '.mat']);
     runSegmentCellsAndorSplitOnlyByPosTime(direc,pos,chan,paramfile,outfile);
@@ -66,9 +66,9 @@ disp('data backed up in /OutfileBackups');
 
 
 %% run tracker
-disp('attempting to track cells...');
-parfor pos = positions;
-    runTracker(['Outfiles' filesep 'pos' int2str(pos) '.mat'],trackParam);
-end
-copyfile(which(trackParam),['scripts&paramfiles/TrackParamCopy.m']); %saves trackParam with dataset
-disp('Tracking complete');
+% disp('attempting to track cells...');
+% parfor pos = positions;
+%     runTracker(['Outfiles' filesep 'pos' int2str(pos) '.mat'],trackParam);
+% end
+% copyfile(which(trackParam),['scripts&paramfiles/TrackParamCopy.m']); %saves trackParam with dataset
+% disp('Tracking complete');

@@ -4,10 +4,10 @@ function setAnalysisParam
 global analysisParam;
 
 fprintf(1, '%s called to define params\n',mfilename);
-analysisParam.nPos = 24; %total number of positions in dataset
-analysisParam.nCon = 4; %total number of separate conditions
-analysisParam.nPosPerCon = 6; %set how many positions per condition
-analysisParam.nMinutesPerFrame = 15; %minutes per frame
+analysisParam.nPos = 120; %total number of positions in dataset
+analysisParam.nCon = 8; %total number of separate conditions
+analysisParam.nPosPerCon = 15; %set how many positions per condition
+analysisParam.nMinutesPerFrame = 20; %minutes per frame
 analysisParam.tLigandAdded = 2; %time ligand added in hours
 analysisParam.ligandName = 'TNFalpha';
 analysisParam.backgroundPositions = nan; %array of positions for bg subtraction

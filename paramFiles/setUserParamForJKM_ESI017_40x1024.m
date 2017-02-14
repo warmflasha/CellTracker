@@ -24,12 +24,15 @@ userParam.gaussRadius=3;
 userParam.gaussSigma=1;
 
 %%%%Background parameters
+userParam.providedBackground=1; %if using provided bg images
+userParam.presubNucBackground=0;
+userParam.presubSmadBackground=0;
+
 userParam.backgroundSmoothRad=50;
 userParam.backgroundSmoothSig=10;
 userParam.backgroundOpenRad = 50;
 
-userParam.presubNucBackground=0;
-userParam.presubSmadBackground=0;
+
 userParam.backdiskrad = 125;
 
 %%%%%%%%%%%%% Parameters for countNuc(): %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
