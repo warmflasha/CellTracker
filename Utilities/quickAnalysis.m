@@ -26,9 +26,9 @@ mkdir('Figures');
 %% read in outfiles into allPeaks, an mxn cell where m is positions and n is conditions
  
  allPeaks = cell(size(analysisParam.positionConditions,1),size(analysisParam.positionConditions,2));
-for iPos = 1:analysisParam.nPos;
-   load(['Outfiles' filesep 'pos' int2str(analysisParam.positionConditions(iPos)) '.mat'],'peaks');
-   allPeaks{analysisParam.positionConditions(iPos)+1} = peaks;
+for iPos = 0:analysisParam.nPos-1;
+   load(['Outfiles' filesep 'pos' int2str(analysisParam.positionConditions(iPos+1)) '.mat'],'peaks');
+   allPeaks{iPos+1} = peaks;
     clear('peaks');
     % load the index of the position, then use that toassign the second
     % value
@@ -46,17 +46,21 @@ nuc2cytoRatioMeans = cell(size(analysisParam.positionConditions,1),size(analysis
 % find position averages
 for iPos = 1:analysisParam.nPos;
     for iTime = 1:length(allPeaks{1})-1;
-        
-    nuc2nucRatioMeans{analysisParam.positionConditions(iPos)+1}(iTime) = meannonan(allPeaks{analysisParam.positionConditions(iPos)+1}{iTime}(:,6)./allPeaks{analysisParam.positionConditions(iPos)+1}{iTime}(:,5));
-    nuc2cytoRatioMeans{analysisParam.positionConditions(iPos)+1}(iTime) = meannonan(allPeaks{analysisParam.positionConditions(iPos)+1}{iTime}(:,6)./allPeaks{analysisParam.positionConditions(iPos)+1}{iTime}(:,7));
+        if ~isempty((allPeaks{iPos}{iTime}));
+        nuc2nucRatioMeans{iPos}(iTime) = meannonan(allPeaks{iPos}{iTime}(:,6)./allPeaks{iPos}{iTime}(:,5));
+        nuc2cytoRatioMeans{iPos}(iTime) = meannonan(allPeaks{iPos}{iTime}(:,6)./allPeaks{iPos}{iTime}(:,7));
+        else
+         nuc2nucRatioMeans{iPos}(iTime) = nan;
+        nuc2cytoRatioMeans{iPos}(iTime) = nan;   
+        end
     end
 end
 
 for iCon = 1:analysisParam.nCon;
-subplot(analysisParam.nCon,1,iCon); hold on;
+%subplot(analysisParam.nCon,1,iCon); hold on;
 for iPos = 1:analysisParam.nPosPerCon;
-tidyPosMeansNuc{iCon}(iPos,:) = nuc2nucRatioMeans{iPos,iCon};
-tidyPosMeansCyto{iCon}(iPos,:) = nuc2cytoRatioMeans{iPos,iCon};
+tidyPosMeansNuc{iCon}(iPos,:) = nuc2nucRatioMeans{iCon,iPos};
+tidyPosMeansCyto{iCon}(iPos,:) = nuc2cytoRatioMeans{iCon,iPos};
 end
 end
 
@@ -67,17 +71,21 @@ plotX = plotX-analysisParam.tLigandAdded;
 %% plotting
 
 % plot each position
-plotColors = ['r';'g';'b';'k';'y'];
+plotColors = distinguishable_colors(analysisParam.nCon);
 
 figure(analysisParam.fig); clf;
-for iCon = 1:analysisParam.nCon;
-subplot(ceil(analysisParam.nCon./2),ceil(analysisParam.nCon./2),iCon); hold on;
+pNum = 8;
+for iCon = 1:4;
+    
+subplot(ceil(analysisParam.nCon./4),ceil(analysisParam.nCon./2),iCon); hold on;
 
-plot(plotX,tidyPosMeansNuc{iCon}',plotColors(iCon));
+plot(plotX,tidyPosMeansNuc{iCon}','Color',plotColors(iCon,:));
 title(analysisParam.conNames{iCon});
 ylabel([analysisParam.yMolecule ' (nuc) : ' analysisParam.yNuc ' (nuc)']);
 xlabel(['time after ' analysisParam.ligandName ' added (hours)']);
+ylim([0.75,1.2]);
 xlim([min(plotX),max(plotX)]);
+pNum = pNum -1;
 end
 
 savefig(['Figures' filesep 'SignalingByPositionNuc2Nuc.fig']);

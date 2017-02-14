@@ -3,7 +3,7 @@ function [ fullIm ] = computeMontageAndSubBG( filename,dims,channels,parrange,im
 %stitches together the montage for the channels specified
 %   see alignAndorOneFileProvideBackground for variable explanations
 
-for iChannels = 1:length(channels);
+for iChannels = channels;
 if iChannels == 1;
     [acoords, fullIm{iChannels}] = alignAndorOneFileProvideBackground(filename,dims,channels(iChannels),parrange,imsize,backgroundImage{1}{channels(iChannels),1});
 end
