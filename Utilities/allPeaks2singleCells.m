@@ -3,6 +3,8 @@ function [ singleCells ] = allPeaks2singleCells( allPeaks )
 %   
 % 
 global analysisParam;
+
+if  analysisParam.isAndorMovie    
 for iCon = 1:analysisParam.nCon;
     %for each position
     for iPos = 1:analysisParam.nPosPerCon;
@@ -17,7 +19,21 @@ for iCon = 1:analysisParam.nCon;
         end
     end
 end
-           
+end
 
+if analysisParam.isFixedCells
+   for iCon = 1:analysisParam.nCon;
+    %for each position
+    for iPos = 1:analysisParam.nPosPerCon;
+              
+            if iPos == 1;
+            singleCells{iCon}=allPeaks{iCon,iPos};
+            else
+            singleCells{iCon}=[singleCells{iCon};allPeaks{iCon,iPos}];
+            end
+        end
+    end
+end 
+singleCells = singleCells';
 end
 

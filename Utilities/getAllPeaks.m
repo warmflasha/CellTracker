@@ -4,6 +4,7 @@ function [ allPeaks ] = getAllPeaks
 %   
 %%
 global analysisParam;
+
 allPeaks = cell(size(analysisParam.positionConditions,1),size(analysisParam.positionConditions,2));
 if isfield(analysisParam,'outDirecStyle') && analysisParam.outDirecStyle == 2
     
@@ -11,9 +12,9 @@ if isfield(analysisParam,'outDirecStyle') && analysisParam.outDirecStyle == 2
     for iCon = 1:analysisParam.nCon
     filenames = dir(fullfile(analysisParam.outDirec, ['Out__' analysisParam.conPrefix{iCon} '*.mat'])); %get outfiles    
         for iPos = 1:length(filenames);
-        load([analysisParam.outDirec filesep filenames(iPos).name]); 
-    allPeaks{iCon,iPos} = peaks;
-    clear('peaks');
+        pp=load([analysisParam.outDirec filesep filenames(iPos).name]); 
+    allPeaks{iCon,iPos} = pp.peaks;
+
         end
     end
 end   

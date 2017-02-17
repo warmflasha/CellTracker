@@ -1,44 +1,17 @@
-function [ output_args ] = allPeaks2Plots( allPeaks )
-%singleCells2Plots generates a few plots to quickly look at singleCells
-%dataset
-%   
+function [ allChannelsRatios ] = allPeaks2ScatterPlot( allPeaks,channels )
+%allPeaks2ScatterPlot plots a scatter plot of two normalized channels
+% channels = two element vector containing the numbers of channels to be
+% plotted. These are in order that they appear from left to right in peaks
+% array not counting the nuc channel. (e.g., if fimg1 is usually colomn 6
+% in peaks, it is indicated as 1 here)
+
+
 global analysisParam;
-% format time
 
-colors = distinguishable_colors(analysisParam.nCon);
-% get ratios
+allRatios = allPeaks2Ratios(allPeaks);
 
 
 
-% plot nuc2nucMeans
-figure; clf; hold on;
-for iCon = 1:analysisParam.nCon;
-plot(analysisParam.plotX(1:length(nuc2nucMeans)),nuc2nucMeans(iCon,:),'Color',colors(iCon,:),'LineWidth',2);
-end
-legend(analysisParam.conNames,'Location','best');
-xlabel(['hours after ' analysisParam.ligandName ' added']);
-ylabel([analysisParam.yMolecule ' : ' analysisParam.yNuc]);
-title('mean signaling');
 
-% plot mean with cell STD
-figure; clf; hold on;
-for iCon = 1:analysisParam.nCon;
-errorbar(analysisParam.plotX(1:length(nuc2nucMeans)),nuc2nucMeans(iCon,:),nuc2nucStd(iCon,:),'Color',colors(iCon,:),'LineWidth',2);
-end
-legend(analysisParam.conNames,'Location','best');
-xlabel(['hours after ' analysisParam.ligandName ' added']);
-ylabel([analysisParam.yMolecule ' : ' analysisParam.yNuc]);
-title('mean signaling w/ cell std');
 
-% plot # of cells in each mean
-figure; clf; hold on;
-for iCon = 1:analysisParam.nCon;
-plot(analysisParam.plotX(1:length(nuc2nucMeans)),nCells(iCon,:),'Color',colors(iCon,:),'LineWidth',2);
-end
-legend(analysisParam.conNames,'Location','eastoutside');
-xlabel(['hours after ' analysisParam.ligandName ' added']);
-ylabel('# of cells');
-title('detected cells');
-
-end
-
+ 
