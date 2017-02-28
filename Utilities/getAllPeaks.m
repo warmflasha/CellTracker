@@ -29,7 +29,7 @@ for iPos = 0:analysisParam.nPos-1;
     
 end
 
-plotX = (0:length(allPeaks{1})-2)*analysisParam.nMinutesPerFrame./60;
+plotX = (0:length(allPeaks{1})-1)*analysisParam.nMinutesPerFrame./60;
 analysisParam.plotX = plotX-analysisParam.tLigandAdded;
 end
 %%
