@@ -1,11 +1,24 @@
-function [acoords, fi] = alignManyImages(imgs,maxov)
+function [acoords, fi] = alignManyImages(imgs,maxov,acoords)
 
 dims = size(imgs);
-tot_imgs=dims(1)*dims(2);
-% zz=zeros(tot_imgs,2);
-% zz=mat2cell(zz,ones(tot_imgs,1));
-% 
-% acoords=struct('wabove',zz,'wside',zz,'absinds',zz);
+si=size(imgs{1,1});
+
+if exist('acoords','var') % only paste stuff together
+    if nargout == 2
+        fullIm=zeros(si(1)*dims(1),si(2)*dims(2));
+    end
+    
+    for jj=1:dims(2)
+        for ii=1:dims(1)
+            currinds=acoords(ii,jj).absinds;
+            if nargout == 2
+                currimg=imgs{ii,jj};
+                fi(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=currimg;
+            end
+        end
+    end
+    return;
+end
 
 for ii=1:dims(1)
     for jj=1:dims(2)
@@ -36,18 +49,18 @@ end
 
 for jj=1:dims(2)
     for ii=1:dims(1)
-            currinds=[(ii-1)*si(1)+1 (jj-1)*si(2)+1];
-            for kk=2:ii
-                currinds(1)=currinds(1)-acoords(kk,jj).wabove(1);
-            end
-            for mm=2:jj
-                currinds(2)=currinds(2)-acoords(ii,mm).wside(1);
-            end
-            acoords(ii,jj).absinds=currinds;
-            if nargout == 2
-                currimg=imgs{ii,jj};
-                fi(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=currimg;
-            end
+        currinds=[(ii-1)*si(1)+1 (jj-1)*si(2)+1];
+        for kk=2:ii
+            currinds(1)=currinds(1)-acoords(kk,jj).wabove(1);
+        end
+        for mm=2:jj
+            currinds(2)=currinds(2)-acoords(ii,mm).wside(1);
+        end
+        acoords(ii,jj).absinds=currinds;
+        if nargout == 2
+            currimg=imgs{ii,jj};
+            fi(currinds(1):(currinds(1)+si(1)-1),currinds(2):(currinds(2)+si(2)-1))=currimg;
+        end
     end
 end
 
