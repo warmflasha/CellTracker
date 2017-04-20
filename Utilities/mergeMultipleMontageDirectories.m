@@ -58,7 +58,7 @@ if exist('alignchans','var')
     for kk = 1:size(all_imgs{1,1},3)
         for ii=1:si(1)
             for jj = 1:si(2)
-                toAlign{ii,jj} = max(all_imgs{ii,jj}(:,:,kk));
+                toAlign{ii,jj} = all_imgs{ii,jj}(:,:,kk);
             end
         end
         [~,fi]=alignManyImages(toAlign,200,ac);
