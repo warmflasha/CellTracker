@@ -1,5 +1,15 @@
 function mergeMultipleMontageDirectories(directory1,directory2,dims,chans,outdir,alignchans)
-
+% Register multiple LSM montages to produce one multichannel montage.
+% Output in Andor format
+% directory1/2 are cell arrays containing directory names for multiple
+% rounds of imaging. Assumes these can be overlaid without registeration. 
+% after overlaying them, registers the stack from directory1 to that from
+% directory2 using channel number chans (if more than more, will take max
+% intensity over channels). dims are the dimension of the input arrays. 
+% will put result in outdir. 
+% if argument alignchans is specified will use the indicated channel number
+% on the registered image to align the montage and will write a montage
+% image for each channel in outdir (NOTE: this feature not tested)
 max_imgs = prod(dims);
 
 if ~exist(outdir,'dir')
