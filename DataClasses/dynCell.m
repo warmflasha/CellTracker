@@ -73,7 +73,7 @@ classdef dynCell %object to store dynamic data for a single cell
         end
         
         function rat1 = ratio1(obj)
-            rat1 = obj.fluorData(:,1)./obj.fluorData(:,2);
+            rat1 = obj.fluorData(:,2)./obj.fluorData(:,3);
         end
     end
 end
