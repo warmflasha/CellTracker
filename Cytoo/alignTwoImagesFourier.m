@@ -1,10 +1,24 @@
-function [fi, rowshift, colshift] = alignTwoImagesFourier(im1,im2,side,maxov)
+function [fi_out, rowshift, colshift] = alignTwoImagesFourier(im1,im2,side,maxov,thresh,blend)
 %   side = 1  im2 below im1
 %          2  im2 left of im1
 %          3  im2 above im1
 %          4  im2 right of im1
 
+if ~exist('blend','var')
+    blend = false;
+end
+
 ov = maxov;
+
+if exist('thresh','var')
+    
+    im1 = imfilter(im1,fspecial('gaussian',50,10));
+    im2 = imfilter(im2,fspecial('gaussian',50,10));
+    
+    im1 = im1 > thresh;
+    im2 = im2 > thresh;
+end
+
 
 switch side
     case 1
@@ -42,9 +56,9 @@ switch side
             fi(si(1)-abs(rowshift)+1:end,1:si(2),2) = im2;
         end
     case 2
-       
+        
     case 3
-         if colshift > 0
+        if colshift > 0
             fi(1:si(1),1:si(2),1) = im2;
             fi(si(1)-abs(rowshift)+1:end,colshift+1:end,2) = im1;
         else
@@ -63,10 +77,14 @@ end
 
 m1 = fi(:,:,1);
 m2 = fi(:,:,2);
-
-m1(m1==0) = m2(m1==0);
-m2(m2==0) = m1(m2==0);
-
-fi = mean(cat(3,m1,m2),3);
-
+if blend
+    m1(m1==0) = m2(m1==0);
+    m2(m2==0) = m1(m2==0);
+    fi_out = mean(cat(3,m1,m2),3);
+else
+    inds1 = m1 > 0;
+    inds2 = m2 > 0;
+    m1(inds2 & ~inds1) = m2(inds2 & ~inds1);
+    fi_out = m1;
+end
 end
