@@ -28,7 +28,7 @@ if ~exist('climits','var')
 end
 
 if ~exist('newfig','var')
-    newfig=1;
+    newfig=0;
 end
 
 if ~exist('rescale_fac','var')

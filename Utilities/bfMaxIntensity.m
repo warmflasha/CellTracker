@@ -7,7 +7,7 @@ nz=reader.getSizeZ;
 for ii=1:nz
     iPlane=reader.getIndex(ii - 1, chan -1, time - 1) + 1;
     img_now=bfGetPlane(reader,iPlane);
-    
+    %figure(ii), imshow(img_now,[]);
     if exist('bitdepth','var')
         switch bitdepth
             case 8

@@ -74,10 +74,19 @@ statsN = addVoronoiPolygon2Stats(statsN, size(red));
 %Loop over non-nuclear fluoresence channels. run edgeThreshCyto once
 % for each
 maskC=zeros(size(gr));
+% for ii=1:size(gr,3)
+%     [maskC(:,:,ii), statsN] = edgeThreshCyto(gr(:,:,ii), statsN, maskN,ii);
+% end
+%AN
+if ~isempty(statsN)
 for ii=1:size(gr,3)
-    [maskC(:,:,ii), statsN] = edgeThreshCyto(gr(:,:,ii), statsN, maskN,ii);
+[maskC(:,:,ii), statsN] = edgeThreshCyto(gr(:,:,ii), statsN, maskN,ii);
 end
-
+else
+    disp('no cells to segment in this non nuclear chanel')
+return
+end
+%AN
 %cyto mask is 1 if included in any of the individual masks
 maskC=any(maskC,3);
 

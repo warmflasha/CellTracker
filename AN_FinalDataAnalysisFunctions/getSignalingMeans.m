@@ -20,11 +20,14 @@ for ii = 1:length(intervals)
     end
 end
 
+        
+
 for jj = 1:3
     totalmeans{jj} = meannozero(notbinned{jj},2);
 end
     
-    
+  end
+  
     
     
 

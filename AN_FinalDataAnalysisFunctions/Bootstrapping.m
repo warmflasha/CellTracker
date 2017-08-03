@@ -9,7 +9,7 @@
 % numbering refers to the numbering of peaks{ii}(:,col) and needs to be
 % verified before plotting , i.e. which channel corresponds to which
 % exactly column in peaks cell array.
-function [aver, err, alldata]=Bootstrapping(peaks,Niter,nsample,col,dapimax, chanmax,dapimeanall)%
+function [aver, err, alldata]=Bootstrapping(peaks,Niter,nsample,col,dapimax, chanmax,dapiscalefactor)%
 
 cellstoremove = removebadDAPIcells(peaks,col, dapimax, chanmax);% the cellstoremove are the rows that need to be removed since they represent very bright DAPI values
 
@@ -24,10 +24,9 @@ q=1;
 for ii=1:length(peaks)%length(peaks)
     if ~isempty(peaks{ii})
         if length(col)==1
-            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,col);%make a single column vector from all the data (normalized intensity of col.6 in peaks to dapi (col. 5) in peaks
-            
+            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,col);%make a single column vector from all the data (normalized intensity of col.6 in peaks to dapi (col. 5) in peaks            
         else
-            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,col(1))./peaks{ii}(:,col(2));%dapimeanall peaks{ii}(:,col(2))
+            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,col(1));%./(peaks{ii}(:,5)/dapiscalefactor)
         end
         q=q+nlines(ii);
     end

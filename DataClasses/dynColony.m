@@ -39,8 +39,13 @@ classdef dynColony %object for storing dynamic colony level data
                 plot(of,rat1',cc{mod(ii,7)+1});
             end
         end
-        function smadratio = NucSmadRatio(obj)%all timepoints, traces
-            
+% <<<<<<< HEAD
+        function smadratio = NucSmadRatio(obj)%all timepoints, traces for the data files returned by the new segmentation (from projections)
+             
+% =======
+%         function smadratio = NucSmadRatio(obj)%all timepoints, traces
+%             
+% >>>>>>> upstream/master
             Ntr = size(obj.cells,2);
             alltimes = cat(1,obj.cells.onframes);
             timepoints = max(alltimes);
@@ -63,19 +68,33 @@ classdef dynColony %object for storing dynamic colony level data
                 smadratio(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,2)./obj.cells(k).fluorData(:,3);
                 
             end
-        end
-        function nuconly = NucOnlyData(obj)%all timepoints, traces
-            
+% <<<<<<< HEAD
+        end 
+        function nuconly = NucOnlyData(obj)% for the data files returned by the new segmentation (from projections)
+             
+% =======
+%         end
+%         function nuconly = NucOnlyData(obj)%all timepoints, traces
+%             
+% >>>>>>> upstream/master
             Ntr = size(obj.cells,2);
             alltimes = cat(1,obj.cells.onframes);
             timepoints = max(alltimes);
             nuconly = zeros(timepoints,Ntr);
             for k=1:Ntr
                 if ~isempty(obj.cells(k).onframes)
-                    nuconly(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,1);
+% <<<<<<< HEAD
+            nuconly(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = ((obj.cells(k).fluorData(:,2)));% times the nuclear Area  .*obj.cells(k).nucArea(:) 
                 end
             end
-            
+           
+           
+% =======
+%                     nuconly(obj.cells(k).onframes(1):obj.cells(k).onframes(end),k) = obj.cells(k).fluorData(:,1);
+%                 end
+%             end
+%             
+% >>>>>>> upstream/master
         end
         function dynsmad = DynNucSmadRatio(obj,tpts,fr_stim,resptime,range,jumptime)%
             % tpts = lenth(peaks);

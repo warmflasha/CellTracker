@@ -21,7 +21,7 @@ for ii=1:length(peaks)
         q=q+ncells;
     end
     plot(dtoplot(:,2),dtoplot(:,1),'.','Color',cc(mod(ii,19)+1,:));
-    text(toadd(1),toadd(2),int2str(ii),'Color','m');
+    text(toadd(2),toadd(1),int2str(ii),'Color','m');
     end
 end
 

@@ -1,0 +1,44 @@
+%% plot mean expression 
+
+ close all 
+ dir = '/Volumes/TOSHIBAexte/2017-08-02-predifferentiatedcellsControls_sorting/outfiles';
+ nms = {'30to70mix_cfpcells2daysbmpSB_2daysinMtesrCFPCY5cdx2RFPsox2'}; % 'control','1cont','10to1','10cont','1to10','10toNoggat3hr','10toNoggat22hr','10toNoggat44hr' 
+ nms2 = {'30to70mix esi with esi CFP'};% 'Control','1 cont','10to1@3hr','10 cont','1 to 10','NOGGIN@3hr','NOGGIN@22hr','NOGGIN@44hr'
+ paramstr = {'CFP','Cdx2','Sox2'};
+ C = {'r','g','c','m'};
+ chans = size(paramstr,2);
+ index = [5 6 8]; 
+ [chandata]= rawdatainchan(nms,dir,index);
+ vect = [1];  
+ normto = []; 
+ 
+[chandata]=plotexpressionmean(dir,nms,nms2,paramstr,vect,normto,index);
+
+%%
+close all
+toplot = [1];
+N = [];
+i1 = 2;% to use for scatter plots
+i2 = 1;% to use for scatter plots
+i3 = 3;% to use as colormap
+plotscatter(chandata,nms2,toplot,N,i1,i2,i3,paramstr,normto);
+xlim([0 6000])
+ylim([0 4000])
+%  colormap = jet;
+%  for k=1:size(nms,2)
+% figure(size(index,2)+1), plot(k,mean(chandata{k}(:,normto)),'p','MarkerSize',20,'MarkerFaceColor',colormap(randi(30),:));hold on
+%  end
+%  hh = figure(size(index,2)+1);box on
+%  hh.CurrentAxes.XTickLabel=nms2;
+%  hh.CurrentAxes.LineWidth = 3; hh.CurrentAxes.FontSize = 18;  
+%  hh.CurrentAxes.XTick = vect;
+%  hh.CurrentAxes.XScale= 'linear';
+%  hh.CurrentAxes.XLim = [0 max(vect)];
+%  hh.CurrentAxes.YLim = [0 3000];
+%  hh.CurrentAxes.XTickLabelRotation = 35; 
+%  ylabel('DAPI')  
+
+ [cmin cmax]=caxis;
+caxis([cmin 7000])
+colorbar
+ 

@@ -8,7 +8,7 @@ function files = readAndorDirectory(direc)
 % see also: getAndorFileName, andorMaxIntensity
 
 
-allfiles = dir([direc filesep '*.tif']);
+allfiles = dir([direc filesep '*.tif']);%% '.tif'
 
 nprefix = 0;
 nImages = length(allfiles);
