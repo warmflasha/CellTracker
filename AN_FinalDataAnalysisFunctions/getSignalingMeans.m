@@ -19,6 +19,7 @@ for ii = 1:length(intervals)
         cellmeans{ii,jj} = meannozero(datanow(:,cellstouse));
     end
 end
+end
         
     
     

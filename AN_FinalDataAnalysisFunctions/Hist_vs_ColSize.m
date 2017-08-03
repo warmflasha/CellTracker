@@ -1,4 +1,4 @@
-function [data] =  Hist_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,usemeandapi,flag,ucol)
+function [data] =  Hist_vs_ColSize(nms,nms2,dir,index1,param1,dapimax,scaledapi,flag,ucol)
 
 % plot the distributions of mean marker expression as a function of colony size
 
@@ -7,9 +7,21 @@ clear tmp2
 clear data
 colormap = colorcube;
 data = cell(1,size(nms,2));
-if usemeandapi == 1
-    [dapimeanall,~] = getmeandapi(nms,dir,index1, dapimax);
+clear dapi
+if (scaledapi == 1) 
+for k=1:size(nms2,2)
+[dapi(k),ncells] = getmeandapi(nms(k),dir,index1, dapimax);
+disp(['cells found' num2str(ncells) ]);
+disp(['dapi mean value' num2str(dapi(k)) ]);
 end
+dapiscalefactor = dapi/dapi(1);
+end
+if (scaledapi == 0) 
+dapiscalefactor = ones(1,size(nms,2));
+end
+disp(dapiscalefactor);
+
+
 for k=1:size(nms,2)
     filename{k} = [dir filesep  nms{k} '.mat'];
     load(filename{k},'plate1');
@@ -25,8 +37,7 @@ for k=1:size(nms,2)
     totalcolonies = zeros(M,1);
     rawdata = zeros(M,1);
     tmp2 = [];
-    totalcells=zeros(M,1);
-    
+    totalcells=zeros(M,1);    
     col = colonies{k};
     q = 1;
     for ii=1:length(col)
@@ -36,21 +47,15 @@ for k=1:size(nms,2)
         if ~isempty(col(ii).data) && (a==0)
             nc = col(ii).ncells;
             totalcolonies(nc)=totalcolonies(nc)+1;
-            % totalcells(nc)=totalcells(nc)+nc;
-            if size(index1,2) == 1            % to look t raw channel data
-                tmp = col(ii).data(:,index1(1));  % assign the value of the normalized intensity in specific channel to tmp;
-                tmp2(nc,q:q+size(tmp,1)-1) = tmp; % add the elements tmp, corresponding to the same colony size, into the tmp2
-            end
+            % totalcells(nc)=totalcells(nc)+nc;           
             if size(index1,2) >1              % to look at normalized data
-                tmp = col(ii).data(:,index1(1))./col(ii).data(:,index1(2));  % assign the value of the normalized intensity in specific channel to tmp;
-                tmp2(nc,q:q+size(tmp,1)-1) = tmp; % add the elements tmp, corresponding to the same colony size, into the tmp2
-                
-            end
-            if usemeandapi == 1
-                tmp = col(ii).data(:,index1(1))./dapimeanall; %assign the value of the normalized intensity in specific channel to tmp;
-                %tmp = col(ii).data(:,index1(1)).*col(ii).data(:,index1(2));
-                tmp2(nc,q:q+size(tmp,1)-1) = tmp;
-            end
+                tmp = col(ii).data(:,index1(1))./(col(ii).data(:,index1(2))./dapiscalefactor(k));  % assign the value of the normalized intensity in specific channel to tmp;
+                tmp2(nc,q:q+size(tmp,1)-1) = tmp; % add the elements tmp, corresponding to the same colony size, into the tmp2          
+            end 
+            if size(index1,2) == 1              % to look at raw data distributions
+                tmp = (col(ii).data(:,index1(1))./dapiscalefactor(k));  % assign the value of the normalized intensity in specific channel to tmp;
+                tmp2(nc,q:q+size(tmp,1)-1) = tmp; % add the elements tmp, corresponding to the same colony size, into the tmp2          
+            end 
             
         end
         q = q+size(tmp,1);

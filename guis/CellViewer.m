@@ -161,6 +161,9 @@ if exist('cells','var')
     set(handles.cellslider,'sliderStep',[1/(length(cells)-1), 10/(length(cells)-1)]);
     
 end
+if exist('colonies','var')
+    handles.colonies = colonies;
+end
 set(handles.mattext,'String','.mat file loaded');
 handles.currcell = 1;
 guidata(hObject,handles);
@@ -198,8 +201,22 @@ if isfield(handles,'cells')
     plot(cc.onframes,cc.fluorData(:,2)./cc.fluorData(:,3),'r.-'); hold on;
     ind = find(cc.onframes == tt);
     if ~isempty(ind)
-    plot(tt,cc.fluorData(ind,2)./cc.fluorData(ind,3),'ks','MarkerSize',20); hold off;
+        plot(tt,cc.fluorData(ind,2)./cc.fluorData(ind,3),'ks','MarkerSize',20); hold off;
     end
+    
+% else
+%     if exist('colonies','var')
+%         disp('found colonies')
+%         cellnum = handles.currcell;
+%         cc = handles.colonies(cellnum);
+%         if ~isempty(cc.cells(cellnum).position)
+%             plot(cc.cells(cellnum).onframes,cc.cells(cellnum).fluorData(:,2)./cc.cells(cellnum).fluorData(:,3),'r.-'); hold on;
+%             ind = find(cc.cells(cellnum).onframes == tt);
+%             if ~isempty(ind)
+%                 plot(tt,cc.cells(cellnum).fluorData(ind,2)./cc.cells(cellnum).fluorData(ind,3),'ks','MarkerSize',20); hold off;
+%             end
+%         end
+%     end
 end
 
 function updateImageView(handles)

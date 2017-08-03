@@ -11,8 +11,6 @@ fprintf(1, '%s called to define params\n',mfilename);
 % the runSegmentCellsZStack60X function.  if not specified, the default is
 % provided in the function
 
-userParam.softtype = 1;% one for Olympus
-
 userParam.sizeImg = [2048,2048];
 % When verbose=1 set, image of field of cells produced with diagnostics. If
 % newFigure=1 these will pile up for successive times and eventually crash MATLAB 
@@ -34,8 +32,8 @@ userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on 
 
 
 % image smoothing parameters 
-userParam.gaussRadius=10;% 4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=2; % 3
+userParam.gaussRadius=9;% 4 is good for 10x images;6 is ok for 20X
+userParam.gaussSigma=3; % 3
 
 %%%%Background parameters
 userParam.backgroundSmoothRad=50;
@@ -68,12 +66,12 @@ userParam.radiusMin = 20; %22
 userParam.radiusMax = 39; %37
 userParam.minNucSep = 10;%10
 userParam.nucIntensityRange = 30;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  =500;  % 270
+userParam.nucIntensityLoc  =600;  % 800
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =400; %370 measure the actual values and decide on this parameter
+userParam.nucAreaLo =200; %370 measure the actual values and decide on this parameter
 userParam.nucAreaHi = 4500;  % not too big
 
 
@@ -81,7 +79,7 @@ userParam.nucAreaHi = 4500;  % not too big
 
 
 %parameters for cytoplasm calculation
-userParam.donutRadiusMin = 3;  % 5 must be >=0
+userParam.donutRadiusMin = 2;  % 5 must be >=0
 userParam.donutRadiusMax = 6;  % 8 set to zero to skip 
 userParam.forceDonut = 1; 
 userParam.minPtsCytoplasm = 5;%5

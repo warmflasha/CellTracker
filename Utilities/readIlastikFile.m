@@ -6,7 +6,7 @@ function mask = readIlastikFile(filename,complement)
 % are label 1. If bg is label 1, then set complement = 0.
 
 if ~exist('complement','var')
-    complement = 1;
+    complement = 0;
 end
 
 immask = h5read(filename, '/exported_data');

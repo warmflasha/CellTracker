@@ -19,31 +19,31 @@ for ii=posRange(1):posRange(2)
     try
         
         %read nuclear image, smooth and background subtract
-        
+        nuc_chan = 1;                                        % AN
         [x, y]=ind2sub([xmax ymax],ii);
-        f1nm = mkMMfilename(files,x-1,y-1,[],[],1);
-
+        f1nm = mkMMfilename(files,x-1,y-1,[],[],nuc_chan);  
+        
         disp(['Nuc marker img:' f1nm]);
-        imfiles(ii).nucfile=f1nm{1};
+        imfiles(ii).nucfile=f1nm{1};  
         nuc=imread(f1nm{1});
         si=size(nuc);
         %apply gaussian smoothing
         nuc=smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
         %subtract precalculated background Image
-        nuc=imsubtract(nuc,bIms{1});
-        nuc=immultiply(im2double(nuc),nIms{1});
+        nuc=imsubtract(nuc,bIms{nuc_chan});
+        nuc=immultiply(im2double(nuc),nIms{nuc_chan});        % AN
         nuc=uint16(65536*nuc);
         
         
         fimg=zeros(si(1),si(2),nImages);
-        for jj=2:(nImages+1)
+        for jj=2:(nImages+1) % AN   was bf:  jj=2:(nImages+1)
             f1nm = mkMMfilename(files,x-1,y-1,[],[],jj);
             fimgnow=imread(f1nm{1});
             fimgnow = smoothImage(fimgnow,userParam.gaussRadius,userParam.gaussSigma);
-            imgfiles(ii).smadfile{jj-1}=f1nm{1};
+            imgfiles(ii).smadfile{jj-1}=f1nm{1};%   AN imgfiles(ii).smadfile{jj-1}
             fimgnow=imsubtract(fimgnow,bIms{jj});
             fimgnow=immultiply(im2double(fimgnow),nIms{jj});
-            fimg(:,:,jj-1)=uint16(65536*fimgnow);
+            fimg(:,:,jj-1)=uint16(65536*fimgnow);% AN fimg(:,:,jj-1)
         end
         
 

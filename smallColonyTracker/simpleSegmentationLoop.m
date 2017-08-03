@@ -23,13 +23,12 @@ for ii = 1:nt
         cmask = false(imsize(1),imsize(2),nt);
         nuc_p = uint16(zeros(imsize(1),imsize(2),nt));
         fimg_p = uint16(zeros(imsize(1),imsize(2),nt));
-    end
-    
-    
+    end    
     
 
     [nmask(:,:,ii), nuc_p(:,:,ii)]=simpleSegmentation(nuc,cellSize,cellIntensity,false);%false
     [cmask(:,:,ii), fimg_p(:,:,ii)]=simpleSegmentation(fimg,1.5*cellSize,cellIntensity1,false);
     [I2_bgsubtract(:,:,ii)] = simplebg(cmask(:,:,ii),nmask(:,:,ii),fimg);
+     I2_bgsubtract(:,:,ii) = fimg;%%%test
 
 end

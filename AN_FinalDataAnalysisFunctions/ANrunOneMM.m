@@ -6,7 +6,7 @@
 % assigns: prefix-Pos_00x_00y. then the usual functions are used:
 % 'readMMdirectory' and 'mkMMfilename'
 
-function [data,nuc]= ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
+function [data,maskC,toshow]= ANrunOneMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
 
 global userParam;
 
@@ -42,7 +42,7 @@ ymax = max(ff.pos_y)+1;
         %apply gaussian smoothing
         nuc=smoothImage(nuc,userParam.gaussRadius,userParam.gaussSigma);
         %subtract precalculated background Image
-        nuc=imsubtract(nuc,bIms{1});
+        nuc=imsubtract(nuc,bIms{1});%
         nuc=immultiply(im2double(nuc),nIms{1});
         nuc=uint16(65536*nuc);
         
@@ -69,10 +69,10 @@ ymax = max(ff.pos_y)+1;
           data  = stats2xy(statsN);
             %outdat=outputData4AWTracker(statsN,nuc,ii); % AN return
         %end
-        figure, imshow(nuc,[]); hold on;                            
+        toshow = nuc;
+        figure(1), imshow(nuc,[]); hold on;                      
         plot(data(:,1),data(:,2),'r.','MarkerSize',10); hold on;
-        
-                
+        %figure(2),imshow(maskC,[])
     catch err       
         disp(['Error with image ' int2str(ii-1)]);
         disp(err.identifier);

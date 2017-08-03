@@ -21,7 +21,7 @@ for ii=1:length(peaks)%length(peaks)
         end
         %cellstoremove = find(alldata> dapimax);
         if size(index,2)>1
-            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,3);% to get rid of the large area cells
+            alldata(q:(q+nlines(ii)-1))=peaks{ii}(:,5);% clean dapi junk %% Apr12 2017
             alldata1(q:(q+nlines(ii)-1))=peaks{ii}(:,index(1));%
             q=q+nlines(ii);
             

@@ -27,18 +27,18 @@ userParam.coltype = 1;
 % when groupinf colonies by distance need to supply the parameter to still
 % consider cells within one colony ( 80 works for microcolonies at 20X
 % magnification
-userParam.colonygrouping = 160;% 120 for 60X
+userParam.colonygrouping = 100;% 120 for 60X
 
 %%%%%%%%%%%%%%% used in segmentCells()  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 userParam.verboseSegmentCells = 0;% set to 0, not to print the detailed info on segmentation 
 
 
 % image smoothing parameters 
-userParam.gaussRadius=8;% 8   4 is good for 10x images;6 is ok for 20X
-userParam.gaussSigma=1; %1 3
+userParam.gaussRadius=9;%11  8   4 is good for 10x images;6 is ok for 20X
+userParam.gaussSigma=2; %1 3
 
 %%%%Background parameters
-userParam.backgroundSmoothRad=50;
+userParam.backgroundSmoothRad=50;%50
 userParam.backgroundSmoothSig=10;  %10
 userParam.backgroundOpenRad = 50;% 50
 
@@ -64,17 +64,17 @@ userParam.backdiskrad = 200; % 200
 % colors. If not finding at all obvious nucl, lower thresh in (1)
 %
 userParam.dontFilterNuc=0; % set to 1 to skip filtering step
-userParam.radiusMin = 20; %22
-userParam.radiusMax = 39; %37
+userParam.radiusMin = 30; % 30 22
+userParam.radiusMax = 40; %40 37
 userParam.minNucSep = 10;%10
-userParam.nucIntensityRange = 20;   % value depends on radiusMin/Max 
-userParam.nucIntensityLoc  =250;  % 250
+userParam.nucIntensityRange = 30;   % value depends on radiusMin/Max 
+userParam.nucIntensityLoc  =2000;  % 1000 for the control in the clonal uCOl experiment 
 
 
 %Prior parameters for filtering nuclei based on size/shape, etc from AW
 %(Area)
-userParam.nucAreaLo =470; %370 measure the actual values and decide on this parameter
-userParam.nucAreaHi = 4500;  % not too big
+userParam.nucAreaLo =250; %measure the actual values and decide on this parameter
+userParam.nucAreaHi = 6000;  % not too big
 
 
 %%%%%PARAMETER BELOW HERE TYPICALLY DO NOT NEED TO BE MODIFIED%%%%%%%%%%%

@@ -2,10 +2,10 @@ function [dapimeanall,ncells] = getmeandapi(nms,dir,index, dapimax)
 % get the mean value of DAPI for all files in nms cell array
 dapimean = zeros(size(nms,2),1);
 ncells = zeros(size(nms,2),1);
-dapimax = 60000;
+
 for k=1:size(nms,2)        % load however many files are in the nms string
     filename{k} = [dir filesep  nms{k} '.mat'];
-    load(filename{k},'peaks','plate1');
+    load(filename{k},'peaks');
     disp(['loaded file: ' filename{k}]);
     nlines=zeros(length(peaks),1);
     for ii=1:length(peaks)
@@ -31,7 +31,7 @@ for k=1:size(nms,2)        % load however many files are in the nms string
             
         end
         
-        cellstoremove = find(alldata>dapimax)  ;%%
+        cellstoremove = find(alldata>dapimax(1))  ;%%
         alldata(cellstoremove) = [];
         dapimean(k,1) = mean(alldata);
         ncells(k,1) = size(alldata,1);

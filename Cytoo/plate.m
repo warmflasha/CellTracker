@@ -56,7 +56,7 @@ classdef plate
             rad=[col.radius];
             
             gind= [col.aspectRatio] > 0.66 & [col.aspectRatio] < 1.5; %& [ncell./(rad.^2) > 0.0030]; %_SC
-            conv = 3.0; % pix per micro
+            conv = 3.1104; % pix per micro 1/0.3215
             col1000= gind & rad > 500*conv*0.9;
             col800 = gind & rad < 400*conv*1.1 & rad > 400*conv*0.9;
             col500 = gind & rad < 250*conv*1.1 & rad > 250*conv*0.9;
@@ -122,13 +122,13 @@ classdef plate
                 compfrom=0;
             end
             
-            rA=zeros(5000/binsize,1); rA2=rA; counter=rA;
+            rA=zeros(round(5000/binsize),1); rA2=rA; counter=rA;
             for ii=1:length(colinds)
                 [rAnow cibnow]=obj.colonies(colinds(ii)).radialAverage(column,ncolumn,binsize,compfrom);
                 npoints=length(rAnow);
                 if npoints > length(rA)
                     continue;
-                end
+                end               
                 rA(1:npoints)=rA(1:npoints)+rAnow.*cibnow;
                 rA2(1:npoints)=rA2(1:npoints)+rAnow.*rAnow.*cibnow;
                 counter(1:npoints)=counter(1:npoints)+cibnow;
