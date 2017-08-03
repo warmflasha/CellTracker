@@ -55,7 +55,7 @@ for ii=1:ntimefiles
     
     nT = reader.getSizeT;
     
-    h5file = geth5name(filename);
+    h5file = geth5name2(filename,'_Simple Segmentation');
     
     if exist(h5file,'file')
         usemask = 1;

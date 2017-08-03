@@ -1,4 +1,4 @@
-function cellmeans = getSignalingMeans(matfile,intervals,mintrajlength)
+function [cellmeans, totalmeans] = getSignalingMeans(matfile,intervals,mintrajlength)
 
 load(matfile,'notbinned','fr_stim','delta_t');
 
@@ -19,10 +19,15 @@ for ii = 1:length(intervals)
         cellmeans{ii,jj} = meannozero(datanow(:,cellstouse));
     end
 end
-end
+
         
+
+for jj = 1:3
+    totalmeans{jj} = meannozero(notbinned{jj},2);
+end
     
-    
+  end
+  
     
     
 

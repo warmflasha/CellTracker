@@ -79,10 +79,14 @@ for ii = 1:ncolonies %loop over colonies, find the ones that need to be split
         tmpmask(cat(1,stats{jj}(cellnums).PixelIdxList))=true;
         
         if jj > 1
-            if nc_time(jj) < max(nc_time(1:jj-1)) && nc_time(jj) > 0 %&& nc_area(jj) > 0.9*nc_area(jj-1) %lost a cell, didn't lose area
+            [max_cell_past, mcp_ind] = max(nc_time(1:jj-1));
+            area_ratio = nc_area(jj)/nc_area(mcp_ind)
+            numneeded = round(max_cell_past*area_ratio);
+            
+            if nc_time(jj) < max_cell_past % lost cell, didn't lose area
                 done = false;
                 %first try erosion based splitting
-                numneeded = max(nc_time(1:jj-1));
+                numneeded = max_cell_past;
                 ncell = nc_time(jj);
                 erode_rad = 1;
                 %increase erosion radius until object is separated
