@@ -5,7 +5,8 @@
 % low  bmp pSmad1-Smad4 corr, use the empty eimage taken in each channel as
 % the background (instead of calculating)
 
-runFullTileMM('30to70mix_cfpcells2daysbmpSB_2daysinMtesr','30to70mix_cfpcells2daysbmpSB_2daysinMtesrCFPCY5cdx2RFPsox2.mat','setUserParamAN20X',1);
+runFullTileMM('control_esionlyinMtsr','control_esionlyinMtsr.mat','setUserParamAN20X',1);
+runFullTileMM('3dBMPsb_2dMtsr','3dBMPsb_2dMtsr.mat','setUserParamAN20X',1);
 
 
 disp('done');
