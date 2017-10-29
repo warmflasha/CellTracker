@@ -5,31 +5,35 @@
 % low  bmp pSmad1-Smad4 corr, use the empty eimage taken in each channel as
 % the background (instead of calculating)
 
-runFullTileMM('control_esionlyinMtsr','control_esionlyinMtsr.mat','setUserParamAN20X',1);
-runFullTileMM('3dBMPsb_2dMtsr','3dBMPsb_2dMtsr.mat','setUserParamAN20X',1);
-
+% runFullTileMM('pluriControl_4dMT','pluriControl_4dMT.mat','setUserParamAN20X',1);
+% runFullTileMM('diffControl_2dBmpSb','diffControl_2dBmpSb.mat','setUserParamAN20X',1);
+% runFullTileMM('1d_BmpSb_3d_MT','1d_BmpSb_3d_MT.mat','setUserParamAN20X',1);
+% runFullTileMM('2d_BmpSb_2d_MT','2d_BmpSb_2d_MT.mat','setUserParamAN20X',1);
+runFullTileMM('3d_BmpSb_1d_MT','3d_BmpSb_1d_MT.mat','setUserParamAN20X',1);
+runFullTileMM('4d_BmpSb','4d_BmpSb.mat','setUserParamAN20X',1);
 
 disp('done');
-
-
 
   
 %% split the ibidi .btfs
 flag = 1;
-%MMdirec1 = '/Volumes/TOSHIBAexte/2017-08-02-predifferentiatedcellsControls_sorting/control_esionlyinMtsr';
-MMdirec2 = '/Volumes/TOSHIBAexte/2017-08-02-predifferentiatedcellsControls_sorting/3dBMPsb_2dMtsr';
-MMdirec3 = '/Volumes/TOSHIBAexte/2017-08-02-predifferentiatedcellsControls_sorting/4dBMPsb_2dMtsr';
+MMdirec1 = '/Volumes/TOSHIBAexte/2017-09-21-MiguelAN_trophoblastDiff10bmp10Sb_NanogCdx2p63/pluriControl_4dMT';
+MMdirec2 = '/Volumes/TOSHIBAexte/2017-09-21-MiguelAN_trophoblastDiff10bmp10Sb_NanogCdx2p63/diffControl_2dBmpSb';
+MMdirec3 = '/Volumes/TOSHIBAexte/2017-09-21-MiguelAN_trophoblastDiff10bmp10Sb_NanogCdx2p63/1d_BmpSb_3d_MT';
+MMdirec4 = '/Volumes/TOSHIBAexte/2017-09-21-MiguelAN_trophoblastDiff10bmp10Sb_NanogCdx2p63/2d_BmpSb_2d_MT';
+MMdirec5 = '/Volumes/TOSHIBAexte/2017-09-21-MiguelAN_trophoblastDiff10bmp10Sb_NanogCdx2p63/3d_BmpSb_1d_MT';
+MMdirec6 = '/Volumes/TOSHIBAexte/2017-09-21-MiguelAN_trophoblastDiff10bmp10Sb_NanogCdx2p63/4d_BmpSb';
 
 
-fn= {'3dBMPSB_2daysMtesr_sox2cdx2nanogdapi.btf','4daysBMPSB_2daysMT.btf'};
+fn= {'Control_4dMT.btf','CDX2posControl_2dBmpSb.btf','1dBmpSb_3dMT.btf','2dBmpSb_2dMT.btf','3dBmpSb_1dMT.btf','BmpSb_4dMT.btf'};
 chan = {'DAPI','GFP','RFP','CY5'};% 
-mm = {MMdirec2,MMdirec3};
-cfpCprediff = cell(1,size(mm,2));
+mm = {MMdirec1,MMdirec2,MMdirec3,MMdirec4,MMdirec5,MMdirec6};
+trophlikediffRotation2017 = cell(1,size(mm,2));
 for k=1:size(mm,2)
-   cfpCprediff{k} = templateSplitOlympData(mm{k},chan,fn{k},flag);
+   trophlikediffRotation2017{k} = templateSplitOlympData(mm{k},chan,fn{k},flag);
 end
 disp('split and saved all');
-save('cfpCprediff');
+save('trophlikediffRotation2017');
 
 %% run colony grouping only 
 

@@ -1,6 +1,6 @@
     %%
 % determine the background images(for all chnnels) for the dataset to run
-ff=readMMdirectory('control_esionlyinMtsr');   % dapi, cy5, gfp
+ff=readMMdirectory('pluriControl_4dMT');   % dapi, cy5, gfp
 dims = [ max(ff.pos_x)+1 max(ff.pos_y)+1];
 wavenames=ff.chan;
 
@@ -34,24 +34,28 @@ end
 % 
 %for k=8:5:25
 close all
- N =5;%  003008 cdx2neg cells
+ N =20;%  003008 cdx2neg cells
 flag = 1;% plot the resulting segmentation on images
 % dapi = gb = ~ 1000; cy5: bg=~ 1000; gfp: bg~ 2300;% high bmp dose, pS1-S4
 % bIms{1} = uint16(1000*ones(size(bIms{1})));
 % bIms{2} = uint16(2300*ones(size(bIms{2})));
 % bIms{3} = uint16(1000*ones(size(bIms{3})));
-[data1,mask1,toshow1]=ANrunOneMM('3dBMPsb_2dMtsr',N,bIms,nIms,'setUserParamAN20X','DAPI',flag);%setUserParamAN20X  setUserParamAN20X_uCOL
+[data1,mask1,toshow1]=ANrunOneMM('1d_BmpSb_3d_MT',N,bIms,nIms,'setUserParamAN20X','DAPI',flag);%setUserParamAN20X  setUserParamAN20X_uCOL
 imcontrast
 %% sorted segmentation
   close all
-  N =15%  
+  N =2%  
   flag = 1;
-  ff = readMMdirectory('30to70mix_cfpcells2daysbmpSB_2daysinMtesr');%CellsSortedonUpattern_60to40(idx = [6 8 10]cfp sox2 bra); 80to20sortedpattern_cfpBraSox2
+  ff = readMMdirectory('/Volumes/TOSHIBAexte/2017-08-02-predifferentiatedcellsControls_sorting/30to70mix_cfpcells2daysbmpSB_2daysinMtesr');%CellsSortedonUpattern_60to40(idx = [6 8 10]cfp sox2 bra); 80to20sortedpattern_cfpBraSox2
    %[nuc1,fmask,statsout]= makeMaskswithmultiplechanelsMM(ff,N,bIms,nIms,'setUserParamAN20X',flag);
-   
- [nuc1,fmask,statsout]=  makeMaskswith2chans_nooverlap(ff,N,bIms,nIms,'setUserParamAN20X',flag);
-  %[alldata1,fmask,statsout]= makeMaskswithmultiplechanelsMM(direc,posRange,bIms,nIms,paramfile,nucname,flag)
-  
+   chanmerge=[1 3];
+   areamin=80;
+   areamax=2500;
+ [nuc1,fmask,statsout]=  makeMaskswith2chans_nooverlap(ff,N,bIms,nIms,'setUserParamAN20X',flag,chanmerge,areamin,areamax);
+  %[alldata1,fmask,statsout]=
+  %makeMaskswithmultiplechanelsMM % not general enough, do not use
+  %
+  %%
 toplot =cat(1,statsout.Centroid);
 A =regionprops(logical(fmask),'Area','Centroid');
   A1 =cat(1,A.Area);

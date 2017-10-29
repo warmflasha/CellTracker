@@ -1,4 +1,4 @@
-function [chandata]=plotexpressionmean(dir,nms,nms2,paramstr,vect,normto,index)
+function [chandata]=plotexpressionmean(dir,nms,nms2,paramstr,vect,normto,index,titlestr)
  
  C = {'r','g','c','m'}; 
  [chandata]= rawdatainchan(nms,dir,index); 
@@ -14,7 +14,7 @@ function [chandata]=plotexpressionmean(dir,nms,nms2,paramstr,vect,normto,index)
  end
  end
  for j=2:size(index,2)   
- figure(j),errorbar(vect,meanval(:,j),err(:,j),'-p','MarkerFaceColor',C{j},'MarkerEdgeColor',C{j},'MarkerSize',18,'LineWidth',2);hold on%,'Color','c','LineWidth',3chandata{k}(:,j)./chandata{k}(:,normto),chandata{k}(:,xx)./chandata{k}(:,cyt)
+ figure(j),errorbar(vect,meanval(:,j),err(:,j),'p','MarkerFaceColor',C{j},'MarkerEdgeColor',C{j},'MarkerSize',18,'LineWidth',2);hold on%,'Color','c','LineWidth',3chandata{k}(:,j)./chandata{k}(:,normto),chandata{k}(:,xx)./chandata{k}(:,cyt)
   hh = figure(j);
  hh.CurrentAxes.XTickLabel=nms2;
  hh.CurrentAxes.LineWidth = 3; hh.CurrentAxes.FontSize = 18;  
@@ -25,6 +25,8 @@ function [chandata]=plotexpressionmean(dir,nms,nms2,paramstr,vect,normto,index)
  hh.CurrentAxes.XTickLabelRotation = 35; box on
  ylabel('Mean expression, a.u.'); 
  legend(paramstr{j});
+ title(titlestr);
+
  end
  end
  if isempty(normto)
@@ -51,6 +53,7 @@ function [chandata]=plotexpressionmean(dir,nms,nms2,paramstr,vect,normto,index)
  hh.CurrentAxes.XTickLabelRotation = 35; box on
  ylabel('Mean expression, a.u.'); 
  legend(paramstr{j});
+ figure(j),title(titlestr);
  end   
      
      
