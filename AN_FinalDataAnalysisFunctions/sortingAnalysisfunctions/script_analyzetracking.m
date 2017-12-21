@@ -33,8 +33,8 @@ close all
 clear all
 csvfile = '/Volumes/TOSHIBAexte/2017-06-29-livesorting_SDConfocalbetaCatcellspluri/2017-07-05-liveSortingMaxProjections/SortingBetaCatpluri_MIP_f0005_w0002-exported_data_table.csv';
 imported_dat = uiimport(csvfile);
-% object_id = imported_dat.data(:,1);
-% timestep = imported_dat.data(:,2);
+
+%imported_dat.data(:,2);
 % lineage_id = imported_dat.data(:,4);
 % track_id1= imported_dat.data(:,5);
 % RegionCenter_0= imported_dat.data(:,9);

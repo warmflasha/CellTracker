@@ -1,0 +1,21 @@
+% get the centroid coordinatesof the other cell type (non-CFP)
+totrack = 100;
+direc1 ='C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\LiveSorting_MIPgfpS4cellswithCFPdiff';
+ifile = ['C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\LiveSorting_MIPgfpS4cellswithCFPdiff\SortingGFPS4cellspluri70to30_MIP_f0000_w0001_Simple Segmentation.h5'];%stmp{end-1}(2:end)
+tpt_end = 80; % how many timepoints to track cells for, in frames
+pos = 1;%1
+chan = 1;% 0 - cfp cells; 1- nuc marker of other cell type
+paramfile = 'C:\Users\Nastya\Desktop\FromGithub\CellTracker\paramFiles\setUserParamTrackSortingAN_20X.m';
+run(paramfile)
+global userParam 
+[nmask,pluristats] = getdatatotrack(direc1,pos,chan,userParam.arealow,ifile);
+% centroids of pluri cells (cell type 1) are in the var pluristats
+% tracked data for CFP cells (cell type 2) are in var coordintime
+jj = 1;% time point
+
+allcells_type1 = round(cat(1,pluristats(jj).stats.Centroid));% centrois of all pluri cells at tp jj
+curr_track = coordintime(totrack).dat(jj,:);% coord of cell of other type, for which the neighborhood is quantified
+rawimg = (r{1}{jj});
+figure(jj),imshow(rawimg,[500 2000]);hold on
+figure(jj),plot(coordintime(totrack).dat(jj,1),coordintime(totrack).dat(jj,2),'rp','MarkerFaceColor',colormap(randcolor,:),'MarkerSize',8,'LineWidth',1);hold on%colormap(randcolor,:)
+plot()

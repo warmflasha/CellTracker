@@ -14,9 +14,13 @@ for time = 1:tpt-1
                 % one close, than may be a division happened
                 closest_cell_dist = tmp1.distance;
                 overlap = intersect(datatomatch(time).stats(jj).PixelIdxList,datatomatch(time+1).stats(closest_cell).PixelIdxList);
-                if size(overlap,1)>=minpxloverlap  
+                % determine what percentage of the cell Area at (time+1) is the overlap
+                overlap_frac = size(overlap,1)/datatomatch(time+1).stats(closest_cell).Area;
+                
+                if overlap_frac>=minpxloverlap  
+                    %disp(overlap_frac)
                     tracks_t0(q).coord(time+1,1:2) = cat(1,datatomatch(time+1).stats(closest_cell).Centroid);
-                    tracks_t0(q).coord(time+1,3)=size(overlap,1);
+                    tracks_t0(q).coord(time+1,3)=overlap_frac;
                     tracks_t0(q).coord(time+1,4)=closest_cell_dist;
                     tracks_t0(q).indx=closest_cell;
                     tracks_t0(q).indx2=jj;
