@@ -1,4 +1,5 @@
-% function to track the sorting cells
+% function to track the sorting cells using matlab-written tracking,
+% ilastik only used for segmentation
 direc1 ='C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\LiveSorting_MIPgfpS4cellswithCFPdiff';
 %fucci
 %direc1 ='C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\Fucci_andOtherCells_regularCulture';% direc2 = 'C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\LiveSorting_MIP_may2016data';
@@ -8,14 +9,16 @@ ifile = ['C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_Matlab
 %ifile_ucol = ['C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\TestTrack_uColonies\PluriConditions_f0021_w0000_Simple Segmentation.h5'];%stmp{end-1}(2:end)
 %ifile = ['C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\LiveSorting_MIPgfpS4cellswithCFPdiff\SortingGFPS4cellspluri70to30_MIP_f0000_w0001_Simple Segmentation.h5'];%stmp{end-1}(2:end)
 ifile = ['C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\Fucci_andOtherCells_regularCulture\Fucci_testDynamics_MIP_f0000_w0000_Simple Segmentation.h5'];%stmp{end-1}(2:end)
+% direc1 ='C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\2017-07-14-Smad4sorting_maxProjections';
+% ifile = ['C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\2017-07-14-Smad4sorting_maxProjections\SortingGFPS4cellspluri70to30_MIP_f0014_w0000_Simple Segmentation.h5'];
 
 tr_1 = 1;% first track ID to look at
-tr_end = 100;%85 150size(tracks_t0,2) last track ID to look at, if [], all the trackIDs will be considered
+tr_end = 50;%85 150size(tracks_t0,2) last track ID to look at, if [], all the trackIDs will be considered
 tpt_end = 80; % how many timepoints to track cells for, in frames
 pos = 1;%1
 chan = 0;% 0 - cfp cells; 1- nuc marker of other cell type
 paramfile = 'C:\Users\Nastya\Desktop\FromGithub\CellTracker\paramFiles\setUserParamTrackSortingAN_20X.m';
-delta_t = 20;%15
+delta_t = 15;%15
 plotsubtracks = 0;
 
 matfile_str = trackSortingCells_full(direc1,pos,chan,ifile,paramfile,delta_t,plotsubtracks,tr_1,tr_end,tpt_end);

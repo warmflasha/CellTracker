@@ -76,7 +76,7 @@ function [msd,slope_estimate,D,diff_coeff,mean_disp,total_disp,mean_speed,validT
                end
              end
              % for 2D trajectory, MSD = 4Dt;
-             %estimate the slope from dy/(dx*delta_t/60) for each track, get
+             % get the slope from the fit
              %D=slope/4 [um^2/hour]             
 ytofit = msd(totrack).dat(1:x1,1);
 xtofit = (1:x1)'*delta_t/60;
