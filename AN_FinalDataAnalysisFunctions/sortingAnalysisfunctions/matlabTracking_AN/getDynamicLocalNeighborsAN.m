@@ -1,5 +1,5 @@
 % get the centroid coordinatesof the other cell type (non-CFP)
-function [samecell_neighbors,othercell_neighbors,curr_cell_speed,curr_cell_rad]= getDynamicLocalNeighborsAN(trackID,paramfile,coordintime,matlabtracking,delta_t,pluristats,diffstats,img_pluri,img_diff,toplot)
+function [samecell_neighbors,othercell_neighbors,same_neighbor_abs,other_neighbor_abs,curr_cell_speed,curr_cell_rad]= getDynamicLocalNeighborsAN(trackID,paramfile,coordintime,matlabtracking,delta_t,pluristats,diffstats,img_pluri,img_diff,toplot)
 run(paramfile)
 global userParam
 
@@ -23,8 +23,8 @@ for jj = 1: (tpts-1)% time points    (size(cfpstats,2)-1)
 allcells_type1 = round(cat(1,pluristats(jj).stats.Centroid));% centrois of all pluri cells at tp jj
 allcells_type2 = round(cat(1,diffstats(jj).stats.Centroid));% centrois of all pluri cells at tp jj
 curr_track = coordintime(totrack).dat(jj,:);% coord of cell of other type, for which the neighborhood is quantified
-rawimg1 = (img_pluri{1}{jj});% pluri cells
-rawimg = (img_diff{1}{jj});% cell type 2 (cfp cells)
+rawimg1 = (img_pluri{1}{jj});% untracked
+rawimg = (img_diff{1}{jj});% tracked
 total_img = max(rawimg1,rawimg);
 %figure(jj),imshow(total_img,[500 1500]);hold on % show the raw image in the CFP channel
 %figure(jj),imshowpair(rawimg1,rawimg);hold on % show the raw image in the CFP channel
@@ -76,9 +76,9 @@ end
 [~,c]=find(local_neighbors.distance==min(local_neighbors.distance));
 local_neighbors.columnindex(c)=[];
 % local_neighbors.columnindex - cells within the rad of local_sz
-if (jj == 1) && (toplot == 1)
+if (jj == 1) && (toplot == 1)%last tp: (tpts-1)
 figure(jj),imshow(total_img,[500 1500]);hold on % show the raw image in the CFP channel
-figure(jj),imshowpair(rawimg1,rawimg,'ColorChannels','red-cyan');hold on % show the raw image in the CFP channel
+figure(jj),imshowpair(rawimg1,rawimg);hold on % show the raw image in the CFP channel
 figure(jj),plot(coordintime(totrack).dat(jj,1),coordintime(totrack).dat(jj,2),'kp','MarkerFaceColor','y','MarkerSize',11,'LineWidth',1);hold on%colormap(randcolor,:)
 figure(jj),plot(allcells(local_neighbors.columnindex',1),allcells(local_neighbors.columnindex',2),'*b');hold on
 title(['At ' num2str(jj*delta_t/60) 'hrs; Track N# ' num2str(totrack) ]);
@@ -103,7 +103,9 @@ end
 sametype_neighbor(jj).same = counter;
 othertype_neighbor(jj).other = (nearest-counter);
 fraction_same(jj).frac = counter/(nearest);
+fraction_same(jj).abs = counter;
 fraction_other(jj).frac = (nearest-counter)/(nearest);
+fraction_other(jj).abs=(nearest-counter);
 end
 %close all
 curr_cell_displ = cat(1,displ.dat);
@@ -114,6 +116,8 @@ curr_cell_theta= cat(1,direction.theta);
 curr_cell_rad= cat(1,direction.rad);
 curr_cell_neighborhood = cat(1,fraction_same.frac);%fraction_same.frac   fraction_other.frac  
 curr_cell_neighborhood2 = cat(1,fraction_other.frac);% 
+same_neighbor_abs = cat(1,fraction_same.abs);
+other_neighbor_abs = cat(1,fraction_other.abs);
 
 % figure(4),scatter((coordintime(totrack).dat(1:end-1,time).*delta_t)/60,curr_cell_speed,[],curr_cell_neighborhood,'filled','Marker','p');box on;title('Color: Fraction of neighbors of the same cell type');ylabel('cell speed, um/hr');xlabel('time, hr');hold on;colorbar
 % h4 = figure(4);h4.Colormap = jet;caxis([0 1]);

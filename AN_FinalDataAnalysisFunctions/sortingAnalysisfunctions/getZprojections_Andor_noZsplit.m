@@ -4,9 +4,9 @@ direc2save ='C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_Mat
 %'C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\Fucci_andOtherCells_regularCulture';
 
 ff = readAndorDirectory(direc);
-pos = 14;
+pos = 0;
 tgroup = [];
-tpname = getAndorFileName(ff,pos,tgroup,[],0);
+tpname = getAndorFileName(ff,pos,tgroup,[],chan);%chan
 reader = bfGetReader(tpname);
 nz=reader.getSizeZ;
 nT = reader.getSizeT;
@@ -27,12 +27,12 @@ for time=1:nT
         multitp_nuc = max_img;
     end
     if (pos)<10
-         imwrite(multitp_nuc,[direc2save '\' ff.prefix '_80tpts_testDynamics_MIP_f000' num2str(pos) '_w000' num2str(ff.w(chan)) '.tif'],'writemode','append');
+         imwrite(multitp_nuc,[direc2save '\' ff.prefix '_80tpts_testDynamics_MIP_f000' num2str(pos) '_w000' num2str(ff.w(chan+1)) '.tif'],'writemode','append');
     end
     if (pos)>=10
-         imwrite(multitp_nuc,[direc2save '\' ff.prefix '_80tpts_testDynamics_MIP_f00' num2str(pos) '_w000' num2str(ff.w(chan)) '.tif'],'writemode','append');
+         imwrite(multitp_nuc,[direc2save '\' ff.prefix '_80tpts_testDynamics_MIP_f00' num2str(pos) '_w000' num2str(ff.w(chan+1)) '.tif'],'writemode','append');
     end
-          disp(['saved projection for time point' num2str(time) ' channel' num2str(ff.w(chan)) '  position' num2str(pos)]);
+          disp(['saved projection for time point' num2str(time) ' channel' num2str(ff.w(chan+1)) '  position' num2str(pos)]);
 
 end
  

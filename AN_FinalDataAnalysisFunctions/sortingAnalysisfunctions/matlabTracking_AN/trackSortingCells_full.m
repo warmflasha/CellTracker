@@ -1,10 +1,10 @@
-function matfile_str = trackSortingCells_full(direc1,pos,chan,ifile,paramfile,delta_t,plotsubtracks,tr_1,tr_end,tpt_end)
+function matfile_str = trackSortingCells_full(direc1,pos,chan,ifile,paramfile,delta_t,plotsubtracks,tr_1,tr_end,tpt_end,ilastikprob)
 
 run(paramfile)
 global userParam 
-[nmask,datatomatch] = getdatatotrack(direc1,pos,chan,userParam.arealow,ifile);
+[nmask,datatomatch] = getdatatotrack(direc1,pos,chan,userParam.arealow,ifile,userParam.probthresh,ilastikprob);
 ff2 = readAndorDirectory(direc1);
-imshowpair(datatomatch(1).img,datatomatch(2).img,'ColorChannels','red-cyan');
+imshowpair(datatomatch(20).img,datatomatch(21).img,'ColorChannels','red-cyan');
 tpt = 2;
 clear tracks_t0
 tracks_t0 = init_tracks(userParam.minpxloverlap,userParam.maxdist_tomove,datatomatch,tpt);

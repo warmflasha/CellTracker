@@ -93,7 +93,7 @@ for totrack = trackID%
             end
             if ~isempty(local_neighbors)
                 hold on;figure(1),scatter(msd(totrack).dat(:,2),msd(totrack).dat(:,1),[],local_neighbors(1:size(msd(totrack).dat),1),'filled','Marker','p'); box on
-                str2 = "Color: Fraction of same type neighbors within " + num2str(round(userParam.local_sz*userParam.pxtomicron))+"um neighborhood";
+                str2 = "Color: Fraction of other type neighbors within " + num2str((userParam.local_sz*userParam.pxtomicron))+"um neighborhood";
                 str1 = "Estimated D = " + num2str(diff_coeff) + " um^2/hr";
                 titlestr = str1 + "\n" + " MSD calculated for all pairs of points per t_l_a_g"+ "\n" + str2;
                 titlestr = compose(titlestr);
