@@ -84,7 +84,7 @@ for ii=1:ntimefiles
         % setup string to hold all the error messages for this frame number
         userParam.errorStr = sprintf('frame= %d\n', nimg);
         
-        [nuc, fimg] = preprocessImages(nuc,fimg);
+%         [nuc, fimg] = preprocessImages(nuc,fimg);
         
         %record some info about image file.
         imgfiles(nimg).filestruct=ff;
