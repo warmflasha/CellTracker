@@ -1,10 +1,11 @@
 %% read the laser scanning data or confocal data and get max projections
 % save max projections
-for xx =2:19;
+for xx =1
 %direc = ['/Volumes/Seagate Backup Plus Drive/RICE_Research_databackup/2017-02-13-LaserScaning4wellwithSB/FV10__20170210_141606/Track000' num2str(xx) '/'];
 %direc = ['/Volumes/Seagate Backup Plus Drive/RICE_Research_databackup/20170403FucciImagingCntrBmpActWnt/Fucci_20170403/FV10__20170403_154933/Track000' num2str(xx) '/'];
-direcT0 = ['/Volumes/TOSHIBAexte/2017-06-25-sortingonyPattern_LSM_betaCatpluriCFPdiff/FV10__20170623_163722/Track000' num2str(xx) '/'];
-direcT1 = ['/Volumes/TOSHIBAexte/2017-06-25-sortingonyPattern_LSM_betaCatpluriCFPdiff/FV10__20170624_144519/Track000' num2str(xx) '/'];
+direcT0 = 'E:\RICE_Research_databackup\FUCCI36hr-C-B-A-Fi_20170426';
+% direcT0 = ['/Volumes/TOSHIBAexte/2017-06-25-sortingonyPattern_LSM_betaCatpluriCFPdiff/FV10__20170623_163722/Track000' num2str(xx) '/'];
+% direcT1 = ['/Volumes/TOSHIBAexte/2017-06-25-sortingonyPattern_LSM_betaCatpluriCFPdiff/FV10__20170624_144519/Track000' num2str(xx) '/'];
 % direcT2 = ['/Volumes/TOSHIBA EXT/lsmdata/FV10__20170522_193346/Track000' num2str(xx) '/'];
 % direcT3 = ['/Volumes/TOSHIBA EXT/lsmdata2/FV10__20170523_110859/Track000' num2str(xx) '/'];
 % direcT4 = ['/Volumes/TOSHIBA EXT/lsmdata2/FV10__20170523_184713/Track000' num2str(xx) '/'];
@@ -17,8 +18,9 @@ direcT1 = ['/Volumes/TOSHIBAexte/2017-06-25-sortingonyPattern_LSM_betaCatpluriCF
 % direcT3 = ['/Volumes/TOSHIBA EXT/lsmdata2/FV10__20170523_110859/Track00' num2str(xx) '/'];
 % direcT4 = ['/Volumes/TOSHIBA EXT/lsmdata2/FV10__20170523_184713/Track00' num2str(xx) '/'];
 end
-direc2 = '/Volumes/TOSHIBAexte/2017-06-25-sortingonyPattern_LSM_betaCatpluriCFPdiff/2017-06-25-maxProjectionsbetaCatsorting';
-% ff = dir(direc);
+%direc2 = '/Volumes/TOSHIBAexte/2017-06-25-sortingonyPattern_LSM_betaCatpluriCFPdiff/2017-06-25-maxProjectionsbetaCatsorting';
+direc2 ='C:\Users\Nastya\Desktop\RiceResearch\2017-10-04-REMOTE_WORK\For_MatlabTracking\FucciCells_regularCulture'
+% ff = dir(direcT0);
 % double check this value
 tpts0 =77;
 tpts1 =77;
@@ -28,7 +30,7 @@ tpts4 =0;
 
 fnstr1 = '_0';
 fnstr2 = '_';
-chan = [1 2]; % 
+chan = [1]; % 
 time = 1;
 %max_img = bfMaxIntensity(reader,time,chan,bitdepth);
 multitp = [];%zeros(1024,1024,tpts);

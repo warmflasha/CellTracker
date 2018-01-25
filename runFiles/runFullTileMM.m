@@ -11,7 +11,12 @@ function runFullTileMM(direc,outfile,paramfile,step,acoords)
 % outputs in matfile:
 %   peaks -- cell by cellslist by image 
 %   plate1 -- plate data structure
-usemultichantoSeg = 1;
+issorted = []; % TO DO : put into param file
+% issorted (SEE STEP 3): if issorted = 1, then a different function will be used
+    % for the segmentation and data compilation into peaks; use this option if running
+    % analysis on sorted cells(two nuclear markers label two different cell types; masks will be nade from the combined image of the two chanels
+    %, that need to be specified in the variable within the nested funtion)
+    % 
 if ~exist('step','var')
     step=1;
 end
@@ -39,7 +44,7 @@ if step < 2
         [minI, meanI]=mkBackgroundImageMM(ff,ii,min(500,maxims));
         bIms{ii}=uint16(2^16*minI);
         nIms{ii}=ones(size(bIms{ii}));
-      %-----------------------------comment out lines 44-48 for uCol or
+      %-----------------------------comment out lines 49-52 for uCol or
       %ibidi where no stitching is required
 %         normIm=(meanI-minI);
 %         normIm=normIm.^-1;
@@ -47,7 +52,7 @@ if step < 2
 %         nIms{ii}=normIm;
     end   
     %-----------------------------------AN
-% %if want to provide separattely the background images for each chanel
+% %if want to provide separately the background images for each chanel
 % % ff1=readMMdirectory('C_1ngml_pS1');   % dapi, cy5, gfp
 % % wavenames = ff1.chan;
 % % bIms{1} = imread('control_bIms.tif','Index',1); % dapi
@@ -66,9 +71,11 @@ if step < 2
 %send imgsperprocessor to each, nloop = total number necessary
 %Assemble Mat Files--puts together matfiles, all data stored as peaks in
 %outfile
+
 if step < 3
+    % issorted : see description in the beginning of the function
     load([direc filesep outfile],'bIms','nIms');
-    runTileLoopMM(ff,imgsperprocessor,nloop,maxims,bIms,nIms,paramfile);     
+    runTileLoopMM(ff,imgsperprocessor,nloop,maxims,bIms,nIms,paramfile,issorted);     
     
 end
 

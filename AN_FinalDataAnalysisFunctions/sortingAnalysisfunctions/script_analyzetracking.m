@@ -33,8 +33,8 @@ close all
 clear all
 csvfile = '/Volumes/TOSHIBAexte/2017-06-29-livesorting_SDConfocalbetaCatcellspluri/2017-07-05-liveSortingMaxProjections/SortingBetaCatpluri_MIP_f0005_w0002-exported_data_table.csv';
 imported_dat = uiimport(csvfile);
-% object_id = imported_dat.data(:,1);
-% timestep = imported_dat.data(:,2);
+
+%imported_dat.data(:,2);
 % lineage_id = imported_dat.data(:,4);
 % track_id1= imported_dat.data(:,5);
 % RegionCenter_0= imported_dat.data(:,9);
@@ -57,7 +57,7 @@ track_id1= imported_dat.data(:,5);
 RegionCenter_0= imported_dat.data(:,9);
 RegionCenter_1= imported_dat.data(:,10);
    
-tpt = 20;
+tpt = 2;
 % need to get the x y coordinates of all cells at time point 0
 % then use these to group into colonies
 txy=cat(2,timestep,RegionCenter_0,RegionCenter_1);
@@ -102,11 +102,12 @@ colormap = prism;
 data = struct;
 for jj=1:size(trNinonecol,1);  
 if trNinonecol(jj) >0
-[x,y,time,r3,nuc,nuc2]=plot_ilastiktrack(trNinonecol(jj),imported_dat,pos,flag); % r3 is the track ID 
+[x,y,time,r3,nuc,nuc2]=plot_ilastiktrack(trNinonecol(jj),imported_dat,pos,flag); % r3 is the region center coordinate identified with the same trN in time
 data(jj).x = x;
 data(jj).y = y;
 data(jj).t = time;
 data(jj).r3 = r3;
+data(jj).trN = trNinonecol(jj);
 data(jj).imgstart = nuc;
 data(jj).imgend = nuc2;
 
@@ -141,8 +142,8 @@ end
 % correspond to the same cell
 
 % use the Rgion Center to calculate the velocity at each
-    % time point 
-    shortesttrack = 0;
+    % time point or average velocity over the current time interval  
+    shortesttrack = 10;
     dt0 = 15; % in minutes
     %dx must be in pixels   
      pxtomicron = 0.325; % SD confocal 20X
@@ -150,24 +151,27 @@ end
      % speed = pixels/hour
      colormap2 = jet;
      close all
-     
+     txy = [];
 for colonytrack =1:size(data,2);% need to loop over tracks of a  given colony
-
-tp1 = 1;
-tp2 = 2;
 v = [];
-
+dispacement = [];
 if (~isempty(data(colonytrack).t)) && (size(data(colonytrack).t,1)>shortesttrack)
-    txy = cat(2,data(colonytrack).t,data(colonytrack).x,data(colonytrack).y);
+    txy = cat(2,data(colonytrack).t,data(colonytrack).x,data(colonytrack).y,ones(size(data(colonytrack).y,1),1)*data(colonytrack).trN);
+    
     for jj=1:(size(data(colonytrack).t,1)-1)% loop over time points in the track
-        d0 = power((power(txy(1,1)-txy(jj+1,1),2)+power(txy(1,2)-txy(jj+1,2),2)),0.5);%
+        tp1 =jj;
+        tp2 = jj+1;
+        d0 = power((power(txy(tp2,1)-txy(tp1,1),2)+power(txy(tp2,2)-txy(tp1,2),2)),0.5);%
         % distance traveled by cell celnter in time from tp1 to tp2
-        dt = (jj+1-1)*(dt0/60);% time interval in minutes
+        dt = ((tp2-tp1))*(dt0/60);% time interval in hours
+        TP(jj,1:2) = [tp1 tp2];        
         dx = d0* pxtomicron;% in microns
         v(jj,1:2) = [data(colonytrack).t(jj);  dx/dt];% in micons/hour
-        
+        dispacement(jj,1:2) = [data(colonytrack).t(jj);  dx];% in micons
     end
-    hold on;figure(colonytrack),plot((v(:,1)*dt0/60),v(:,2),'p','MarkerFaceCOlor',colormap2(randi(60),:),'Markersize',18); box on
+    xx = randi(60);
+    hold on;figure(colonytrack),plot((v(:,1)*dt0/60),v(:,2),'p','MarkerFaceCOlor',colormap2(xx,:),'Markersize',18); box on
+    
     h  = figure(colonytrack);
     h.CurrentAxes.LineWidth = 3;
     h.CurrentAxes.FontSize = 18;
@@ -175,11 +179,42 @@ if (~isempty(data(colonytrack).t)) && (size(data(colonytrack).t,1)>shortesttrack
     h.CurrentAxes.XLim = [0 round((nt*dt0/60))];
     h.CurrentAxes.YLim = [-5 15];
     xlabel('time, hours');
-    ylabel('Cell velocity, um/hour')%/hour
-    title(['Colony number'  num2str(colN) ';grouped at tp' num2str(tpt*dt0/60) ' hours' ]);
+    ylabel('Cell speed, um/hour')%/hour
+    title(['ColN = '  num2str(colN) ';Tracks IDs found at t = ' num2str(tpt*dt0/60) ' hours; trN' num2str(txy(colonytrack,4)) ]);
+    figure(size(data,2)+1), plot(v(:,1)*dt0/60,dispacement(:,2),'p','MarkerFaceCOlor',colormap2(xx,:),'Markersize',18);hold on; box on
+    ylabel('Displ. wrt track start, microns');
+    xlabel('time, hours');
+    h = figure(size(data,2)+1);
+    h.CurrentAxes.FontSize = 18;
+    h.CurrentAxes.LineWidth = 3;
+    title(['Cells within colony N '  num2str(colN) ]);
     
 else
     disp('this track is empty')
 end
 end
- % determie the direction of movement of each cell 
+ % still need to determine the direction of movement of each cell 
+%%
+% determine the colony center
+% since there are multiple colonies in the image, need to 
+% 1. get the colony ID at tp=0;
+% 2. then get the x,y coordnates of the cells within that colony (get them
+% from the tracking data RegionCenter coord at the beginning of the track
+% for that colony;
+% 3. To find colony center, find the point that is most equidistant to all the points in the
+% colony
+
+
+
+
+
+
+
+
+
+% 
+
+
+
+
+
