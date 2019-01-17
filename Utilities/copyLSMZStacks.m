@@ -45,7 +45,10 @@ for ii = 1:ntime
         end
         
         file1 = fullfile(indirec,['Track00' posstr],['Image00' posstr '_' timestr '.oif']);
-        
-        renameZStack(file1,outfile1,chan);
+        try
+            renameZStack(file1,outfile1,chan);
+        catch
+            continue;
+        end
     end
 end

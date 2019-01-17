@@ -20,9 +20,7 @@ classdef frame
             
         end
         
-        function imgs = 
-            
-        end
+
         
     end
     
