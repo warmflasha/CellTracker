@@ -101,7 +101,7 @@ assert(status, ['Missing Bio-Formats library. Either add bioformats_package.jar 
     'to the static Java path or add it to the Matlab path.']);
 
 % Prompt for a file if not input
-if nargin == 0 || exist(id, 'file') == 0
+if nargin == 0 %|| exist(id, 'file') == 0 %AW - comment out here to avoid popping up this dialogue box
   [file, path] = uigetfile(bfGetFileExtensions, 'Choose a file to open');
   id = [path file];
   if isequal(path, 0) || isequal(file, 0), return; end

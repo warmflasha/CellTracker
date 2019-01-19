@@ -1,7 +1,7 @@
-function copyLSMZStacks(indirec,outdirec,chan,npos,ntime)
+function copyLSMZStacks(indirec,outdirec,chan,npos,ntime,posToUse)
 
 
-if ~exist('npos','var') %find number of positions
+if ~exist('npos','var') || isempty(npos) %find number of positions
     npos = 0;
     numstr = '01';
     while exist(fullfile(indirec,['Track00' numstr]))
@@ -11,7 +11,16 @@ if ~exist('npos','var') %find number of positions
             numstr = ['0' numstr];
         end
     end
+    posarray = 1:npos;
+else
+    if length(npos) < 2
+        posarray = 1:npos;
+    else
+        posarray = npos;
+    end
 end
+
+
 
 if ~exist('ntime','var')
     ntime = 0;
@@ -29,8 +38,12 @@ if ~exist(outdirec)
     mkdir(outdirec);
 end
 
+
+
+
 for ii = 1:ntime
-    for jj = 1:npos
+    q = 1;
+    for jj = posarray
         
         timestr = int2str(ii);
         posstr = int2str(jj);
@@ -44,11 +57,25 @@ for ii = 1:ntime
             posstr = ['0' posstr];
         end
         
-        file1 = fullfile(indirec,['Track00' posstr],['Image00' posstr '_' timestr '.oif']);
-        try
-            renameZStack(file1,outfile1,chan);
-        catch
-            continue;
+        if ~exist('posToUse','var')
+            posstr2 = posstr;
+        else
+            posstr2 = int2str(posToUse(q));
+            if length(posstr2) < 2
+                posstr2 = ['0' posstr2];
+            end
+            q = q + 1;
+        end
+        
+        file1 = fullfile(indirec,['Track00' posstr],['Image00' posstr2 '_' timestr '.oif']);
+        if exist(file1,'file')
+            try
+                renameZStack(file1,outfile1,chan);
+            catch
+                continue;
+            end
+        else
+            disp([file1 ' does not exist.']);
         end
     end
 end

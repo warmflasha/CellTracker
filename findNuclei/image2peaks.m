@@ -17,6 +17,12 @@ function [outdat, maskC, statsN] = image2peaks(red, gr, maskN)
 global userParam;
 
 doCyto = 1;
+% 
+% if ~isfield(userParam,'doCyto')
+%     doCyto = 1;
+% else
+%     doCyto = userParam.doCyto;
+% end
 %make sure the field userParam.errorstr exists
 if ~isfield(userParam,'errorStr')
     userParam.errorStr=[];
@@ -32,17 +38,18 @@ else
     statsN =ilastikMaskToStats(maskN);
 end
 
+% look at each V-polygon and use either grad(gr) or fraction of max to
+% define cyto for each cell. MaskC = mask for cells == cyto + nuclei. Redefine
+% the Vpolygons since nuclei have been eliminated since last call
+statsN = addVoronoiPolygon2Stats(statsN, size(red));
+nImages = size(gr,3);
+
 if doCyto == 1
-    % look at each V-polygon and use either grad(gr) or fraction of max to
-    % define cyto for each cell. MaskC = mask for cells == cyto + nuclei. Redefine
-    % the Vpolygons since nuclei have been eliminated since last call
-    statsN = addVoronoiPolygon2Stats(statsN, size(red));
     
     %Loop over non-nuclear fluoresence channels. run edgeThreshCyto once
     % for each
     maskC=zeros(size(gr));
     
-    nImages = size(gr,3);
     for ii=1:nImages
         [maskC(:,:,ii), statsN] = edgeThreshCyto(gr(:,:,ii), statsN, maskN,ii);
     end
@@ -51,7 +58,8 @@ if doCyto == 1
     maskC=any(maskC,3);
     
     [~, statsN]=addCellAvr2Stats(maskC,gr,statsN);
-    outdat=outputData4AWTracker(statsN,red,nImages);
-    return
+end
+outdat=outputData4AWTracker(statsN,red,nImages);
+return
 end
 

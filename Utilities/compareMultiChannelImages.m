@@ -1,4 +1,4 @@
-function compareMultiChannelImages(imgs,condToUseForChan)
+function compareMultiChannelImages(imgs,condToUseForChan,cropwindow)
 
 nchan = min(cellfun(@(x) size(x,3), imgs)); %minimum of chan numbers
 if ~exist('condToUseForChan','var')  || isempty(condToUseForChan)
@@ -7,7 +7,7 @@ end
 nimgs = length(imgs);
 q = 1;
 for chan = 1:nchan
-    lims = stretchlim(imgs{condToUseForChan(chan)}(:,:,chan),[0.3 0.9999]);
+    lims = stretchlim(imgs{condToUseForChan(chan)}(:,:,chan),[0.3 0.99]);
     for ii = 1:nimgs
         subplot(nchan,nimgs,q);
         imgToUse = imgs{ii}(:,:,chan);
