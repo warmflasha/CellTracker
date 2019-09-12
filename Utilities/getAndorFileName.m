@@ -29,6 +29,9 @@ for ii=1:length(files.ordering)
             num = int2str(w);
         case 'm'
             num = int2str(pos);
+        case 'p'
+            num = int2str(pos);
+            
     end
     
     while length(num) < 4

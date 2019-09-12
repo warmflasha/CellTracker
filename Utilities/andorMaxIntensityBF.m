@@ -24,7 +24,7 @@ if isempty(files.z)
     else
         timeInFile = time;
     end
-    max_img = bfMaxIntensity(reader,timeInFile+1,chan -1);
+    max_img = bfMaxIntensity(reader,timeInFile+1,chan);
     reader.close;
     
 end

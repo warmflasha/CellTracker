@@ -1,4 +1,4 @@
-function files = readAndorDirectory(direc)
+function files = readAndorDirectory(direc,excludeIdx)
 % files = readAndorDirectory(direc)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % takes a directory produced by the Andor iQ3 software and returns a
@@ -7,8 +7,23 @@ function files = readAndorDirectory(direc)
 %
 % see also: getAndorFileName, andorMaxIntensity
 
+if ~exist('excludeIdx','var')
+    excludeIdx = false;
+end
 
 allfiles = dir([direc filesep '*.tif']);%% '.tif'
+
+if excludeIdx
+    for ii = 1:length(allfiles)
+        if ~isempty(strfind(allfiles(ii).name,'idx'))
+            badinds(ii) = true;
+        else
+            badinds(ii) = false;
+        end
+    end
+    allfiles(badinds) = []; %remove idx tifs
+end
+
 
 nprefix = 0;
 nImages = length(allfiles);
@@ -28,6 +43,7 @@ for ii=1:nImages
     end
     
     ind = strfind(nm,'_f0');
+    
     if length(ind) > 1 
         toremove = false(length(ind),1);
         for ii=1:length(ind)
@@ -78,6 +94,13 @@ for ii=1:nImages
         inds(5) = 0;
     end
     
+    ind = strfind(nm,'_p0');
+    if ~isempty(ind)
+        inds(6) = ind;
+        p{currPrefixNum} = [p{currPrefixNum} str2num(nm((inds(6)+2):(inds(6)+5)))];
+    else
+        inds(6) = 0;
+    end
 end
 
 inds_nonzero=inds(inds>0);
@@ -88,7 +111,7 @@ if nprefix==1
 end
 
 
-ordering = 'ftzwm';
+ordering = 'ftzwmp';
 drop = inds == 0;
 ordering(drop) =[];
 inds(drop) =[];
